@@ -1,0 +1,168 @@
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Papers}
+  \vspace{-0.25em}
+  {\fontsize{7.9}{9.1}\selectfont
+  \begin{block}{Paper A}
+    Kalicanin Dimitrov, M., Dimitrov, M., Malyarenko, A., and Ni, Y. (2025).
+    \emph{Almost-Exact Simulation Scheme for Heston-type Models: Bermudan and American Option Pricing}.
+    Manuscript submitted for publication.
+  \end{block}
+
+  \vspace{-0.1em}
+  \begin{block}{Paper B}
+    Haida, B., Dimitrov, M. K., Marmaras, T., and Ni, Y. (2026).
+    \emph{Almost Exact Mixed Scheme for Gatheral Double Mean Reverting Model}.
+    In S. Silvestrov and A. Malyarenko (Eds.),
+    \emph{Mathematical Structures I: Stochastic and Analytic Structures with Applications},
+    Springer Proceedings in Mathematics and Statistics, Vol. 532. Springer, Cham.
+    Accepted for publication.
+  \end{block}
+
+  \vspace{-0.1em}
+  \begin{block}{Paper C}
+    M. Kalicanin Dimitrov and Y. Ni (2026).
+    \emph{A Hybrid LSMC--PDE Method for Bermudan Option Pricing under the Gatheral Double Mean-Reverting Model}.
+    Submitted to International Journal of Applied and Computational Mathematics (currently under review).
+  \end{block}}
+\end{frame}
+
+\begin{frame}{One Numerical Idea Across Three Papers}
+  \keymessage{One common numerical idea connects the three papers: use the structure of the stochastic-volatility model to improve either path simulation or continuation-value approximation.}
+
+  \vspace{0.6em}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.31\textwidth}
+      \begin{block}{Paper A}
+        \paperlabel{AES}\\
+        Heston and double Heston. CIR variance sampling is used to reduce Euler discretization bias in early-exercise pricing.
+      \end{block}
+    \end{column}
+    \begin{column}{0.31\textwidth}
+      \begin{block}{Paper B}
+        \paperlabel{AEMS / AEMS-SOR}\\
+        Gatheral DMR. AES-type sampling is combined with a Milstein correction for a model with stochastic long-run variance.
+      \end{block}
+    \end{column}
+    \begin{column}{0.31\textwidth}
+      \begin{block}{Paper C}
+        \paperlabel{Hybrid LSMC-PDE}\\
+        GDMR Bermudan pricing. The stock-price direction is handled by a conditional FFT/PDE step and regression is performed over variance variables.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Bermudan and American Pricing under Stochastic Volatility}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Pricing problem}
+        For a put payoff \(h(S_t)=(K-S_t)^+\), Bermudan/American pricing requires
+        \[
+          V_{t_k}=\max\{h(S_{t_k}), C(t_k,Y_{t_k})\},
+        \]
+        where
+        \[
+          C(t_k,Y_{t_k})
+          =e^{-r\dt}\E^\Q\!\left[V_{t_{k+1}}\mid Y_{t_k}\right].
+        \]
+      \end{block}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{Computational challenge}
+        \begin{itemize}
+          \item State variables include asset price and one or more variance factors.
+          \item Simulation bias affects exercise decisions.
+          \item Continuation values are conditional expectations, not explicit formulas.
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.5em}
+  \keymessage{The numerical price is driven by two decisions: how accurately paths are simulated, and how accurately continuation values are approximated.}
+\end{frame}
+
+\begin{frame}{Two Numerical Difficulties}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.47\textwidth}
+      \begin{block}{1. Variance simulation}
+        Euler-type schemes can create negative variance approximations and introduce discretization bias.
+        \[
+          \dd v_t=\kappa(\theta-v_t)\dd t+\xi\sqrt{v_t}\dd W_t.
+        \]
+        For CIR-type variance factors, the next variance value can be sampled from its known noncentral chi-square distribution.
+      \end{block}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \begin{block}{2. Continuation regression}
+        In multifactor stochastic volatility,
+        {\small
+        \[
+          C(t,Y_t)=\E^\Q[\hbox{discounted future value}\mid Y_t].
+        \]}
+        Plain LSMC must approximate this high-dimensional object from simulated paths.
+      \end{block}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.5em}
+  \centering
+  \small Papers A and B focus on the simulation of variance paths. Paper C focuses on the approximation of continuation values.
+\end{frame}
+
+\begin{frame}{Model Hierarchy}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.31\textwidth}
+      \begin{block}{Heston}
+        {\scriptsize
+        \[
+          \dd S_t=rS_t\dd t+\sqrt{v_t}S_t\dd W_t^{(1)}
+        \]
+        \[
+          \dd v_t=\kappa(\theta-v_t)\dd t+\xi\sqrt{v_t}\dd W_t^{(2)}
+        \]}
+      \end{block}
+    \end{column}
+    \begin{column}{0.31\textwidth}
+      \begin{block}{Double Heston}
+        {\tiny
+        \[
+          \dd S_t=rS_t\dd t+
+          S_t\sum_{i=1}^2\sqrt{v_t^{(i)}}\dd W_t^{(i)}
+        \]
+        \[
+        \begin{aligned}
+          \dd v_t^{(i)}
+          &=\kappa_i(\bar v_i-v_t^{(i)})\dd t\\
+          &\quad+\gamma_i\sqrt{v_t^{(i)}}\dd W_t^{(i+2)},
+          \quad i=1,2.
+        \end{aligned}
+        \]}
+      \end{block}
+    \end{column}
+    \begin{column}{0.31\textwidth}
+      \begin{block}{Gatheral DMR/GDMR}
+        {\tiny
+        \[
+          \dd S_t=rS_t\dd t+S_t\sqrt{v_t}\dd W_t^{(1)}
+        \]
+        \[
+          \dd v_t=\kappa_1(v'_t-v_t)\dd t+
+          \xi_1 v_t^{\delta_1}\dd W_t^{(2)}
+        \]
+        \[
+          \dd v'_t=\kappa_2(\theta-v'_t)\dd t+
+          \xi_2(v'_t)^{\delta_2}\dd W_t^{(3)}
+        \]}
+      \end{block}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.35em}
+  \begin{center}
+    \small Paper B uses the square-root DMR case, \(\delta_1=\delta_2=\tfrac12\). Paper C treats the CEV-type GDMR extension.
+  \end{center}
+\end{frame}

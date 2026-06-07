@@ -1,0 +1,73 @@
+\usetheme{Boadilla}
+\usecolortheme{dove}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{headline}{}
+\newif\ifbackupslides
+\backupslidesfalse
+\newcommand{\beginbackupslides}{%
+  \backupslidestrue
+  \setcounter{framenumber}{0}%
+}
+\newcommand{\mainframecount}{30}
+
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.83\paperwidth,ht=2.4ex,dp=1ex,leftskip=1.2em]{author in head/foot}%
+      {\tiny\insertshorttitle}
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.17\paperwidth,ht=2.4ex,dp=1ex,rightskip=1.2em plus1fil]{date in head/foot}%
+      \hfill
+      \ifbackupslides
+        Backup \insertframenumber
+      \else
+        \insertframenumber{} / \mainframecount
+      \fi
+    \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,bm}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{microtype}
+\usepackage{array}
+\usepackage{ragged2e}
+\usepackage{etoolbox}
+
+\AtBeginEnvironment{frame}{\justifying}
+\AtBeginEnvironment{block}{\justifying}
+\setbeamertemplate{itemize/enumerate body begin}{\justifying}
+\setbeamertemplate{itemize/enumerate subbody begin}{\justifying}
+
+\pdfstringdefDisableCommands{%
+  \def\translate#1{#1}%
+}
+
+\definecolor{accent}{RGB}{23,84,116}
+\definecolor{accentlight}{RGB}{232,242,246}
+\definecolor{softgray}{RGB}{245,247,248}
+\definecolor{graytext}{RGB}{88,96,104}
+\definecolor{deeptext}{RGB}{28,34,40}
+
+\setbeamercolor{normal text}{fg=deeptext,bg=white}
+\setbeamercolor{title}{fg=accent}
+\setbeamercolor{frametitle}{fg=accent,bg=white}
+\setbeamercolor{structure}{fg=accent}
+\setbeamercolor{itemize item}{fg=accent}
+\setbeamercolor{itemize subitem}{fg=accent}
+\setbeamercolor{block title}{fg=white,bg=accent}
+\setbeamercolor{block body}{fg=deeptext,bg=softgray}
+\setbeamercolor{keybox}{fg=deeptext,bg=accentlight}
+\setbeamerfont{frametitle}{size=\large,series=\bfseries}
+\setbeamerfont{title}{size=\Large,series=\bfseries}
+\setbeamerfont{subtitle}{size=\normalsize}
+\setbeamerfont{block title}{size=\small,series=\bfseries}
+\setbeamerfont{block body}{size=\small}
+
+\setlength{\tabcolsep}{5pt}
+\renewcommand{\arraystretch}{1.15}
+\setlength{\abovecaptionskip}{0pt}
+\setlength{\belowcaptionskip}{0pt}

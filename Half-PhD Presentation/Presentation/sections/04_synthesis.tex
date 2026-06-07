@@ -1,0 +1,35 @@
+\section{Future work}
+
+\begin{frame}{Future work}
+  \scriptsize
+  \begin{tabular}{p{0.10\linewidth}p{0.43\linewidth}p{0.37\linewidth}}
+    \toprule
+    Paper & Summary & Role in the thesis \\
+    \midrule
+    A & AES is extended to Bermudan and American put pricing under Heston and double Heston models. & Improves simulation when CIR variance factors are available. \\
+    B & AEMS and AEMS-SOR are developed for the Gatheral DMR model and tested on several payoffs. & Extends the simulation study to a stochastic long-run variance setting. \\
+    C & Hybrid LSMC-PDE is adapted to GDMR Bermudan pricing. & Reduces the continuation-value regression from \((S,v,w)\) to \((v,w)\). \\
+    \bottomrule
+  \end{tabular}
+
+  \vspace{0.8em}
+  \begin{columns}[T,onlytextwidth]
+    \begin{column}{0.47\textwidth}
+      \begin{block}{Main conclusion}
+        \scriptsize The three papers together develop simulation and continuation-value approximation tools for early-exercise pricing under multifactor stochastic volatility models.
+      \end{block}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \begin{block}{Future directions}
+        \scriptsize Test more calibrated parameter sets; add low-biased and dual benchmarks; study more payoff types; and combine improved variance simulation with the Hybrid LSMC-PDE continuation approximation.
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \centering
+  \vfill
+  {\Large\bfseries Thank you for your attention}
+  \vfill
+\end{frame}

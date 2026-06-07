@@ -1,0 +1,42 @@
+# OS/editor noise
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local archives and binaries
+*.zip
+*.exe
+
+# Python caches/environments
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+
+# LaTeX build outputs
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.dvi
+*.fdb_latexmk
+*.fls
+*.ilg
+*.idx
+*.ind
+*.lof
+*.log
+*.lot
+*.nav
+*.out
+*.run.xml
+*.snm
+*.synctex.gz
+*.toc
+*.vrb
+**/build/
+
+# Existing legacy repo/data folder
+Paper-C To Be Deleted When Mara Is 100% sure/

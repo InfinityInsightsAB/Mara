@@ -1,0 +1,1273 @@
+\documentclass[a4paper,12pt,openany]{article}
+
+\usepackage{parskip}
+\usepackage[pdftex]{graphicx}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[british]{babel}
+
+\usepackage{amsmath}
+\usepackage{amsthm}
+
+\usepackage{typearea}
+
+\usepackage[toc,page]{appendix}
+\usepackage{float}
+\usepackage{arydshln}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}{Corollary}
+\newtheorem{proposition}{Proposition}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+
+\usepackage{newtxtext}
+\usepackage{newtxmath}
+
+\begin{document}
+
+\begin{center}
+\huge Probability Theory\\
+\vspace{0.2cm}
+\Large Solutions to selected problems for INL1 \\ \vspace{0.5cm}
+Mara Kali\v{c}anin Dimitrov
+\vspace{0.5cm}
+\end{center}
+
+\subsection*{Problem 1.1.1}
+
+Let $\Omega = \mathbb{R}$, $\mathcal{F} =$ all subsets so that $A$ or $A^c$ is countable, $P(A) = 0$ in the first case and $= 1$ in the second. Show that $(\Omega, \mathcal{F}, P)$ is a probability space.
+
+\subsection*{Solution}
+
+We need to show that $\mathcal{F}$ is a $\sigma$-field, that $P$ is countably additive, and that $P(\Omega)=1$. The events in $\mathcal{F}$ are exactly the countable or co-countable subsets of $\mathbb{R}$. We use Durrett's definitions of probability space, $\sigma$-field, and measure from book p. 1 (PDF p. 9), and the definition of probability measure from book p. 2 (PDF p. 10).
+
+First note that $P$ is well-defined: no set $A\subset\mathbb{R}$ can have both $A$ and $A^c$ countable, because then $\mathbb{R}=A\cup A^c$ would be countable, which is false.
+
+\medskip
+
+First, $\Omega\in\mathcal{F}$, since $\Omega^c=\emptyset$ is countable. Also, if $A\in\mathcal{F}$, then either $A$ is countable or $A^c$ is countable. In the first case $(A^c)^c=A$ is countable, and in the second case $A^c$ is countable. Therefore $A^c\in\mathcal{F}$.
+
+\medskip
+
+Now let $A_1,A_2,\ldots\in\mathcal{F}$. If all the sets $A_n$ are countable, then
+\[
+\bigcup_{n=1}^{\infty} A_n
+\]
+is countable, so it belongs to $\mathcal{F}$. If at least one of the sets, say $A_j$, has countable complement, then
+\[
+\left(\bigcup_{n=1}^{\infty} A_n\right)^c
+=
+\bigcap_{n=1}^{\infty} A_n^c
+\subset A_j^c.
+\]
+Since $A_j^c$ is countable, the complement of the union is countable. Hence the union is co-countable and again belongs to $\mathcal{F}$. Thus $\mathcal{F}$ is a $\sigma$-field.
+
+\medskip
+
+It remains to prove that $P$ is a probability measure. We have $P(\Omega)=1$, because $\Omega^c=\emptyset$ is countable. Let $A_1,A_2,\ldots$ be disjoint sets in $\mathcal{F}$. If all $A_n$ are countable, then the union is countable and
+\[
+P\left(\bigcup_{n=1}^{\infty} A_n\right)
+=0
+=\sum_{n=1}^{\infty} P(A_n).
+\]
+If some $A_j$ has countable complement, then all other $A_n$, $n\neq j$, must be countable, since
+\[
+A_n\subset A_j^c.
+\]
+There can be at most one such co-countable set, because the sets are disjoint. Therefore
+\[
+\left(\bigcup_{n=1}^{\infty}A_n\right)^c
+\subset
+A_j^c,
+\]
+so the union is also co-countable and has probability $1$. Also, two disjoint co-countable sets cannot both occur, because their intersection would be co-countable and hence nonempty. Therefore
+\[
+P\left(\bigcup_{n=1}^{\infty} A_n\right)
+=1
+=P(A_j)+\sum_{n\neq j}P(A_n)
+=\sum_{n=1}^{\infty}P(A_n).
+\]
+So $P$ is countably additive. Therefore $(\Omega,\mathcal{F},P)$ is a probability space.
+
+\subsection*{Problem 1.2.1}
+
+Suppose $X$ and $Y$ are random variables on $(\Omega, \mathcal{F}, P)$ and let $A \in \mathcal{F}$. Show that if we let $Z(\omega) = X(\omega)$ for $\omega \in A$ and $Z(\omega) = Y(\omega)$ for $\omega \in A^c$, then $Z$ is a random variable.
+
+\subsection*{Solution}
+
+We need to show that $Z$ is measurable. We use Durrett's definition of a random variable from book p. 10 (PDF p. 18): for every Borel set $B\subset\mathbb{R}$, the inverse image $\{Z\in B\}$ must belong to $\mathcal{F}$.
+
+Since $X$ and $Y$ are real-valued, the function $Z$ is also real-valued.
+
+\medskip
+
+Let $B$ be a Borel set. From the definition of $Z$,
+\[
+\{Z\in B\}
+=
+\bigl(A\cap\{X\in B\}\bigr)
+\cup
+\bigl(A^c\cap\{Y\in B\}\bigr).
+\]
+This identity just says that on $A$ we have $Z=X$, and on $A^c$ we have $Z=Y$. These are exactly the two ways in which the event $\{Z\in B\}$ can occur.
+Since $X$ and $Y$ are random variables,
+\[
+\{X\in B\}\in\mathcal{F},
+\qquad
+\{Y\in B\}\in\mathcal{F}.
+\]
+Also $A\in\mathcal{F}$, so $A^c\in\mathcal{F}$. Since $\mathcal{F}$ is closed under finite intersections and finite unions, the right hand side belongs to $\mathcal{F}$.
+
+\medskip
+
+Therefore $\{Z\in B\}\in\mathcal{F}$ for every Borel set $B$. So we can conclude that $Z$ is a random variable.
+
+\subsection*{Problem 1.2.3}
+
+Show that a distribution function has at most countably many discontinuities.
+
+\subsection*{Solution}
+
+We need to show that the set of discontinuities cannot be uncountable. We use Durrett's Theorem 1.2.1(v) on book p. 11 (PDF p. 19), which says that
+\[
+P(X=x)=F(x)-F(x-).
+\]
+
+By Theorem 1.2.2, every distribution function $F$ is the distribution function of some random variable $X$, so applying Theorem 1.2.1(v) is legitimate.
+
+\medskip
+
+Let $F$ be a distribution function. Since $F$ is increasing and right-continuous, the left limit
+\[
+F(x-)=\lim_{y\uparrow x}F(y)
+\]
+exists for every $x$, and a discontinuity can only be a jump discontinuity. For such a point $x$, the jump size is
+\[
+\Delta F(x)=F(x)-F(x-),
+\]
+If $X$ has distribution function $F$, then
+\[
+P(X=x)=F(x)-F(x-)=\Delta F(x).
+\]
+Hence the discontinuities of $F$ are exactly the points where $\Delta F(x)>0$. In other words, jumps of $F$ correspond to atoms of the distribution.
+
+\medskip
+
+For each $m\ge 1$, define
+\[
+D_m=\{x:\Delta F(x)>1/m\}.
+\]
+We claim that $D_m$ is finite. Indeed, if $x_1,\ldots,x_N$ are distinct points in $D_m$, then the events $\{X=x_i\}$ are disjoint, and therefore
+\[
+1
+\ge
+\sum_{i=1}^N P(X=x_i)
+=
+\sum_{i=1}^N \Delta F(x_i)
+>
+\frac{N}{m}.
+\]
+Thus $N<m$. This shows that $D_m$ has only finitely many points.
+
+\medskip
+
+Now let $D$ be the set of discontinuities of $F$. Since every positive jump is larger than $1/m$ for some $m$, we have
+\[
+D
+=
+\{x:\Delta F(x)>0\}
+=
+\bigcup_{m=1}^{\infty}D_m.
+\]
+This is a countable union of finite sets. Therefore $D$ is at most countable, and so a distribution function has at most countably many discontinuities.
+
+\subsection*{Problem 1.3.3}
+
+Show that if $f$ is continuous and $X_n \to X$ almost surely then $f(X_n) \to f(X)$ almost surely.
+
+\subsection*{Solution}
+
+We need to prove that the convergence still holds after applying $f$. We use Durrett's definition of almost sure convergence from book pp. 16--17 (PDF pp. 24--25), and the exercise itself is listed on book p. 17 (PDF p. 25).
+
+Since $f$ is continuous, it is Borel measurable. Hence, by Theorem 1.3.4, $f(X_n)$ and $f(X)$ are random variables.
+
+\medskip
+
+Since $X_n\to X$ almost surely, there is a set $\Omega_0\in\mathcal{F}$ such that
+\[
+P(\Omega_0)=1
+\]
+and such that for every $\omega\in\Omega_0$,
+\[
+X_n(\omega)\to X(\omega).
+\]
+Now fix $\omega\in\Omega_0$. At this point there is no probability left; we are just looking at a sequence of real numbers. Since $f$ is continuous, ordinary convergence of real numbers gives
+\[
+X_n(\omega)\to X(\omega)
+\quad\Longrightarrow\quad
+f(X_n(\omega))\to f(X(\omega)).
+\]
+Thus
+\[
+f(X_n)\to f(X)
+\]
+on the set $\Omega_0$, which has probability one.
+
+\medskip
+
+Therefore $f(X_n)\to f(X)$ almost surely.
+
+\subsection*{Problem 1.4.1}
+
+Show that if $f \ge 0$ and $\int f\,d\mu = 0$ then $f = 0$ a.e.
+
+\subsection*{Solution}
+
+We need to show that the set on which $f$ is positive has measure zero. The set $\{f>0\}$ may be complicated, so we split it into the simpler sets where $f$ is at least $1/m$. We use Lemma 1.4.5(iv) on book p. 22 (PDF p. 30), which gives monotonicity for nonnegative integrals, and Theorem 1.1.1(ii) on book p. 2 (PDF p. 10), which gives subadditivity of a measure.
+
+\medskip
+
+For each $m\ge 1$, let
+\[
+A_m=\{x:f(x)\ge 1/m\}.
+\]
+The set $A_m$ is measurable because $f$ is measurable and $[1/m,\infty]$ is Borel in the extended real line.
+On $A_m$ we have
+\[
+f\ge \frac{1}{m}1_{A_m}.
+\]
+By Lemma 1.4.5(iv),
+\[
+0
+=
+\int f\,d\mu
+\ge
+\int \frac{1}{m}1_{A_m}\,d\mu
+=
+\frac{1}{m}\mu(A_m).
+\]
+The right hand side is nonnegative, so it must be zero.
+Hence $\mu(A_m)=0$ for every $m$.
+
+\medskip
+
+Finally,
+\[
+\{x:f(x)>0\}
+=
+\bigcup_{m=1}^{\infty}\{x:f(x)\ge 1/m\}
+=
+\bigcup_{m=1}^{\infty}A_m.
+\]
+Indeed, if $f(x)>0$, then we can choose $m$ large enough so that $1/m\le f(x)$, and then $x\in A_m$. Conversely, if $x\in A_m$, then $f(x)\ge 1/m>0$.
+Therefore, by countable subadditivity,
+\[
+\mu(\{f>0\})
+\le
+\sum_{m=1}^{\infty}\mu(A_m)
+=0.
+\]
+So $f=0$ a.e., as required.
+
+\subsection*{Problem 1.5.1}
+
+Let $\|f\|_\infty = \inf\{M : \mu(\{x : |f(x)| > M\}) = 0\}$. Prove that
+\[
+\int |f g|\,d\mu \le \|f\|_1 \|g\|_\infty
+\]
+
+\subsection*{Solution}
+
+We need to use the definition of the essential supremum. The statement defines this norm for a general function, and here we apply it to $g$. In words, $\|g\|_\infty$ is the infimum of the bounds that hold for $|g|$ outside a null set. We also follow Durrett's notation for $\|\cdot\|_\infty$ as it appears in Theorem 1.6.3 on book p. 29 (PDF p. 37). For the integral comparison we use Lemma 1.4.5(iv) on book p. 22 (PDF p. 30).
+
+\medskip
+
+We first remove the degenerate cases. If $\|f\|_1=0$, then $|f|=0$ a.e. by Problem 1.4.1, and hence $|fg|=0$ a.e. Therefore the left hand side is zero. If $\|g\|_\infty=0$, then $|g|=0$ a.e., so again the left hand side is zero. If $\|g\|_\infty=\infty$ and $\|f\|_1>0$, then the right hand side is $\infty$, so the inequality is immediate. Handling these cases separately avoids the ambiguous expression $0\cdot\infty$. Thus the only nontrivial case is
+\[
+\|f\|_1>0,
+\qquad
+0<\|g\|_\infty<\infty.
+\]
+
+Let $M>\|g\|_\infty$. By the definition of the infimum, there is a number $M_0<M$ such that
+\[
+\mu(\{x:|g(x)|>M_0\})=0.
+\]
+In particular,
+\[
+\mu(\{x:|g(x)|>M\})=0,
+\]
+so $|g|\le M$ a.e. Therefore
+\[
+|fg|\le M|f|
+\quad\text{a.e.}
+\]
+Using Lemma 1.4.5(iv) and linearity of the integral,
+\[
+\int |fg|\,d\mu
+\le
+\int M|f|\,d\mu
+=
+M\|f\|_1.
+\]
+This holds for every $M>\|g\|_\infty$. Letting $M\downarrow \|g\|_\infty$, we obtain
+\[
+\int |fg|\,d\mu
+\le
+\|f\|_1\|g\|_\infty.
+\]
+
+\medskip
+
+Therefore the desired inequality is proved.
+
+\subsection*{Problem 1.5.6}
+
+If $g_m \ge 0$ then
+\[
+\int \sum_{m=0}^{\infty} g_m\,d\mu
+= \sum_{m=0}^{\infty} \int g_m\,d\mu.
+\]
+
+\subsection*{Solution}
+
+We need to interchange a nonnegative sum and the integral. This is exactly the situation where Durrett's Monotone Convergence Theorem, Theorem 1.5.7 on book p. 27 (PDF p. 35), applies.
+
+\medskip
+
+Let
+\[
+S_n=\sum_{m=0}^{n}g_m.
+\]
+Each $S_n$ is measurable because it is a finite sum of measurable functions.
+Since $g_m\ge 0$ for all $m$, we have
+\[
+S_0\le S_1\le S_2\le\cdots
+\]
+and
+\[
+S_n\uparrow \sum_{m=0}^{\infty}g_m.
+\]
+By Theorem 1.5.7,
+\[
+\int \sum_{m=0}^{\infty}g_m\,d\mu
+=
+\lim_{n\to\infty}\int S_n\,d\mu.
+\]
+For each fixed $n$, finite additivity of the integral gives
+\[
+\int S_n\,d\mu
+=
+\int \sum_{m=0}^{n}g_m\,d\mu
+=
+\sum_{m=0}^{n}\int g_m\,d\mu.
+\]
+Therefore
+\[
+\int \sum_{m=0}^{\infty}g_m\,d\mu
+=
+\lim_{n\to\infty}\sum_{m=0}^{n}\int g_m\,d\mu
+=
+\sum_{m=0}^{\infty}\int g_m\,d\mu.
+\]
+So we can conclude that the integral of the nonnegative series is the series of the integrals.
+
+\subsection*{Problem 1.6.6}
+
+A useful lower bound. Let $Y \ge 0$ with $EY^2 < \infty$. Apply the Cauchy-Schwarz inequality to $Y\,1_{(Y>0)}$ and conclude
+\[
+P(Y > 0) \ge (EY)^2/EY^2
+\]
+
+\subsection*{Solution}
+
+We need to apply Cauchy--Schwarz to the product of $Y$ and the indicator of the set where $Y$ is positive. This is a Paley--Zygmund type lower bound at level zero. We use Durrett's Holder inequality, Theorem 1.6.3 on book p. 29 (PDF p. 37), and the note after Theorem 1.5.2 on book p. 26 (PDF p. 34), where the case $p=q=2$ is identified as the Cauchy--Schwarz inequality.
+
+\medskip
+
+Since $Y\ge 0$,
+\[
+Y=Y1_{\{Y>0\}}.
+\]
+Therefore
+\[
+EY
+=
+E\bigl(Y1_{\{Y>0\}}\bigr).
+\]
+By the Cauchy--Schwarz inequality,
+\[
+E\bigl(Y1_{\{Y>0\}}\bigr)
+\le
+\bigl(EY^2\bigr)^{1/2}
+\bigl(E1_{\{Y>0\}}^2\bigr)^{1/2}.
+\]
+But $1_{\{Y>0\}}^2=1_{\{Y>0\}}$, so
+\[
+E1_{\{Y>0\}}^2
+=
+P(Y>0).
+\]
+Thus
+\[
+EY
+\le
+\bigl(EY^2\bigr)^{1/2}P(Y>0)^{1/2}.
+\]
+Squaring both sides gives
+\[
+(EY)^2
+\le
+EY^2\,P(Y>0).
+\]
+If $EY^2>0$, we divide by $EY^2$ and obtain
+\[
+P(Y>0)
+\ge
+\frac{(EY)^2}{EY^2}.
+\]
+If $EY^2=0$, then $Y^2=0$ a.e. by Problem 1.4.1, so $Y=0$ a.s. Hence the displayed ratio is the only nondegenerate case. Therefore the useful lower bound follows from Cauchy--Schwarz.
+
+\subsection*{Problem 1.6.11}
+
+If $E|X|^k < \infty$ then for $0 < j < k$, $E|X|^j < \infty$, and furthermore
+\[
+E|X|^j \le (E|X|^k)^{j/k}
+\]
+
+\subsection*{Solution}
+
+We need to show that a finite higher moment implies finite lower moments. We use Durrett's Holder inequality, Theorem 1.6.3 on book p. 29 (PDF p. 37).
+
+\medskip
+
+Let
+\[
+p=\frac{k}{j},
+\qquad
+q=\frac{k}{k-j}.
+\]
+Since $0<j<k$, we have $p>1$, $q>1$, and
+\[
+\frac1p+\frac1q=\frac{j}{k}+\frac{k-j}{k}=1.
+\]
+Apply Holder's inequality to $|X|^j$ and $1$. Then
+\[
+E|X|^j
+=
+E(|X|^j\cdot 1)
+\le
+\bigl(E(|X|^j)^p\bigr)^{1/p}
+\bigl(E1^q\bigr)^{1/q}.
+\]
+Now
+\[
+(|X|^j)^p=|X|^{jp}=|X|^k,
+\qquad
+E1^q=1.
+\]
+Here $1\in L^q$ because $P(\Omega)=1$.
+Hence
+\[
+E|X|^j
+\le
+\bigl(E|X|^k\bigr)^{1/p}
+=
+\bigl(E|X|^k\bigr)^{j/k}.
+\]
+Since the right hand side is finite, we also have $E|X|^j<\infty$.
+
+\medskip
+
+Therefore
+\[
+E|X|^j \le (E|X|^k)^{j/k},
+\]
+as desired.
+
+\subsection*{Problem 1.7.2}
+
+Let $g \ge 0$ be a measurable function on $(X, \mathcal{A}, \mu)$. Use Theorem 1.7.2 to conclude that
+\[
+\int_X g\,d\mu
+= (\mu \times \lambda)(\{(x,y) : 0 \le y < g(x)\})
+= \int_0^\infty \mu(\{x : g(x) > y\})\,dy
+\]
+
+\subsection*{Solution}
+
+We need to represent the integral of $g$ as the measure of the region under its graph. We use Durrett's Fubini theorem, Theorem 1.7.2 on book p. 38 (PDF p. 46), together with the cross-section notation used in its proof on book p. 39 (PDF p. 47).
+
+\medskip
+
+Let
+\[
+A=\{(x,y):0\le y<g(x)\}.
+\]
+We first check that $A$ is measurable. Since $g$ is measurable,
+\[
+A
+=
+\bigcup_{\substack{q\in\mathbb{Q}\\ q>0}}
+\{x:g(x)>q\}\times [0,q).
+\]
+Indeed, if $0\le y<g(x)$, we can choose a rational $q$ with $y<q<g(x)$; the converse is immediate. Each set $\{x:g(x)>q\}$ is measurable and $[0,q)$ is Borel, so $A$ is a countable union of measurable rectangles. Hence $A$ belongs to the product $\sigma$-field. Also,
+\[
+1_A(x,y)=1_{\{0\le y<g(x)\}}.
+\]
+For fixed $x$, the set of $y$ satisfying $0\le y<g(x)$ is the interval $[0,g(x))$, whose Lebesgue measure is $g(x)$.
+For each fixed $x$,
+\[
+\int_0^\infty 1_{\{0\le y<g(x)\}}\,dy
+=
+g(x).
+\]
+Therefore
+\[
+\int_X g\,d\mu
+=
+\int_X\int_0^\infty 1_A(x,y)\,dy\,\mu(dx).
+\]
+Since the integrand is nonnegative, Theorem 1.7.2 allows us to change the order of integration. Thus
+\[
+\int_X\int_0^\infty 1_A(x,y)\,dy\,\mu(dx)
+=
+(\mu\times\lambda)(A).
+\]
+This proves the first equality:
+\[
+\int_X g\,d\mu
+=
+(\mu\times\lambda)(\{(x,y):0\le y<g(x)\}).
+\]
+
+\medskip
+
+Now integrate in the other order:
+\[
+(\mu\times\lambda)(A)
+=
+\int_0^\infty\int_X 1_A(x,y)\,\mu(dx)\,dy.
+\]
+For fixed $y\ge 0$,
+\[
+1_A(x,y)=1_{\{g(x)>y\}},
+\]
+and hence
+\[
+\int_X 1_A(x,y)\,\mu(dx)
+=
+\mu(\{x:g(x)>y\}).
+\]
+Therefore
+\[
+(\mu\times\lambda)(A)
+=
+\int_0^\infty \mu(\{x:g(x)>y\})\,dy.
+\]
+Combining the two equalities gives
+\[
+\int_X g\,d\mu
+=
+(\mu \times \lambda)(\{(x,y) : 0 \le y < g(x)\})
+=
+\int_0^\infty \mu(\{x : g(x) > y\})\,dy.
+\]
+So the formula follows from Theorem 1.7.2.
+
+\subsection*{Problem 2.1.2}
+
+Suppose $X_1,\ldots,X_n$ are random variables that take values in countable sets $S_1,\ldots,S_n$. Then in order for $X_1,\ldots,X_n$ to be independent, it is sufficient that whenever $x_i \in S_i$
+\[
+P(X_1 = x_1,\ldots,X_n = x_n)
+= \prod_{i=1}^n P(X_i = x_i)
+\]
+
+\subsection*{Solution}
+
+We need to show independence for arbitrary Borel sets, using only the given formula for single points. We use Durrett's definition of independence of random variables from book p. 44 (PDF p. 52). The method is the same $\pi$-$\lambda$ idea behind Theorem 2.1.7 on book p. 46 (PDF p. 54), but in the countable case we can write the sets as explicit sums over points.
+
+\medskip
+
+Let $B_1,\ldots,B_n$ be Borel subsets of $\mathbb{R}$. Since $X_i$ takes values in $S_i$, put
+\[
+T_i=S_i\cap B_i.
+\]
+Each $T_i$ is countable, and the finite product $T_1\times\cdots\times T_n$ is also countable.
+Then
+\[
+\{X_i\in B_i\}=\{X_i\in T_i\}.
+\]
+Hence
+\[
+\{X_1\in B_1,\ldots,X_n\in B_n\}
+=
+\bigcup_{(x_1,\ldots,x_n)\in T_1\times\cdots\times T_n}
+\{X_1=x_1,\ldots,X_n=x_n\}.
+\]
+This is a countable disjoint union. Therefore, by countable additivity and the assumption,
+\[
+\begin{aligned}
+P(X_1\in B_1,\ldots,X_n\in B_n)
+&=
+\sum_{(x_1,\ldots,x_n)\in T_1\times\cdots\times T_n}
+P(X_1=x_1,\ldots,X_n=x_n)\\
+&=
+\sum_{(x_1,\ldots,x_n)\in T_1\times\cdots\times T_n}
+\prod_{i=1}^n P(X_i=x_i).
+\end{aligned}
+\]
+Since all terms are nonnegative, Tonelli's theorem, or equivalently monotone convergence for sums, justifies factoring the countable sums:
+\[
+\sum_{(x_1,\ldots,x_n)\in T_1\times\cdots\times T_n}
+\prod_{i=1}^n P(X_i=x_i)
+=
+\prod_{i=1}^n \sum_{x_i\in T_i}P(X_i=x_i).
+\]
+But
+\[
+\sum_{x_i\in T_i}P(X_i=x_i)
+=
+P(X_i\in T_i)
+=
+P(X_i\in B_i).
+\]
+Thus
+\[
+P(X_1\in B_1,\ldots,X_n\in B_n)
+=
+\prod_{i=1}^n P(X_i\in B_i).
+\]
+This is the definition of independence of $X_1,\ldots,X_n$. Therefore the given pointwise condition is sufficient.
+
+\subsection*{Problem 2.1.10}
+
+Show that if $X$ and $Y$ are independent, integer-valued random variables, then
+\[
+P(X+Y=n) = \sum_m P(X=m)P(Y=n-m)
+\]
+
+\subsection*{Solution}
+
+We need to decompose the event $\{X+Y=n\}$ according to the possible values of $X$. We use Durrett's definition of independence of random variables from book p. 44 (PDF p. 52), and countable additivity from the definition of a measure on book p. 1 (PDF p. 9).
+
+\medskip
+
+Since $X$ and $Y$ are integer-valued,
+\[
+\{X+Y=n\}
+=
+\bigcup_{m\in\mathbb{Z}}\{X=m,\;Y=n-m\}.
+\]
+Once $X=m$, we must have $Y=n-m$ in order for $X+Y=n$. The events in this union are disjoint, because $X$ cannot equal two different integers at the same time. Hence, by countable additivity,
+\[
+P(X+Y=n)
+=
+\sum_{m\in\mathbb{Z}}P(X=m,\;Y=n-m).
+\]
+Since $X$ and $Y$ are independent,
+\[
+P(X=m,\;Y=n-m)
+=
+P(X=m)P(Y=n-m).
+\]
+Therefore
+\[
+P(X+Y=n)
+=
+\sum_{m\in\mathbb{Z}}P(X=m)P(Y=n-m).
+\]
+Here the sum is over all integers $m\in\mathbb{Z}$.
+So the distribution of $X+Y$ is obtained by this convolution formula.
+
+\subsection*{Problem 2.2.3}
+
+Monte Carlo integration. (i) Let $f$ be a measurable function on $[0, 1]$ with $\int_0^1 |f(x)|\,dx < \infty$. Let $U_1, U_2, \ldots$ be independent and uniformly distributed on $[0, 1]$, and let
+\[
+I_n = n^{-1}(f(U_1)+\cdots+f(U_n))
+\]
+Show that $I_n \to I \equiv \int_0^1 f\,dx$ in probability. (ii) Suppose $\int_0^1 |f(x)|^2\,dx < \infty$. Use Chebyshev’s inequality to estimate $P(|I_n - I| > a/n^{1/2})$.
+
+\subsection*{Solution}
+
+Let
+\[
+Y_i=f(U_i).
+\]
+We use Durrett's change of variables formula, Theorem 1.6.9 on book p. 32 (PDF p. 40), to compute the expectation of $f(U_i)$. We use Durrett's definition of convergence in probability from book p. 56 (PDF p. 64), the weak law of large numbers, Theorem 2.2.14 on book p. 64 (PDF p. 72), the variance formula for sums from Theorem 2.2.1 on book p. 56 (PDF p. 64), and Chebyshev's inequality, Theorem 1.6.4 on book p. 29 (PDF p. 37). For the usual second-moment form of Chebyshev's inequality, we use the display on book p. 30 (PDF p. 38). We also use Durrett's Theorem 2.1.10, the result that measurable functions of independent random variables are independent.
+
+\medskip
+
+Since $U_i$ is uniformly distributed on $[0,1]$,
+\[
+EY_i
+=
+\int_0^1 f(x)\,dx
+=
+I.
+\]
+Also,
+\[
+E|Y_i|
+=
+\int_0^1 |f(x)|\,dx
+<\infty.
+\]
+Because $U_1,U_2,\ldots$ are independent, Durrett's Theorem 2.1.10 gives that the random variables $Y_1,Y_2,\ldots$ are independent. They are identically distributed because the $U_i$ have the same uniform distribution.
+
+\medskip
+
+Now
+\[
+I_n
+=
+\frac1n\sum_{i=1}^n f(U_i)
+=
+\frac1n\sum_{i=1}^n Y_i.
+\]
+By Theorem 2.2.14,
+\[
+\frac1n\sum_{i=1}^n Y_i
+\to
+EY_1
+=
+I
+\]
+in probability. Therefore
+\[
+I_n\to I
+\]
+in probability. This proves part (i).
+
+\medskip
+
+For part (ii), assume that $a>0$ and
+\[
+\int_0^1 |f(x)|^2\,dx<\infty.
+\]
+Then
+\[
+\operatorname{var}(Y_1)
+=
+EY_1^2-(EY_1)^2
+=
+\int_0^1 f(x)^2\,dx-I^2.
+\]
+Let
+\[
+\sigma_f^2=\operatorname{var}(Y_1).
+\]
+By independence,
+\[
+\operatorname{var}(I_n)
+=
+\operatorname{var}\left(\frac1n\sum_{i=1}^n Y_i\right)
+=
+\frac{1}{n^2}\sum_{i=1}^n\operatorname{var}(Y_i)
+=
+\frac{\sigma_f^2}{n}.
+\]
+Using Theorem 1.6.4, in the second-moment form displayed on book p. 30 (PDF p. 38),
+\[
+P\left(|I_n-I|>\frac{a}{n^{1/2}}\right)
+\le
+\frac{\operatorname{var}(I_n)}{a^2/n}
+=
+\frac{\sigma_f^2}{a^2}.
+\]
+Thus
+\[
+P\left(|I_n-I|>\frac{a}{n^{1/2}}\right)
+\le
+\frac{1}{a^2}
+\left(\int_0^1 f(x)^2\,dx-I^2\right)
+\le
+\frac{1}{a^2}\int_0^1 f(x)^2\,dx.
+\]
+So Chebyshev's inequality gives a bound at the natural $n^{-1/2}$ scale.
+
+\subsection*{Problem 2.3.11}
+
+Let $X_1,X_2,\ldots$ be independent with $P(X_n = 1) = p_n$ and $P(X_n = 0) = 1 - p_n$. Show that (i) $X_n \to 0$ in probability if and only if $p_n \to 0$, and (ii) $X_n \to 0$ a.s. if and only if $\sum p_n < \infty$.
+
+\subsection*{Solution}
+
+Let
+\[
+A_n=\{X_n=1\}.
+\]
+Then $P(A_n)=p_n$.
+
+We use Durrett's definition of convergence in probability from book p. 56 (PDF p. 64), the notation $A_n$ i.o. from book p. 68 (PDF p. 76), the Borel--Cantelli lemma, Theorem 2.3.1 on book p. 68 (PDF p. 76), and the second Borel--Cantelli lemma, Theorem 2.3.7 on book p. 70 (PDF p. 78).
+
+\medskip
+
+For part (i), we need to compare convergence in probability with $p_n\to 0$. Let $0<\varepsilon<1$. Since $X_n$ takes only the values $0$ and $1$,
+\[
+P(|X_n-0|>\varepsilon)
+=
+P(X_n=1)
+=
+p_n.
+\]
+If $\varepsilon>1$, then
+\[
+P(|X_n|>\varepsilon)=0.
+\]
+Therefore
+\[
+X_n\to 0 \text{ in probability}
+\quad\Longleftrightarrow\quad
+p_n\to 0.
+\]
+This proves part (i).
+
+\medskip
+
+For part (ii), we use the Borel--Cantelli lemmas. Since $X_n$ takes values in $\{0,1\}$, the convergence $X_n\to 0$ almost surely is equivalent to saying that $X_n=1$ occurs only finitely many times. In other words,
+\[
+X_n\to 0 \text{ a.s.}
+\quad\Longleftrightarrow\quad
+P(A_n\ \text{i.o.})=0.
+\]
+
+If
+\[
+\sum_{n=1}^{\infty}p_n<\infty,
+\]
+then
+\[
+\sum_{n=1}^{\infty}P(A_n)<\infty.
+\]
+By the first Borel--Cantelli lemma,
+\[
+P(A_n\ \text{i.o.})=0.
+\]
+Hence $X_n\to 0$ almost surely.
+
+\medskip
+
+Conversely, suppose that
+\[
+\sum_{n=1}^{\infty}p_n=\infty.
+\]
+The random variables $X_n$ are independent, so the events $A_n=\{X_n=1\}$ are independent. This implication follows directly from Durrett's definition of independent random variables, since $A_n=\{X_n\in\{1\}\}$. By the second Borel--Cantelli lemma,
+\[
+P(A_n\ \text{i.o.})=1.
+\]
+Thus $X_n=1$ infinitely often almost surely, and so $X_n$ does not converge to $0$ almost surely.
+
+\medskip
+
+Therefore
+\[
+X_n\to 0 \text{ a.s.}
+\quad\Longleftrightarrow\quad
+\sum_{n=1}^{\infty}p_n<\infty.
+\]
+
+\subsection*{Problem 3.2.12}
+
+Show that if $X_n \to X$ in probability then $X_n \Rightarrow X$ and that, conversely, if $X_n \Rightarrow c$, where $c$ is a constant then $X_n \to c$ in probability.
+
+\subsection*{Solution}
+
+We first prove that convergence in probability implies weak convergence. We use Durrett's Theorem 2.3.4 on book p. 69 (PDF p. 77), which says that continuous functions preserve convergence in probability and that bounded continuous functions also give convergence of expectations. We then use Theorem 3.2.9 on book p. 119 (PDF p. 127), which characterizes weak convergence by bounded continuous test functions.
+
+\medskip
+
+Let $g$ be bounded and continuous. Since $X_n\to X$ in probability, Theorem 2.3.4 gives
+\[
+g(X_n)\to g(X)
+\]
+in probability and, because $g$ is bounded,
+\[
+Eg(X_n)\to Eg(X).
+\]
+Since this holds for every bounded continuous $g$, Theorem 3.2.9 implies
+\[
+X_n\Rightarrow X.
+\]
+
+\medskip
+
+Conversely, suppose that $X_n\Rightarrow c$, where $c$ is a constant. We need to prove that for every $\varepsilon>0$,
+\[
+P(|X_n-c|>\varepsilon)\to 0.
+\]
+We use Durrett's closed-set criterion in Theorem 3.2.11 on book p. 120 (PDF p. 128).
+
+Let
+\[
+K_\varepsilon=(-\infty,c-\varepsilon]\cup[c+\varepsilon,\infty).
+\]
+Then $K_\varepsilon$ is closed and
+\[
+\{|X_n-c|\ge \varepsilon\}=\{X_n\in K_\varepsilon\}.
+\]
+If $X\equiv c$ denotes the limiting random variable, then $c\notin K_\varepsilon$, and hence
+\[
+P(X\in K_\varepsilon)=0.
+\]
+By Theorem 3.2.11,
+\[
+\limsup_{n\to\infty}P(X_n\in K_\varepsilon)
+\le
+P(X\in K_\varepsilon)
+=0.
+\]
+Hence
+\[
+P(|X_n-c|\ge\varepsilon)\to 0.
+\]
+Therefore also $P(|X_n-c|>\varepsilon)\to 0$, and so $X_n\to c$ in probability.
+
+\subsection*{Problem 3.3.1}
+
+Show that if $\varphi$ is a ch.f. then $\operatorname{Re}\varphi$ and $|\varphi|^2$ are also.
+
+\subsection*{Solution}
+
+Let
+\[
+\varphi(t)=Ee^{itX}
+\]
+be the characteristic function of a random variable $X$.
+
+We use Durrett's definition of a characteristic function from book p. 125 (PDF p. 133), the basic properties in Theorem 3.3.1 on book p. 126 (PDF p. 134), and the product formula for independent sums in Theorem 3.3.2 on book p. 126 (PDF p. 134).
+
+To prove that a function is a characteristic function, we construct a random variable whose characteristic function is that function. We will use $\varepsilon X$ for $\operatorname{Re}\varphi$ and $X-X'$ for $|\varphi|^2$.
+
+\medskip
+
+We first show that $\operatorname{Re}\varphi$ is a characteristic function. Let $\varepsilon$ be independent of $X$ and satisfy
+\[
+P(\varepsilon=1)=P(\varepsilon=-1)=\frac12.
+\]
+Thus $\varepsilon X$ is $X$ with a random sign. Without using conditional expectation,
+\[
+Ee^{it\varepsilon X}
+=
+E(e^{itX}1_{\{\varepsilon=1\}})
++
+E(e^{-itX}1_{\{\varepsilon=-1\}}).
+\]
+By independence,
+\[
+E(e^{itX}1_{\{\varepsilon=1\}})
+=
+Ee^{itX}P(\varepsilon=1)
+=
+\frac12\varphi(t)
+\]
+and
+\[
+E(e^{-itX}1_{\{\varepsilon=-1\}})
+=
+Ee^{-itX}P(\varepsilon=-1)
+=
+\frac12\varphi(-t).
+\]
+By Theorem 3.3.1(b), $\varphi(-t)=\overline{\varphi(t)}$. Therefore
+\[
+Ee^{it\varepsilon X}
+=
+\frac12\varphi(t)+\frac12\overline{\varphi(t)}
+=
+\operatorname{Re}\varphi(t).
+\]
+Thus $\operatorname{Re}\varphi$ is the characteristic function of the random variable $\varepsilon X$.
+
+\medskip
+
+Now let $X'$ be an independent copy of $X$. Then
+\[
+Ee^{it(X-X')}
+=
+Ee^{itX}Ee^{-itX'}
+\]
+by independence. Since $X'$ has the same distribution as $X$,
+\[
+Ee^{-itX'}
+=
+\varphi(-t)
+=
+\overline{\varphi(t)}.
+\]
+Therefore
+\[
+Ee^{it(X-X')}
+=
+\varphi(t)\overline{\varphi(t)}
+=
+|\varphi(t)|^2.
+\]
+So $|\varphi|^2$ is the characteristic function of $X-X'$.
+
+\medskip
+
+Therefore both $\operatorname{Re}\varphi$ and $|\varphi|^2$ are characteristic functions.
+
+\subsection*{Problem 3.3.6}
+
+Use the result in Example 3.3.16 to conclude that if $X_1,X_2,\ldots$ are independent and have the Cauchy distribution, then $(X_1+\cdots+X_n)/n$ has the same distribution as $X_1$.
+
+\subsection*{Solution}
+
+We use the characteristic function of the Cauchy distribution from Durrett's Example 3.3.16 on book p. 131 (PDF p. 139):
+\[
+\varphi(t)=e^{-|t|}.
+\]
+We also use Theorem 3.3.2 on book p. 126 (PDF p. 134) for sums of independent random variables and Theorem 3.3.11 on book p. 128 (PDF p. 136), the inversion formula, to use the fact that characteristic functions determine distributions.
+
+\medskip
+
+Let
+\[
+S_n=X_1+\cdots+X_n.
+\]
+Since $X_1,\ldots,X_n$ are independent, the characteristic function of $S_n/n$ is
+\[
+E e^{itS_n/n}
+=
+E e^{i(t/n)(X_1+\cdots+X_n)}.
+\]
+Using independence,
+\[
+E e^{itS_n/n}
+=
+\prod_{j=1}^{n}E e^{i(t/n)X_j}.
+\]
+Here we use the scaling property in Theorem 3.3.1(e): the characteristic function of $X_j/n$ is $\varphi(t/n)$.
+Each $X_j$ has the same Cauchy distribution, so
+\[
+E e^{i(t/n)X_j}
+=
+\varphi(t/n)
+=
+e^{-|t|/n}.
+\]
+Therefore
+\[
+E e^{itS_n/n}
+=
+\left(e^{-|t|/n}\right)^n
+=
+e^{-|t|}.
+\]
+But $e^{-|t|}$ is exactly the characteristic function of $X_1$.
+
+\medskip
+
+Since characteristic functions determine distributions, we can conclude that
+\[
+\frac{X_1+\cdots+X_n}{n}
+\]
+has the same distribution as $X_1$.
+
+\subsection*{Problem 3.4.1}
+
+Suppose you roll a die 180 times. Use the normal approximation (with the histogram correction) to estimate the probability you will get fewer than 25 sixes.
+
+\subsection*{Solution}
+
+Let $S$ be the number of sixes in the $180$ rolls. Each roll has probability $1/6$ of being a six. Then
+\[
+S\sim \operatorname{Binomial}\left(180,\frac16\right).
+\]
+We use Durrett's central limit theorem, Theorem 3.4.1 on book p. 144 (PDF p. 152), and the histogram correction in Example 3.4.7 on book p. 146 (PDF p. 154).
+
+\medskip
+
+Thus
+\[
+ES=180\cdot \frac16=30
+\]
+and
+\[
+\operatorname{var}(S)
+=
+180\cdot\frac16\cdot\frac56
+=
+25.
+\]
+So the standard deviation is
+\[
+\sigma=5.
+\]
+
+\medskip
+
+We want the probability of fewer than $25$ sixes, that is
+\[
+P(S<25)=P(S\le 24).
+\]
+Here $S<25$ is the same as $S\le 24$ because $S$ is integer-valued.
+Using the normal approximation with the histogram correction, the event $S\le 24$ is approximated by the normal event
+\[
+S\le 24.5.
+\]
+The reason for the number $24.5$ is that the discrete value $24$ is represented by the continuous bin $[23.5,24.5]$.
+Therefore
+\[
+P(S\le 24)
+\approx
+P\left(\chi\le \frac{24.5-30}{5}\right),
+\]
+where $\chi$ is standard normal, as in Durrett's notation. The standardized value is
+\[
+\frac{24.5-30}{5}
+=
+-1.1.
+\]
+Hence
+\[
+P(S<25)
+\approx
+P(\chi\le -1.1).
+\]
+From the standard normal table,
+\[
+P(\chi\le -1.1)
+=
+1-P(\chi\le 1.1)
+\approx
+1-0.8643
+=
+0.1357.
+\]
+Therefore the normal approximation gives
+\[
+P(S<25)\approx 0.136.
+\]
+
+\subsection*{Problem 4.1.2}
+
+Prove Chebyshev’s inequality. If $a > 0$ then
+\[
+P(|X| \ge a \mid \mathcal{F}) \le a^{-2}E(X^2 \mid \mathcal{F})
+\]
+
+\subsection*{Solution}
+
+We need to prove the conditional version of Chebyshev's inequality. We assume that $X^2$ is integrable, or interpret $E(X^2\mid\mathcal{F})$ in the extended nonnegative sense. We use Durrett's notation $P(A\mid\mathcal{F})=E(1_A\mid\mathcal{F})$ from book p. 208 (PDF p. 216), and the linearity and monotonicity of conditional expectation in Theorem 4.1.9 on book p. 210 (PDF p. 218). The inequality below is understood a.s.
+
+\medskip
+
+Recall that
+\[
+P(|X|\ge a\mid\mathcal{F})
+=
+E(1_{\{|X|\ge a\}}\mid\mathcal{F}).
+\]
+On the event $\{|X|\ge a\}$, we have $X^2\ge a^2$. Therefore
+\[
+a^2 1_{\{|X|\ge a\}}
+\le
+X^2.
+\]
+Since $a>0$, this is the same as
+\[
+1_{\{|X|\ge a\}}
+\le
+a^{-2}X^2.
+\]
+Taking conditional expectations with respect to $\mathcal{F}$ and using monotonicity of conditional expectation,
+\[
+E(1_{\{|X|\ge a\}}\mid\mathcal{F})
+\le
+E(a^{-2}X^2\mid\mathcal{F}).
+\]
+By linearity,
+\[
+E(a^{-2}X^2\mid\mathcal{F})
+=
+a^{-2}E(X^2\mid\mathcal{F}).
+\]
+Thus
+\[
+P(|X| \ge a \mid \mathcal{F})
+\le
+a^{-2}E(X^2 \mid \mathcal{F}).
+\]
+Therefore Chebyshev's inequality in conditional form is proved a.s.
+
+\subsection*{Problem 4.2.1}
+
+Suppose $X_n$ is a martingale w.r.t. $\mathcal{G}_n$ and let $\mathcal{F}_n = \sigma(X_1,\ldots,X_n)$. Then $\mathcal{G}_n \supset \mathcal{F}_n$ and $X_n$ is a martingale w.r.t. $\mathcal{F}_n$.
+
+\subsection*{Solution}
+
+We need to show two things. We use Durrett's definition of a martingale with respect to a filtration from book p. 217 (PDF p. 225), and the tower property for conditional expectation, Theorem 4.1.13 on book p. 212 (PDF p. 220).
+
+\medskip
+
+We need to show two things:
+\begin{itemize}
+\item $\mathcal{F}_n\subset \mathcal{G}_n$;
+\item $(X_n)$ is a martingale with respect to $(\mathcal{F}_n)$.
+\end{itemize}
+
+\medskip
+
+Since $X_n$ is a martingale with respect to $\mathcal{G}_n$, it is adapted to $\mathcal{G}_n$. Thus, for every $i\le n$,
+\[
+X_i \text{ is } \mathcal{G}_i\text{-measurable}.
+\]
+Because $(\mathcal{G}_n)$ is a filtration, $\mathcal{G}_i\subset \mathcal{G}_n$ whenever $i\le n$. Hence $X_i$ is $\mathcal{G}_n$-measurable for every $i\le n$.
+
+Therefore the $\sigma$-field generated by $X_1,\ldots,X_n$ is contained in $\mathcal{G}_n$:
+\[
+\mathcal{F}_n
+=
+\sigma(X_1,\ldots,X_n)
+\subset
+\mathcal{G}_n.
+\]
+This proves the first part.
+
+\medskip
+
+Now we prove the martingale property with respect to $\mathcal{F}_n$. First, $(\mathcal{F}_n)$ is a filtration because
+\[
+\sigma(X_1,\ldots,X_n)
+\subset
+\sigma(X_1,\ldots,X_n,X_{n+1}).
+\]
+Since $X_n$ is a martingale with respect to $\mathcal{G}_n$, each $X_n$ is integrable. Also, by definition, $X_n$ is $\mathcal{F}_n$-measurable. Hence $(X_n)$ is adapted and integrable with respect to $(\mathcal{F}_n)$.
+
+It remains to check the conditional expectation. All conditional expectation equalities below are understood a.s. Since
+\[
+\mathcal{F}_n\subset \mathcal{G}_n,
+\]
+the tower property gives
+\[
+E(X_{n+1}\mid\mathcal{F}_n)
+=
+E\bigl(E(X_{n+1}\mid\mathcal{G}_n)\mid\mathcal{F}_n\bigr).
+\]
+Because $(X_n)$ is a martingale with respect to $(\mathcal{G}_n)$,
+\[
+E(X_{n+1}\mid\mathcal{G}_n)=X_n.
+\]
+Therefore
+\[
+E(X_{n+1}\mid\mathcal{F}_n)
+=
+E(X_n\mid\mathcal{F}_n).
+\]
+Since $X_n$ is $\mathcal{F}_n$-measurable,
+\[
+E(X_n\mid\mathcal{F}_n)=X_n.
+\]
+Thus
+\[
+E(X_{n+1}\mid\mathcal{F}_n)=X_n.
+\]
+So we can conclude that $(X_n)$ is a martingale with respect to $(\mathcal{F}_n)$.
+
+\end{document}

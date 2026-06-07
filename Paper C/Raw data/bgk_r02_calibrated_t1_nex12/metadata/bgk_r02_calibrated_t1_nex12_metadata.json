@@ -1,0 +1,100 @@
+{
+  "case_id": "bgk_r02_calibrated_t1_nex12",
+  "run_root": "Code/bgk_r02_calibrated_t1_nex12",
+  "data_root": "Raw data/bgk_r02_calibrated_t1_nex12",
+  "sandbox_only": true,
+  "model_env": {
+    "GDMR_S0": "100.0",
+    "GDMR_V0": "0.114",
+    "GDMR_VP0": "0.110",
+    "GDMR_R": "0.02",
+    "GDMR_KAPPA1": "5.5",
+    "GDMR_KAPPA2": "0.1",
+    "GDMR_THETA": "0.078",
+    "GDMR_XI1": "2.689",
+    "GDMR_XI2": "0.502",
+    "GDMR_DELTA1": "0.94",
+    "GDMR_DELTA2": "0.94",
+    "GDMR_RHO12": "-0.982",
+    "GDMR_RHO13": "-0.727",
+    "GDMR_RHO23": "0.590",
+    "GDMR_MATURITY": "1.0",
+    "GDMR_EXERCISE_DATES": "12"
+  },
+  "seeds": {
+    "direct": "2026",
+    "low": "2103"
+  },
+  "hybrid_env": {
+    "GDMR_HYBRID_ASSET_POINTS": "301",
+    "GDMR_HYBRID_ASSET_LOW_FACTOR": "0.30",
+    "GDMR_HYBRID_ASSET_HIGH_FACTOR": "3.50",
+    "GDMR_HYBRID_VOL_QUANTILE": "0.999",
+    "GDMR_HYBRID_FST_PAD_FACTOR": "4",
+    "GDMR_HYBRID_FST_BATCH_SIZE": "256"
+  },
+  "benchmark": {
+    "euler_steps": 1200,
+    "paths": 1200000,
+    "low_paths": 1200000
+  },
+  "step_sweep": {
+    "paths": [
+      20000,
+      60000
+    ],
+    "steps": [
+      24,
+      48,
+      72,
+      96
+    ],
+    "methods": [
+      "benchmark",
+      "hybrid"
+    ]
+  },
+  "path_sweep": {
+    "steps": [
+      48,
+      60
+    ],
+    "paths": [
+      250,
+      500,
+      1000,
+      2000,
+      5000,
+      10000,
+      20000,
+      40000,
+      60000
+    ],
+    "reported_paths": [
+      250,
+      1000,
+      5000,
+      10000,
+      20000,
+      40000,
+      60000
+    ],
+    "methods": [
+      "benchmark",
+      "hybrid"
+    ]
+  },
+  "engines": {
+    "lsmc": "Code/bgk_r02_calibrated_t1_nex12/code/lsmc_from_scratch.py",
+    "hybrid": "Code/bgk_r02_calibrated_t1_nex12/code/hybrid_from_scratch.py",
+    "lsmc_helper": "Code/bgk_r02_calibrated_t1_nex12/code/scratch_lsmc_helpers.py",
+    "hybrid_helper": "Code/bgk_r02_calibrated_t1_nex12/code/scratch_hybrid_helpers.py",
+    "config": "Raw data/bgk_r02_calibrated_t1_nex12/config/rerun_config.json",
+    "lsmc_sha256": "27cf36f62400b0287829c91b7ef3c581dd5a92de2590e054a8ae422e4bd373b3",
+    "hybrid_sha256": "c46423d4ebda4f0bdb7fa8daa54d7a1e5762a784fc264187e5ec4f83847b990f",
+    "lsmc_helper_sha256": "397db83a0380efbcdc3f230f0f3df9d869682779ad59fa60d3eef821ecb9ea27",
+    "hybrid_helper_sha256": "503cc5b1117b245fabb1a6f72ca295f4dcf6230cd9f5cb775314eea44a8fc7c6",
+    "config_sha256": "9b1bf5c9c692f86c779781292274b3efd4b45469ea4ee9980d84cc0c43ff820c"
+  },
+  "created_by": "from-scratch sandbox rerun"
+}
