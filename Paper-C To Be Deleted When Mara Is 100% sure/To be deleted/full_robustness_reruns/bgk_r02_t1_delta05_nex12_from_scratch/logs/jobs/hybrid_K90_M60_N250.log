@@ -1,0 +1,29 @@
+COMMAND: C:\Python312\python.exe D:\Mara PhD\Paper-C\To be deleted\full_robustness_reruns\bgk_r02_t1_delta05_nex12_from_scratch\code\hybrid_from_scratch.py
+
+STDOUT:
+Hybrid LSMC-PDE for a Bermudan put
+Implementation: from-scratch volatility-only gDMR + FFT grid engine
+Spot:                           100.00
+Strike:                         90.00
+Maturity:                       1.00
+Rate:                           0.0200
+Training volatility paths:      250
+Low-estimator volatility paths: 250
+Exercise dates:                 12
+Euler steps:                    60
+Asset grid points:              301
+FST pad factor:                 4
+FST batch size:                 256
+Vol basis size:                 10
+Hybrid direct price:            8.821923
+Hybrid direct error:            0.304561
+Hybrid low price:               7.110705
+Hybrid low error:               0.919378
+RESULT_JSON: {"K": 90.0, "S0": 100.0, "T": 1.0, "asset_grid_points": 301, "asset_high_factor": 3.5, "asset_low_factor": 0.3, "beta2": -0.8483969934038962, "beta3": -0.22644577389170112, "delta1": 0.5, "delta2": 0.5, "euler_steps": 60, "exercise_dates": 12, "fst_batch_size": 256, "fst_pad_factor": 4, "hybrid_direct_error": 0.3045611427104472, "hybrid_direct_price": 8.82192337274137, "hybrid_low_error": 0.9193778039719082, "hybrid_low_price": 7.11070518484712, "internal_steps": 5.0, "kappa1": 5.5, "kappa2": 0.1, "low_paths": 250, "low_seed": 2103, "method": "Hybrid LSMC-PDE with FFT from scratch", "option_type": "put", "paths": 250, "r": 0.02, "rho12": -0.982, "rho13": -0.727, "rho23": 0.59, "seed": 2026, "sigma_perp_sq": 0.0022480748581070686, "theta": 0.078, "time_zero_exercise_in_low": false, "v0": 0.114, "v_cap": 2.7103230953216553, "vol_basis_degree": 3, "vol_basis_size": 10, "vol_quantile": 0.999, "vp0": 0.11, "vp_cap": 0.6754429936408997, "xi1": 2.689, "xi2": 0.502}
+
+
+STDERR:
+
+
+EXIT_CODE: 0
+RUNTIME_SECONDS: 1.094734

@@ -1,0 +1,96 @@
+\documentclass[pdflatex,sn-mathphys-num]{sn-jnl}
+
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{hyperref}
+\hypersetup{hypertexnames=false}
+
+\raggedbottom
+
+\begin{document}
+
+\title[Standalone numerical study for a positive-rate square-root gDMR parameter set]{Standalone numerical study for a positive-rate square-root gDMR parameter set}
+
+\author[1]{\fnm{Mara Kalicanin} \sur{Dimitrov}}
+\author[1]{\fnm{Ying} \sur{Ni}}
+\affil[1]{\orgdiv{Department of Business and Mathematics}, \orgname{M\"{a}lardalen University}, \orgaddress{\postcode{721~23}, \city{V\"{a}ster{\aa}s}, \country{Sweden}}}
+
+\maketitle
+
+\section{Numerical studies}
+
+This standalone document repeats the manuscript numerical-study design for the square-root gDMR parameter set reported in Table~\ref{tab:bgk_r05_v0114_vp009_t1_delta05_nex12-experimental-setting}, using the positive risk-free rate \(r=0.05\). The option is a Bermudan put with twelve exercise dates, maturity \(T=1\), and strikes \(K=70,80,90,100,110\). The direct plain LSMC estimator is compared with the Hybrid LSMC--PDE estimator. All prices, standard errors, confidence intervals, and relative errors are computed from the direct estimators, and benchmark-relative errors use the plain LSMC references in Table~\ref{tab:bgk_r05_v0114_vp009_t1_delta05_nex12-benchmark-references}.
+
+\input{../tables/bgk_r05_v0114_vp009_t1_delta05_nex12_experimental_setting_table}
+
+The benchmark references are obtained with \(1200\) Euler time steps and \(1,200,000\) direct paths. Across the five strikes, the benchmark direct prices range from 3.734195 to 15.732048. These values define the reference scale used in the step-sweep and path-sweep experiments below.
+
+\input{../tables/bgk_r05_v0114_vp009_t1_delta05_nex12_benchmark_reference_table}
+
+\subsection{Fixed path budget, varying number of Euler time steps}
+
+The first experiment keeps the direct path budget fixed and varies the number of Euler time steps. The two path budgets are \(20,000\) and \(60,000\), and both methods are evaluated at \(24\), \(48\), \(72\), and \(96\) steps. This isolates how the time discretization affects the direct Bermudan estimator away from the benchmark regime.
+
+For \(20,000\) paths, the LSMC relative-error range over the full step-sweep grid is 10.292\%--41.074\%, while the Hybrid LSMC--PDE range is 9.487\%--28.662\%. Figure~\ref{fig:bgk_r05_v0114_vp009_t1_delta05_nex12-step20k} shows the strike-wise relative-error profiles, and Table~\ref{tab:bgk_r05_v0114_vp009_t1_delta05_nex12-step72-20k} reports the representative \(72\)-step values.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.96\textwidth]{../figures/bgk_r05_v0114_vp009_t1_delta05_nex12_step_sweep_20k_direct_relative_error.pdf}
+\caption{Relative errors for the matched \(20{,}000\)-path step-sweep experiment. Error bars are induced by the \(95\%\) confidence intervals of the direct estimators.}
+\label{fig:bgk_r05_v0114_vp009_t1_delta05_nex12-step20k}
+\end{figure}
+
+\input{../tables/bgk_r05_v0114_vp009_t1_delta05_nex12_step_sweep_20k_step72_table}
+
+For \(60,000\) paths, the same design gives an LSMC relative-error range of 10.731\%--35.979\% and a Hybrid LSMC--PDE range of 9.557\%--29.642\%. Figure~\ref{fig:bgk_r05_v0114_vp009_t1_delta05_nex12-step60k} and Table~\ref{tab:bgk_r05_v0114_vp009_t1_delta05_nex12-step72-60k} give the corresponding graphical and tabular summaries.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.96\textwidth]{../figures/bgk_r05_v0114_vp009_t1_delta05_nex12_step_sweep_60k_direct_relative_error.pdf}
+\caption{Relative errors for the matched \(60{,}000\)-path step-sweep experiment. Error bars are induced by the \(95\%\) confidence intervals of the direct estimators.}
+\label{fig:bgk_r05_v0114_vp009_t1_delta05_nex12-step60k}
+\end{figure}
+
+\input{../tables/bgk_r05_v0114_vp009_t1_delta05_nex12_step_sweep_60k_step72_table}
+
+\subsection{Fixed number of Euler time steps, varying path counts}
+
+The second experiment fixes the number of Euler time steps and varies the direct path budget. The reported path grid is \(250\), \(1000\), \(5000\), \(10000\), \(20000\), \(40000\), and \(60000\). The two discretization levels are \(48\) and \(60\) steps.
+
+At \(48\) steps for the at-the-money strike, the LSMC relative-error range over all path counts is 19.633\%--49.645\%, while the Hybrid LSMC--PDE range is 15.300\%--19.872\%. Figure~\ref{fig:bgk_r05_v0114_vp009_t1_delta05_nex12-path48} reports the full strike-wise path sweep, and Table~\ref{tab:bgk_r05_v0114_vp009_t1_delta05_nex12-path48-path20k} reports the \(20,000\)-path representative values.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.96\textwidth]{../figures/bgk_r05_v0114_vp009_t1_delta05_nex12_path_sweep_steps48_direct_relative_error.pdf}
+\caption{Relative errors for the fixed \(48\)-step path-sweep experiment. Error bars are induced by the \(95\%\) confidence intervals of the direct estimators.}
+\label{fig:bgk_r05_v0114_vp009_t1_delta05_nex12-path48}
+\end{figure}
+
+\input{../tables/bgk_r05_v0114_vp009_t1_delta05_nex12_path_sweep_steps48_path20k_table}
+
+At \(60\) steps for the at-the-money strike, the corresponding LSMC range is 18.367\%--55.332\%, and the Hybrid LSMC--PDE range is 14.133\%--19.266\%. Figure~\ref{fig:bgk_r05_v0114_vp009_t1_delta05_nex12-path60} and Table~\ref{tab:bgk_r05_v0114_vp009_t1_delta05_nex12-path60-path20k} provide the companion summaries.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.96\textwidth]{../figures/bgk_r05_v0114_vp009_t1_delta05_nex12_path_sweep_steps60_direct_relative_error.pdf}
+\caption{Relative errors for the fixed \(60\)-step path-sweep experiment. Error bars are induced by the \(95\%\) confidence intervals of the direct estimators.}
+\label{fig:bgk_r05_v0114_vp009_t1_delta05_nex12-path60}
+\end{figure}
+
+\input{../tables/bgk_r05_v0114_vp009_t1_delta05_nex12_path_sweep_steps60_path20k_table}
+
+\subsection{High-path Hybrid confirmation}
+
+The fixed-step sweeps show that the coarse \(48\)- and \(60\)-step designs do not by themselves remove the discretization and grid effects for this square-root case. As a final confirmation, the Hybrid LSMC--PDE calculation is repeated with \(1200\) Euler steps, \(100,000\) direct paths, and a widened \(601\)-point asset grid on \([0.10S_0,5S_0]\). Under this accuracy-oriented setting, the largest benchmark-relative Hybrid error over the five strikes is 0.837\%, and each strike is below the one-percent level.
+
+\input{../tables/bgk_r05_v0114_vp009_t1_delta05_nex12_hybrid_highaccuracy_steps1200_paths100000_grid601_table}
+
+The high-path confirmation indicates that the larger errors observed in the moderate-budget sweeps are not caused by the Bermudan stopping formulation itself. They are primarily a numerical-budget effect for this parameter set, and the Hybrid prices recover the benchmark scale once the time grid and asset grid are refined together with the path budget.
+
+\clearpage
+\appendix
+\input{../tables/bgk_r05_v0114_vp009_t1_delta05_nex12_appendix_price_tables}
+
+\end{document}

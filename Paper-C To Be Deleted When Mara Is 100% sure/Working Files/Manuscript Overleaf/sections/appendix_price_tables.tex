@@ -1,0 +1,114 @@
+% Appendix price tables generated from canonical numerical CSV sources.
+% Prices are rounded uniformly to three decimal places.
+\begin{appendices}
+
+\section{Direct prices for the numerical experiments}\label{app:direct-prices}
+This appendix reports the direct Bermudan put prices corresponding to the numerical experiments in Section~\ref{sec:numerical}. All price entries are rounded to three decimal places. The label LSMC denotes the plain least-squares Monte Carlo estimator, and Hybrid denotes the Hybrid LSMC--PDE estimator.
+
+\subsection{Calibrated specification}
+
+\begin{table}[htbp]
+\centering
+\caption{Direct benchmark reference prices. Prices are rounded to three decimal places.}
+\label{tab:app-benchmark-prices}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{0.86\textwidth}{@{}l *{5}{>{\centering\arraybackslash}X}@{}}
+\toprule
+Reference setting & $K=70$ & $K=80$ & $K=90$ & $K=100$ & $K=110$ \\
+\midrule
+$1200$ steps, $1{,}200{,}000$ paths & 2.699 & 4.597 & 7.403 & 11.357 & 16.646 \\
+\botrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Direct prices in the fixed-path step-sweep experiments. Prices are rounded to three decimal places.}
+\label{tab:app-step-sweep-prices}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{@{}cc l *{5}{>{\centering\arraybackslash}X}@{}}
+\toprule
+Paths & Steps & Method & $K=70$ & $K=80$ & $K=90$ & $K=100$ & $K=110$ \\
+\midrule
+\multicolumn{8}{@{}l}{\textit{Matched 20,000-path comparison}} \\
+20{,}000 & 24 & LSMC & 2.940 & 4.939 & 7.819 & 11.814 & 17.074 \\
+20{,}000 & 24 & Hybrid & 2.882 & 4.818 & 7.634 & 11.584 & 16.890 \\
+20{,}000 & 48 & LSMC & 2.804 & 4.744 & 7.564 & 11.509 & 16.849 \\
+20{,}000 & 48 & Hybrid & 2.742 & 4.635 & 7.421 & 11.363 & 16.684 \\
+20{,}000 & 72 & LSMC & 2.739 & 4.673 & 7.535 & 11.465 & 16.774 \\
+20{,}000 & 72 & Hybrid & 2.714 & 4.597 & 7.372 & 11.303 & 16.619 \\
+20{,}000 & 96 & LSMC & 2.720 & 4.677 & 7.551 & 11.549 & 16.739 \\
+20{,}000 & 96 & Hybrid & 2.731 & 4.628 & 7.422 & 11.376 & 16.713 \\
+\addlinespace
+\multicolumn{8}{@{}l}{\textit{Matched 60,000-path comparison}} \\
+60{,}000 & 24 & LSMC & 2.909 & 4.842 & 7.664 & 11.631 & 16.966 \\
+60{,}000 & 24 & Hybrid & 2.896 & 4.844 & 7.679 & 11.651 & 16.973 \\
+60{,}000 & 48 & LSMC & 2.802 & 4.729 & 7.534 & 11.497 & 16.729 \\
+60{,}000 & 48 & Hybrid & 2.751 & 4.649 & 7.442 & 11.391 & 16.719 \\
+60{,}000 & 72 & LSMC & 2.766 & 4.663 & 7.504 & 11.496 & 16.785 \\
+60{,}000 & 72 & Hybrid & 2.722 & 4.610 & 7.393 & 11.332 & 16.654 \\
+60{,}000 & 96 & LSMC & 2.711 & 4.621 & 7.411 & 11.392 & 16.706 \\
+60{,}000 & 96 & Hybrid & 2.706 & 4.589 & 7.370 & 11.310 & 16.632 \\
+\botrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Direct prices in the fixed 48-step path-sweep experiments. Prices are rounded to three decimal places.}
+\label{tab:app-path-sweep-48-prices}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{@{}c l *{5}{>{\centering\arraybackslash}X}@{}}
+\toprule
+Paths & Method & $K=70$ & $K=80$ & $K=90$ & $K=100$ & $K=110$ \\
+\midrule
+250 & LSMC & 3.478 & 5.721 & 9.218 & 14.103 & 20.413 \\
+250 & Hybrid & 3.272 & 5.386 & 8.426 & 12.577 & 18.067 \\
+1{,}000 & LSMC & 3.130 & 5.211 & 7.983 & 12.044 & 17.703 \\
+1{,}000 & Hybrid & 2.865 & 4.808 & 7.618 & 11.541 & 16.811 \\
+5{,}000 & LSMC & 2.866 & 4.869 & 7.762 & 11.833 & 17.003 \\
+5{,}000 & Hybrid & 2.778 & 4.721 & 7.563 & 11.541 & 16.867 \\
+10{,}000 & LSMC & 2.807 & 4.776 & 7.616 & 11.562 & 16.905 \\
+10{,}000 & Hybrid & 2.715 & 4.584 & 7.339 & 11.248 & 16.546 \\
+20{,}000 & LSMC & 2.804 & 4.744 & 7.564 & 11.509 & 16.849 \\
+20{,}000 & Hybrid & 2.742 & 4.635 & 7.421 & 11.363 & 16.684 \\
+40{,}000 & LSMC & 2.753 & 4.663 & 7.538 & 11.565 & 16.884 \\
+40{,}000 & Hybrid & 2.738 & 4.646 & 7.454 & 11.417 & 16.752 \\
+60{,}000 & LSMC & 2.802 & 4.729 & 7.534 & 11.497 & 16.729 \\
+60{,}000 & Hybrid & 2.751 & 4.649 & 7.442 & 11.391 & 16.719 \\
+\botrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Direct prices in the fixed 60-step path-sweep experiments. Prices are rounded to three decimal places.}
+\label{tab:app-path-sweep-60-prices}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{@{}c l *{5}{>{\centering\arraybackslash}X}@{}}
+\toprule
+Paths & Method & $K=70$ & $K=80$ & $K=90$ & $K=100$ & $K=110$ \\
+\midrule
+250 & LSMC & 3.749 & 6.295 & 9.893 & 14.375 & 19.992 \\
+250 & Hybrid & 3.298 & 5.331 & 8.312 & 12.476 & 17.957 \\
+1{,}000 & LSMC & 3.090 & 5.097 & 7.673 & 12.259 & 18.224 \\
+1{,}000 & Hybrid & 2.803 & 4.674 & 7.400 & 11.249 & 16.486 \\
+5{,}000 & LSMC & 2.934 & 4.961 & 7.754 & 11.694 & 17.029 \\
+5{,}000 & Hybrid & 2.824 & 4.764 & 7.588 & 11.544 & 16.853 \\
+10{,}000 & LSMC & 2.853 & 4.858 & 7.760 & 11.671 & 16.856 \\
+10{,}000 & Hybrid & 2.734 & 4.606 & 7.365 & 11.276 & 16.569 \\
+20{,}000 & LSMC & 2.807 & 4.774 & 7.610 & 11.569 & 16.842 \\
+20{,}000 & Hybrid & 2.729 & 4.604 & 7.370 & 11.293 & 16.606 \\
+40{,}000 & LSMC & 2.810 & 4.696 & 7.516 & 11.522 & 16.822 \\
+40{,}000 & Hybrid & 2.715 & 4.607 & 7.395 & 11.342 & 16.672 \\
+60{,}000 & LSMC & 2.765 & 4.723 & 7.554 & 11.517 & 16.764 \\
+60{,}000 & Hybrid & 2.735 & 4.626 & 7.410 & 11.350 & 16.671 \\
+\botrule
+\end{tabularx}
+\end{table}
+
+\end{appendices}

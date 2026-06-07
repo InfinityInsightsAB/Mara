@@ -1,0 +1,42 @@
+{
+  "scenario_slug": "k100",
+  "scenario_label": "ATM",
+  "display_label": "K=100",
+  "strike": 100.0,
+  "euler_steps": 48,
+  "path_counts": [
+    250,
+    500,
+    1000,
+    2000,
+    5000,
+    10000,
+    20000,
+    40000,
+    60000
+  ],
+  "reuse_mode": "reused_directly",
+  "source_paths": [
+    "C:\\MDU PhD\\Paper C\\Experiments 26.03\\bgk_r00_t1_nex12_path_sweep_atm_steps48_direct_ref1200_paths1200000_table.csv"
+  ],
+  "reused_paths": [
+    250,
+    500,
+    1000,
+    2000,
+    5000,
+    10000,
+    20000,
+    40000,
+    60000
+  ],
+  "computed_paths": [],
+  "output_csv": "C:\\MDU PhD\\Paper C\\Working Files\\Manuscript Code\\reference_values\\path_sweep\\bgk_r00_t1_nex12_path_sweep_k100_steps48_direct_ref1200_paths1200000_table.csv",
+  "benchmark_reference_price": 11.356823,
+  "benchmark_source_paths": [
+    "C:\\MDU PhD\\Paper C\\Experiments 26.03\\bgk_r00_t1_nex12_benchmark_steps1200_paths1200000_table.csv",
+    "C:\\MDU PhD\\Paper C\\Experiments 26.03\\bgk_r00_t1_nex12_benchmark_steps1200_paths1200000_k80_k70_table.csv"
+  ],
+  "benchmark_script": "C:\\MDU PhD\\Paper C\\Experiments 26.03\\LSMC Benchmark\\run_gdmr_benchmark_put.py",
+  "hybrid_script": "C:\\MDU PhD\\Paper C\\Experiments 26.03\\Hybrid LSMC-PDE with FFT\\run_gdmr_hybrid_put.py"
+}

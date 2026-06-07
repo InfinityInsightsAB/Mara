@@ -1,0 +1,2 @@
+study,K,euler_steps,paths,low_paths,seed,low_seed,policy,price_direct,se_direct,ci_width_direct,price_low,se_low,direct_low_gap,runtime_seconds,r,delta1,delta2,v0,vp0,T,exercise_dates,benchmark_engine_sha256
+smoke,100,48,1000,1000,2026,2103,all_paths,12.184360117042,0.657242674438,2.576391283798,11.147886879740,0.608170638186,0.085065873575,0.208713,0.02,0.5,0.5,0.114,0.11,1,12,9f68fa764ddd504f255f0bd81f5638093b041a929b8bc6a2d059845d2d390253

@@ -1,0 +1,91 @@
+\section{Numerical Studies}\label{sec:numerical}
+
+This section focuses on the direct Bermudan pricing experiments under the calibrated gDMR specification. The plain LSMC method is compared with the Hybrid LSMC--PDE method. The objective is to examine the effect of the number of steps under fixed path budgets and the effect of the path budget under fixed step levels. Throughout the section, only direct prices are reported, together with standard errors, confidence intervals, and relative errors with respect to the benchmark reference values.
+
+\subsection{Experimental setting and benchmark}
+
+Table~\ref{tab:calibrated-setup} summarizes the calibrated model parameters and the fixed numerical setting used in all Bermudan experiments. When \(S_0=100\), the strikes \(K=70\), \(K=80\), and \(K=90\) are out-of-the-money, \(K=100\) is at-the-money, and \(K=110\) is in-the-money for the Bermudan put.
+
+\input{tables/numerical/experimental_setting_table}
+
+All reported quantities are direct estimators. The benchmark is plain LSMC with \(1200\) steps and \(1{,}200{,}000\) paths. For a direct estimator \(V\) and benchmark reference value \(V^{\mathrm{ref}}\), the direct relative error is defined by
+\[
+\varepsilon_{\mathrm{dir}} = \frac{|V-V^{\mathrm{ref}}|}{|V^{\mathrm{ref}}|}.
+\]
+The associated two-sided \((1-\alpha)\) confidence interval is reported as
+\[
+[V-z_{1-\alpha/2}\,\mathrm{SE},\,V+z_{1-\alpha/2}\,\mathrm{SE}],
+\]
+where \(z_{1-\alpha/2}\) denotes the corresponding standard normal quantile. In the reported results below, \(\alpha=0.05\).
+
+Table~\ref{tab:benchmark-direct-references} provides the direct benchmark prices, standard errors, and confidence intervals used as reference values throughout the numerical study.
+
+\input{tables/numerical/benchmark_reference_table}
+
+\subsection{Fixed path budget, varying number of steps}
+
+This experiment investigates the effect of the number of steps when the direct path budget is fixed for both methods. The path budgets \(20{,}000\) and \(60{,}000\) are intentionally moderate. This keeps the Monte Carlo variation visible and makes it possible to assess the effect of the conditional PDE step away from the benchmark regime.
+
+\subsubsection*{Matched 20,000-path comparison}
+The first comparison uses \(20{,}000\) direct paths for both methods and step counts \(24\), \(48\), \(72\), and \(96\). Figure~\ref{fig:step-sweep-20k} reports the corresponding relative errors. The results show that the Hybrid LSMC--PDE method attains smaller relative error for all four step levels at \(K=80\), \(K=90\), \(K=100\), and \(K=110\), and for three of the four step levels at \(K=70\). The separation between the two methods is therefore more visible at this lower path budget, particularly for the out-of-the-money and at-the-money contracts.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/numerical/step_sweep_20k_direct_relative_error.pdf}
+\caption{Relative errors for the matched \(20{,}000\)-path step-sweep experiment. Error bars are induced by the \(95\%\) confidence intervals of the direct estimators.}
+\label{fig:step-sweep-20k}
+\end{figure}
+
+Table~\ref{tab:step-sweep-20k-step72} reports representative results at \(72\) steps. The Hybrid LSMC--PDE estimator has smaller relative errors, smaller standard errors, and narrower confidence intervals for all five strikes. The simultaneous reduction in relative error and confidence-interval width shows that the hybrid direct prices are closer to the benchmark and less dispersed under the same path budget.
+
+\input{tables/numerical/step_sweep_20k_step72_table}
+
+\subsubsection*{Matched 60,000-path comparison}
+The second comparison increases the common path budget to \(60{,}000\), while the step grid remains unchanged. Figure~\ref{fig:step-sweep-60k} shows that the Hybrid LSMC--PDE method again attains the smallest relative errors at the intermediate step levels. The difference between the two methods is clearest at \(48\) and \(72\) steps across the full strike set, whereas the gap becomes smaller at \(24\) and \(96\) steps.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{figures/numerical/step_sweep_60k_direct_relative_error.pdf}
+\caption{Relative errors for the matched \(60{,}000\)-path step-sweep experiment. Error bars are induced by the \(95\%\) confidence intervals of the direct estimators.}
+\label{fig:step-sweep-60k}
+\end{figure}
+
+Table~\ref{tab:step-sweep-60k-step72} records representative results at \(72\) steps. At this resolution the hybrid direct estimator has smaller relative error for all five strikes. The standard errors and confidence intervals are again smaller, which confirms that the improvement in accuracy is accompanied by lower sampling variability.
+
+\input{tables/numerical/step_sweep_60k_step72_table}
+
+The matched-path experiments show that the improvement delivered by the Hybrid LSMC--PDE method is most visible at intermediate step levels. The advantage becomes stronger when the path budget is reduced from \(60{,}000\) to \(20{,}000\), so the difference between the two estimators is clearest in the moderate-sample regime. However, isolated reversals remain at \(24\) and \(96\) steps, especially in the deepest out-of-the-money case.
+
+\subsection{Fixed number of steps, varying path counts}
+
+This experiment complements the preceding study by fixing the number of steps and varying the direct path budget. The step levels \(48\) and \(60\) are retained because they produced the smallest relative errors in the matched-path comparison. The reported path counts are \(250\), \(1000\), \(5000\), \(10000\), \(20000\), \(40000\), and \(60000\), so that both the low-sample regime and the moderate- to large-sample regimes are represented clearly.
+
+\subsubsection*{Fixed 48-step comparison}
+The first path-sweep experiment fixes \(48\) steps and varies the direct path count over \(250\), \(1000\), \(5000\), \(10000\), \(20000\), \(40000\), and \(60000\). Figure~\ref{fig:path-sweep-48} displays the corresponding relative-error curves with propagated confidence-interval information. The relative-error envelope decreases with the number of paths for both methods, although finite-sample fluctuations remain visible at the smallest path counts. The Hybrid LSMC--PDE method has smaller relative error across the full reported path grid and for all five strikes. The reduction is already visible at \(250\) paths and remains uniform across the full strike set.
+
+Table~\ref{tab:path-sweep-48-path20k} reports representative results at \(20{,}000\) paths. At this budget the benchmark relative error remains above \(1\%\) for every strike, ranging from \(1.221\%\) to \(3.890\%\). The hybrid estimator reduces these values to the interval from \(0.052\%\) to \(1.589\%\), and is already below \(1\%\) for four of the five strikes. The standard errors and confidence intervals are also uniformly smaller for the hybrid estimator, which shows lower sampling variability at the same path budget.
+
+\input{tables/numerical/path_sweep_steps48_path20k_table}
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.93\textwidth]{figures/numerical/path_sweep_steps48_direct_relative_error.pdf}
+\caption{Relative errors for the fixed \(48\)-step path-sweep experiment. Error bars are induced by the \(95\%\) confidence intervals of the direct estimators.}
+\label{fig:path-sweep-48}
+\end{figure}
+
+\subsubsection*{Fixed 60-step comparison}
+The second experiment keeps the same path grid and increases the discretization to \(60\) steps. Figure~\ref{fig:path-sweep-60} confirms that the hybrid advantage persists across the full reported path grid. The Hybrid LSMC--PDE estimator has smaller relative error for all reported path counts and for all five strikes. The separation between the two methods is most visible in the low- and moderate-path regimes, while the gap narrows as the path budget increases.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=0.93\textwidth]{figures/numerical/path_sweep_steps60_direct_relative_error.pdf}
+\caption{Relative errors for the fixed \(60\)-step path-sweep experiment. Error bars are induced by the \(95\%\) confidence intervals of the direct estimators.}
+\label{fig:path-sweep-60}
+\end{figure}
+
+Table~\ref{tab:path-sweep-60-path20k} records representative \(20{,}000\)-path results for the \(60\)-step setting. The same pattern is observed: the benchmark relative error is still above \(1\%\) for every strike, whereas the hybrid estimator is below \(1\%\) for \(K=80\), \(K=90\), \(K=100\), and \(K=110\). The standard errors and confidence intervals are again smaller under the hybrid method, while the ranking between \(48\) and \(60\) steps is not perfectly uniform across moneyness.
+
+\input{tables/numerical/path_sweep_steps60_path20k_table}
+
+Both study families lead to the same numerical conclusion. In most cases, the Hybrid LSMC--PDE method produces direct prices that are closer to the benchmark and accompanied by smaller standard errors and narrower confidence intervals. The improvement is most visible at \(48\) and \(72\) steps and at moderate path budgets. Within the reported comparisons, the remaining reversals arise in the fixed-path step-sweep study, especially in the deepest out-of-the-money case. These findings indicate that the conditional PDE step improves both accuracy and sampling stability for the direct Bermudan estimator under the calibrated gDMR specification.

@@ -1,0 +1,104 @@
+\relax 
+\bibstyle{sn-mathphys-num}
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\Newlabel{1}{1}
+\citation{farahany2020mixing}
+\citation{longstaff2001valuing,tsitsiklis2001regression,clement2002analysis}
+\citation{loeper2009mixed,lipp2013mixing,cozma2017mixed,farahany2020mixing}
+\citation{heston1993closedform,cir1985termstructure,gatheral2006volsurface,bayer2013fast,cox1975cev,chan1992empirical,yamada1971uniqueness}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{2}{section.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2}Model, Bermudan problem, and well-posedness}{3}{section.3}\protected@file@percent }
+\newlabel{sec:model}{{2}{3}{Model, Bermudan problem, and well-posedness}{section.3}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Generalized gDMR dynamics}{3}{subsection.4}\protected@file@percent }
+\newlabel{eq:gdmr}{{1}{3}{Generalized gDMR dynamics}{equation.5}{}}
+\newlabel{ass:pricing-martingale}{{2.1}{3}{Pricing martingale}{theorem.6}{}}
+\newlabel{rem:one-way}{{2.2}{4}{One-way coupling}{theorem.7}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Bermudan stopping problem}{4}{subsection.8}\protected@file@percent }
+\citation{yamada1971uniqueness}
+\citation{farahany2020mixing}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Well-posedness and nonnegativity}{5}{subsection.9}\protected@file@percent }
+\newlabel{sec:wellposed}{{2.3}{5}{Well-posedness and nonnegativity}{subsection.9}{}}
+\newlabel{ass:delta-range}{{2.3}{5}{CEV exponents}{theorem.10}{}}
+\newlabel{thm:wellposed}{{2.4}{5}{Strong well-posedness and nonnegativity}{theorem.11}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Conditional hybrid representation for the generalized gDMR model}{6}{section.12}\protected@file@percent }
+\newlabel{sec:conditional_pde}{{3}{6}{Conditional hybrid representation for the generalized gDMR model}{section.12}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}Brownian projection}{6}{subsection.13}\protected@file@percent }
+\newlabel{eq:proj-coeffs}{{2}{6}{Brownian projection}{equation.14}{}}
+\newlabel{eq:sigperp}{{3}{6}{Brownian projection}{equation.15}{}}
+\newlabel{eq:orth}{{4}{6}{Brownian projection}{equation.16}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}Conditional one-dimensional equation}{7}{subsection.17}\protected@file@percent }
+\newlabel{prop:conditional-gaussian-step}{{3.1}{7}{Conditional one-step representation}{theorem.18}{}}
+\citation{farahany2020mixing}
+\citation{farahany2020mixing}
+\citation{farahany2020mixing}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3}Connection with the hybrid convergence theorem}{8}{subsection.19}\protected@file@percent }
+\newlabel{sec:as_convergence}{{3.3}{8}{Connection with the hybrid convergence theorem}{subsection.19}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Numerical implementation}{8}{section.20}\protected@file@percent }
+\newlabel{sec:hybrid-method}{{4}{8}{Numerical implementation}{section.20}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}Grids and basis functions}{8}{subsection.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Variance simulation and path statistics}{9}{subsection.22}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}Pathwise FFT propagation and regression}{10}{subsection.23}\protected@file@percent }
+\newlabel{eq:fft-recursion}{{5}{11}{Pathwise FFT propagation and regression}{equation.24}{}}
+\newlabel{eq:estimated_coeff}{{6}{11}{Pathwise FFT propagation and regression}{equation.25}{}}
+\newlabel{eq:lsq}{{7}{12}{Pathwise FFT propagation and regression}{equation.26}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}Time-zero estimator and pseudocode}{12}{subsection.27}\protected@file@percent }
+\citation{longstaff2001valuing}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Hybrid LSMC--PDE recursion}}{13}{algorithm.28}\protected@file@percent }
+\newlabel{alg:hybrid-lsmc-pde}{{1}{13}{Time-zero estimator and pseudocode}{algorithm.28}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Numerical experiments}{13}{section.46}\protected@file@percent }
+\newlabel{sec:numerical}{{5}{13}{Numerical experiments}{section.46}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}Experimental setting and reference values}{13}{subsection.47}\protected@file@percent }
+\citation{bayer2013fast}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Parameter set and numerical settings used in the Bermudan pricing experiments.}}{14}{table.49}\protected@file@percent }
+\newlabel{tab:parameter-setup}{{1}{14}{Parameter set and numerical settings used in the Bermudan pricing experiments}{table.49}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces Direct LSMC reference values for the parameter set in Table~\ref {tab:parameter-setup}.}}{15}{table.51}\protected@file@percent }
+\newlabel{tab:reference-prices}{{2}{15}{Direct LSMC reference values for the parameter set in Table~\ref {tab:parameter-setup}}{table.51}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Fixed path budget and varying Euler steps}{15}{subsection.52}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Reference-relative errors for the matched \(20{,}000\)-path step-sweep experiment. The reference values are the LSMC estimates in Table~\ref {tab:reference-prices}. Error bars are obtained from the 95\% confidence intervals of the direct estimators.}}{16}{figure.54}\protected@file@percent }
+\newlabel{fig:step-sweep-20k}{{1}{16}{Reference-relative errors for the matched \(20{,}000\)-path step-sweep experiment. The reference values are the LSMC estimates in Table~\ref {tab:reference-prices}. Error bars are obtained from the 95\% confidence intervals of the direct estimators}{figure.54}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Reference-relative errors for the matched \(60{,}000\)-path step-sweep experiment. The reference values are the LSMC estimates in Table~\ref {tab:reference-prices}. Error bars are obtained from the 95\% confidence intervals of the direct estimators.}}{17}{figure.56}\protected@file@percent }
+\newlabel{fig:step-sweep-60k}{{2}{17}{Reference-relative errors for the matched \(60{,}000\)-path step-sweep experiment. The reference values are the LSMC estimates in Table~\ref {tab:reference-prices}. Error bars are obtained from the 95\% confidence intervals of the direct estimators}{figure.56}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}Fixed Euler step count and varying path budget}{18}{subsection.57}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Reference-relative errors for the fixed \(48\)-step path-sweep experiment. The reference values are the LSMC estimates in Table~\ref {tab:reference-prices}. Error bars are obtained from the 95\% confidence intervals of the direct estimators.}}{18}{figure.59}\protected@file@percent }
+\newlabel{fig:path-sweep-48}{{3}{18}{Reference-relative errors for the fixed \(48\)-step path-sweep experiment. The reference values are the LSMC estimates in Table~\ref {tab:reference-prices}. Error bars are obtained from the 95\% confidence intervals of the direct estimators}{figure.59}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Reference-relative errors for the fixed \(60\)-step path-sweep experiment. The reference values are the LSMC estimates in Table~\ref {tab:reference-prices}. Error bars are obtained from the 95\% confidence intervals of the direct estimators.}}{19}{figure.61}\protected@file@percent }
+\newlabel{fig:path-sweep-60}{{4}{19}{Reference-relative errors for the fixed \(60\)-step path-sweep experiment. The reference values are the LSMC estimates in Table~\ref {tab:reference-prices}. Error bars are obtained from the 95\% confidence intervals of the direct estimators}{figure.61}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusion}{20}{section.62}\protected@file@percent }
+\newlabel{sec:conclusion}{{6}{20}{Conclusion}{section.62}{}}
+\@writefile{toc}{\contentsline {subparagraph}{Acknowledgements}{20}{section*.63}\protected@file@percent }
+\citation{yamada1971uniqueness}
+\citation{karatzas1991brownian}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Proof of Theorem~\ref {thm:wellposed}}{21}{appendix.73}\protected@file@percent }
+\newlabel{app:proof-wellposed}{{A}{21}{Proof of Theorem~\ref {thm:wellposed}}{appendix.73}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {B}Direct prices for the numerical experiments}{23}{appendix.74}\protected@file@percent }
+\newlabel{app:direct-prices}{{B}{23}{Direct prices for the numerical experiments}{appendix.74}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {B.1}Reference prices}{23}{subsection.75}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {B1}{\ignorespaces Direct reference prices for the parameter set in Table~\ref {tab:parameter-setup}. Prices are rounded to three decimal places.}}{23}{table.77}\protected@file@percent }
+\newlabel{tab:app-reference-prices}{{B1}{23}{Direct reference prices for the parameter set in Table~\ref {tab:parameter-setup}. Prices are rounded to three decimal places}{table.77}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {B2}{\ignorespaces Direct prices in the fixed-path step-sweep experiment with \(20{,}000\) paths. Prices are rounded to three decimal places.}}{23}{table.79}\protected@file@percent }
+\newlabel{tab:app-step-sweep-prices-20k}{{B2}{23}{Direct prices in the fixed-path step-sweep experiment with \(20{,}000\) paths. Prices are rounded to three decimal places}{table.79}{}}
+\bibdata{references}
+\bibcite{farahany2020mixing}{{1}{2020}{{Farahany et~al.}}{{}}}
+\bibcite{longstaff2001valuing}{{2}{2001}{{Longstaff and Schwartz}}{{}}}
+\bibcite{tsitsiklis2001regression}{{3}{2001}{{Tsitsiklis and Van~Roy}}{{}}}
+\@writefile{lot}{\contentsline {table}{\numberline {B3}{\ignorespaces Direct prices in the fixed-path step-sweep experiment with \(60{,}000\) paths. Prices are rounded to three decimal places.}}{24}{table.81}\protected@file@percent }
+\newlabel{tab:app-step-sweep-prices-60k}{{B3}{24}{Direct prices in the fixed-path step-sweep experiment with \(60{,}000\) paths. Prices are rounded to three decimal places}{table.81}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {B4}{\ignorespaces Direct prices in the fixed 48-step path-sweep experiment. Prices are rounded to three decimal places.}}{24}{table.83}\protected@file@percent }
+\newlabel{tab:app-path-sweep-48-prices}{{B4}{24}{Direct prices in the fixed 48-step path-sweep experiment. Prices are rounded to three decimal places}{table.83}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {B5}{\ignorespaces Direct prices in the fixed 60-step path-sweep experiment. Prices are rounded to three decimal places.}}{24}{table.85}\protected@file@percent }
+\newlabel{tab:app-path-sweep-60-prices}{{B5}{24}{Direct prices in the fixed 60-step path-sweep experiment. Prices are rounded to three decimal places}{table.85}{}}
+\bibcite{clement2002analysis}{{4}{2002}{{Cl{\'e}ment et~al.}}{{}}}
+\bibcite{loeper2009mixed}{{5}{2009}{{Loeper and Pironneau}}{{}}}
+\bibcite{lipp2013mixing}{{6}{2013}{{Lipp et~al.}}{{}}}
+\bibcite{cozma2017mixed}{{7}{2017}{{Cozma and Reisinger}}{{}}}
+\bibcite{heston1993closedform}{{8}{1993}{{Heston}}{{}}}
+\bibcite{cir1985termstructure}{{9}{1985}{{Cox et~al.}}{{}}}
+\bibcite{gatheral2006volsurface}{{10}{2006}{{Gatheral}}{{}}}
+\bibcite{bayer2013fast}{{11}{2013}{{Bayer et~al.}}{{}}}
+\bibcite{cox1975cev}{{12}{1975}{{Cox}}{{}}}
+\bibcite{chan1992empirical}{{13}{1992}{{Chan et~al.}}{{}}}
+\bibcite{yamada1971uniqueness}{{14}{1971}{{Yamada and Watanabe}}{{}}}
+\bibcite{karatzas1991brownian}{{15}{1991}{{Karatzas and Shreve}}{{}}}
+\gdef \@abspage@last{26}

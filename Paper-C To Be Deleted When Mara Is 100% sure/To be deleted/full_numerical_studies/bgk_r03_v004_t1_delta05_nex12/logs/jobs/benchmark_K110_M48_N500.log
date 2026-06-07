@@ -1,0 +1,31 @@
+COMMAND: C:\Python312\python.exe D:\Mara PhD\Paper-C\To be deleted\full_numerical_studies\bgk_r03_v004_t1_delta05_nex12\code\lsmc_from_scratch.py
+
+STDOUT:
+Plain LSMC from-scratch Bermudan put engine
+Model: generalized Gatheral double mean-reverting (gDMR)
+Spot:                 100.00
+Strike:               110.00
+Maturity:             1.00
+Rate:                 0.0300
+Training paths:       500
+Low-estimator paths:  500
+Exercise dates:       12
+Euler steps:          48
+Basis degree:         3
+Basis size:           16
+State dtype:          float32
+Seed:                 2026
+Low seed:             2103
+Scratch root:         D:\Mara PhD\Paper-C\To be deleted\full_numerical_studies\bgk_r03_v004_t1_delta05_nex12\scratch\benchmark_K110_M48_N500
+LSMC direct price:    13.655880
+LSMC direct error:    0.455580
+LSMC low price:       11.834617
+LSMC low error:       0.447823
+RESULT_JSON: {"K": 110.0, "S0": 100.0, "T": 1.0, "basis_degree": 3, "basis_size": 16, "delta1": 0.5, "delta2": 0.5, "engine": "from_scratch_plain_lsmc", "euler_steps": 48, "exercise_dates": 12, "internal_steps": 4.0, "kappa1": 2.0, "kappa2": 1.0, "low_paths": 500, "low_seed": 2103, "lsmc_direct_error": 0.4555797916736077, "lsmc_direct_price": 13.655879720983645, "lsmc_low_error": 0.4478233077183341, "lsmc_low_price": 11.834617448018028, "method": "LSMC Benchmark", "option_type": "put", "paths": 500, "r": 0.03, "rho12": 0.2, "rho13": 0.1, "rho23": 0.1, "ridge": 1e-10, "scratch_root": "D:\\Mara PhD\\Paper-C\\To be deleted\\full_numerical_studies\\bgk_r03_v004_t1_delta05_nex12\\scratch\\benchmark_K110_M48_N500", "seed": 2026, "state_dtype": "float32", "theta": 0.04, "v0": 0.04, "vp0": 0.04, "xi1": 0.35, "xi2": 0.2}
+
+
+STDERR:
+
+
+EXIT_CODE: 0
+RUNTIME_SECONDS: 0.204102

@@ -1,0 +1,195 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{booktabs}
+\usepackage{amsmath}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\renewcommand{\arraystretch}{1.15}
+
+\begin{document}
+
+\begin{center}
+{\Large Reference-Price Sensitivity Study for the Hybrid LSMC--PDE Method}\\[0.5em]
+{\normalsize BGK-style calibrated gDMR model with 12 Bermudan exercise dates}\\[0.5em]
+{\normalsize 27 March 2026}
+\end{center}
+
+\section*{1. Setting and Scope}
+
+This note summarizes the experiments collected in the folder \texttt{Experiments 26.03} for the BGK-style calibrated gDMR model with parameters
+\[
+S_0 = 100,\quad v_0 = 0.114,\quad v'_0 = 0.110,\quad r = 0,\quad T = 1,
+\]
+\[
+\kappa_1 = 5.5,\quad \kappa_2 = 0.1,\quad \theta = 0.078,\quad \xi_1 = 2.689,\quad \xi_2 = 0.502,
+\]
+and
+\[
+\delta_1 = \delta_2 = 0.94,\quad \rho_{12} = -0.982,\quad \rho_{13} = -0.727,\quad \rho_{23} = 0.59.
+\]
+The Bermudan option is sampled at \(12\) exercise dates and the strike levels are \(K \in \{90,100,110\}\), corresponding to OTM, ATM, and ITM puts.
+
+The purpose of the note is to compare two benchmark-reference regimes:
+\begin{itemize}
+\item a reference generated with \(600\) Euler steps, which was used during the broader exploratory phase;
+\item a stronger reference generated with \(1200\) Euler steps and \(1{,}200{,}000\) benchmark paths.
+\end{itemize}
+
+The main emphasis is on the \emph{direct estimator}, because this is where the Hybrid LSMC--PDE method displayed its clearest advantage over plain LSMC.
+
+\section*{2. Benchmark References at 600 and 1200 Steps}
+
+Table~\ref{tab:references} compares the benchmark direct reference prices under the two reference regimes.
+
+\begin{table}[h!]
+\centering
+\caption{Benchmark direct reference values under the two benchmark regimes.}
+\label{tab:references}
+\begin{tabular}{lcccc}
+\toprule
+Scenario & 600-step reference & SE & 1200-step reference & SE \\
+\midrule
+ATM & 11.371204 & 0.016590 & 11.356823 & 0.015058 \\
+ITM put & 16.637388 & 0.018957 & 16.645784 & 0.017243 \\
+OTM put & 7.426156 & 0.013741 & 7.402999 & 0.012459 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The shift from \(600\) to \(1200\) Euler steps changes the benchmark reference values only modestly, but it is still useful to check whether the ranking between LSMC and the hybrid method is stable under this stronger benchmark.
+
+\section*{3. Experiments Using the 600-Step Reference}
+
+The \(600\)-step reference was used for the broader experimental campaign, including the original three-scenario comparison, the hybrid tuning study, and the 48-step path-count sweeps for ATM and OTM.
+
+\subsection*{3.1 Original and Tuned Three-Scenario Comparisons}
+
+\begin{table}[h!]
+\centering
+\caption{Direct prices and direct relative errors under the 600-step reference.}
+\begin{tabular}{lccccc}
+\toprule
+Scenario & Benchmark direct & Baseline hybrid & Baseline err. & Tuned hybrid & Tuned err. \\
+\midrule
+ATM & 11.371204 & 11.245782 & 1.103\% & 11.359836 & 0.100\% \\
+ITM put & 16.637388 & 16.571453 & 0.396\% & 16.680641 & 0.260\% \\
+OTM put & 7.426156 & 7.295876 & 1.754\% & 7.414778 & 0.153\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The untuned \(12\)-date hybrid setup was already reasonably close in the ITM case, but it was above \(1\%\) in ATM and OTM. After tuning, the direct relative errors fell to \(0.100\%\) for ATM and \(0.153\%\) for OTM, while ITM remained at \(0.260\%\).
+
+\subsection*{3.2 Hybrid Tuning Scorecard}
+
+\begin{table}[h!]
+\centering
+\caption{Hybrid tuning scorecard under the 600-step reference, focusing on ATM and OTM.}
+\begin{tabular}{lcccc}
+\toprule
+Setting & ATM dir. err. & OTM dir. err. & Max err. & Average err. \\
+\midrule
+\texttt{baseline\_20k\_181} & 1.103\% & 1.754\% & 1.754\% & 1.429\% \\
+\texttt{paths40k\_grid181} & 0.075\% & 0.318\% & 0.318\% & 0.196\% \\
+\texttt{paths40k\_grid241} & 0.058\% & 0.304\% & 0.304\% & 0.181\% \\
+\texttt{paths60k\_grid241} & 0.210\% & 0.274\% & 0.274\% & 0.242\% \\
+\texttt{paths60k\_grid301} & 0.211\% & 0.282\% & 0.282\% & 0.246\% \\
+\texttt{paths60k\_grid301\_wide\_q999} & 0.100\% & 0.153\% & 0.153\% & 0.127\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The best common hybrid configuration was the \(60{,}000\)-path, \(301\)-point grid with the wider asset range and volatility quantile \(0.999\). This setting produced the smallest worst-case direct error over the ATM and OTM focus cases.
+
+\subsection*{3.3 Path-Count Study at 48 Euler Steps}
+
+With Euler steps fixed at \(48\), the tuned hybrid method consistently outperformed the benchmark LSMC method in direct relative error for both ATM and OTM across the full tested path range.
+
+\begin{table}[h!]
+\centering
+\caption{Representative direct relative errors at 48 Euler steps under the 600-step reference.}
+\begin{tabular}{llcc}
+\toprule
+Scenario & Paths & Benchmark dir. err. & Hybrid dir. err. \\
+\midrule
+ATM & 1,000 & 5.919\% & 1.491\% \\
+ATM & 10,000 & 1.678\% & 1.086\% \\
+ATM & 20,000 & 1.207\% & 0.074\% \\
+ATM & 60,000 & 1.104\% & 0.176\% \\
+\midrule
+OTM put & 1,000 & 7.504\% & 2.585\% \\
+OTM put & 10,000 & 2.556\% & 1.178\% \\
+OTM put & 20,000 & 1.855\% & 0.064\% \\
+OTM put & 60,000 & 1.452\% & 0.213\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+This was the clearest favorable result for the hybrid method: on a coarse time grid, the hybrid direct estimator dominated the plain LSMC direct estimator over the entire path sweep in both ATM and OTM.
+
+\section*{4. Experiments Using the 1200-Step Reference}
+
+The stronger \(1200\)-step benchmark reference was then used to reassess the direct-error story. This is a more demanding comparison because the benchmark target is refined further in time and estimated with \(1{,}200{,}000\) paths.
+
+\subsection*{4.1 Rebased Path-Count Results at 48 Euler Steps}
+
+The key question is whether the hybrid advantage observed under the \(600\)-step reference survives after rebasing to the stronger benchmark. The answer is yes: the hybrid method remains more accurate than plain LSMC at all representative path counts shown below.
+
+\begin{table}[h!]
+\centering
+\caption{Representative direct relative errors at 48 Euler steps under the 1200-step reference.}
+\begin{tabular}{llcc}
+\toprule
+Scenario & Paths & Benchmark dir. err. & Hybrid dir. err. \\
+\midrule
+ATM & 1,000 & 6.053\% & 1.620\% \\
+ATM & 10,000 & 1.806\% & 0.960\% \\
+ATM & 20,000 & 1.336\% & 0.052\% \\
+ATM & 60,000 & 1.232\% & 0.302\% \\
+\midrule
+OTM put & 1,000 & 7.840\% & 2.905\% \\
+OTM put & 10,000 & 2.877\% & 0.869\% \\
+OTM put & 20,000 & 2.173\% & 0.248\% \\
+OTM put & 60,000 & 1.769\% & 0.526\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Relative errors do change after rebasing, as expected, but the qualitative ranking is preserved: at \(48\) Euler steps the hybrid direct estimator still remains below the benchmark LSMC direct estimator across the tested path counts for both ATM and OTM.
+
+\subsection*{4.2 Saved Higher-Step Check at 60 Euler Steps}
+
+An additional saved comparison is available at \(60\) Euler steps. Rebased to the \(1200\)-step reference, this check also remains favorable to the hybrid method.
+
+\begin{table}[h!]
+\centering
+\caption{Direct relative error at 60 Euler steps under the 1200-step reference.}
+\begin{tabular}{lcccc}
+\toprule
+Scenario & Benchmark direct & Hybrid direct & Benchmark dir. err. & Hybrid dir. err. \\
+\midrule
+ATM & 11.381616 & 11.350391 & 0.218\% & 0.057\% \\
+OTM put & 7.435732 & 7.410080 & 0.442\% & 0.096\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The saved \(60\)-step comparison suggests that the hybrid advantage is not confined to the most extreme coarse-grid case. Even after strengthening the benchmark reference, the hybrid direct estimator remains more accurate than plain LSMC in both ATM and OTM for this saved higher-step check.
+
+\section*{5. Overall Conclusions}
+
+The experiments support three main conclusions.
+
+\begin{itemize}
+\item The \(600\)-step reference regime provided the broader exploratory evidence. Within that regime, the tuned Hybrid LSMC--PDE method achieved direct relative errors below \(0.3\%\) in ATM, ITM, and OTM, and showed a strong advantage over plain LSMC in the \(48\)-step path-count study.
+\item Replacing the benchmark reference by a stronger \(1200\)-step, \(1.2\) million-path benchmark does not overturn the main favorable direct-error conclusions. In particular, the hybrid method remains more accurate than plain LSMC in the saved ATM and OTM path-count studies at \(48\) steps.
+\item The saved \(60\)-step check indicates that this advantage can persist when the time grid is moderately refined, at least for the ATM and OTM cases available on disk.
+\end{itemize}
+
+Taken together, the two-reference comparison indicates that the main favorable conclusion for the Hybrid LSMC--PDE method is robust: its direct estimator performs particularly well on relatively coarse Euler grids, and this remains visible even when the benchmark target is strengthened from \(600\) to \(1200\) Euler steps.
+
+\end{document}

@@ -1,0 +1,53 @@
+{
+  "case_id": "bgk_r02_t1_delta05_nex12",
+  "model_env": {
+    "GDMR_DELTA1": "0.5",
+    "GDMR_DELTA2": "0.5",
+    "GDMR_EXERCISE_DATES": "12",
+    "GDMR_KAPPA1": "5.5",
+    "GDMR_KAPPA2": "0.1",
+    "GDMR_MATURITY": "1.0",
+    "GDMR_R": "0.02",
+    "GDMR_RHO12": "-0.982",
+    "GDMR_RHO13": "-0.727",
+    "GDMR_RHO23": "0.59",
+    "GDMR_S0": "100.0",
+    "GDMR_THETA": "0.078",
+    "GDMR_V0": "0.114",
+    "GDMR_VP0": "0.110",
+    "GDMR_XI1": "2.689",
+    "GDMR_XI2": "0.502"
+  },
+  "rows": [
+    {
+      "K": 100,
+      "case_id": "bgk_r02_t1_delta05_nex12",
+      "delta1": 0.5,
+      "delta2": 0.5,
+      "direct_price": "14.471340057558",
+      "direct_se": "1.474633780455",
+      "euler_steps": 24,
+      "exercise_dates": 12,
+      "method": "benchmark",
+      "paths": 250,
+      "r": 0.02,
+      "runtime_seconds": "0.172237",
+      "scenario": "ATM"
+    },
+    {
+      "K": 100,
+      "case_id": "bgk_r02_t1_delta05_nex12",
+      "delta1": 0.5,
+      "delta2": 0.5,
+      "direct_price": "13.494749196577",
+      "direct_se": "0.831250726865",
+      "euler_steps": 24,
+      "exercise_dates": 12,
+      "method": "hybrid",
+      "paths": 100,
+      "r": 0.02,
+      "runtime_seconds": "0.471680",
+      "scenario": "ATM"
+    }
+  ]
+}

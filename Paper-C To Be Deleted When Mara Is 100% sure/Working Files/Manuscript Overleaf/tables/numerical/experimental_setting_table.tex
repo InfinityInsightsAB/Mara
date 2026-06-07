@@ -1,0 +1,42 @@
+\begin{table}[htbp]
+\centering
+\caption{Calibrated gDMR parameters and fixed numerical setting used in the Bermudan pricing experiments.}
+\label{tab:calibrated-setup}
+\begin{threeparttable}
+\small
+\begin{tabularx}{0.94\textwidth}{@{}l c X@{}}
+\toprule
+Symbol & Value & Interpretation \\
+\midrule
+\multicolumn{3}{@{}l}{\textit{Model and contract parameters}} \\
+$S_0$ & 100 & initial asset level \\
+$v_0$ & 0.114 & initial instantaneous variance factor \\
+$v'_0$ & 0.110 & initial secondary variance factor \\
+$r$ & 0 & risk-free rate \\
+$T$ & 1 & maturity in years \\
+$\kappa_1$ & 5.5 & mean-reversion speed of \(v_t\) toward \(v'_t\) \\
+$\kappa_2$ & 0.1 & mean-reversion speed of \(v'_t\) toward \(\theta\) \\
+$\theta$ & 0.078 & long-run variance level \\
+$\xi_1$ & 2.689 & volatility scale of the first variance factor \\
+$\xi_2$ & 0.502 & volatility scale of the second variance factor \\
+$\delta_1$ & 0.94 & CEV exponent of the first variance factor \\
+$\delta_2$ & 0.94 & CEV exponent of the second variance factor \\
+$\rho_{12}$ & -0.982 & correlation between the first and second Brownian drivers \\
+$\rho_{13}$ & -0.727 & correlation between the first and third Brownian drivers \\
+$\rho_{23}$ & 0.590 & correlation between the second and third Brownian drivers \\
+\addlinespace
+\multicolumn{3}{@{}l}{\textit{Fixed numerical setting}} \\
+$N_{\mathrm{ex}}$ & 12 & Bermudan exercise dates \\
+$K$ & \(\{70,80,90,100,110\}\) & strike set used in all experiments \\
+$N_S$ & 301 & asset-grid points in the conditional PDE solver \\
+$(a_{\min},a_{\max})$ & \((0.30,3.50)\) & asset-range factors relative to \(S_0\) \\
+$q_v$ & 0.999 & volatility truncation quantile \\
+$(N_{\mathrm{ref}},M_{\mathrm{ref}})$ & \((1200,1{,}200{,}000)\) & benchmark LSMC step count and path budget \\
+\botrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]
+\footnotesize
+\item Benchmark reference prices are reported separately in Table~\ref{tab:benchmark-direct-references}. The Hybrid LSMC--PDE settings are kept fixed throughout the two study families.
+\end{tablenotes}
+\end{threeparttable}
+\end{table}

@@ -1,0 +1,4112 @@
+c 2020 Society for Industrial and Applied Mathematics
+\bigcirc 
+
+SIAM J. FINANCIAL MATH.
+Vol. 11, No. 1, pp. 201--239
+
+Mixing LSMC and PDE Methods to Price Bermudan Options\ast 
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+David Farahany\dagger  , Kenneth R. Jackson\ddagger  , and Sebastian Jaimungal\dagger 
+
+Abstract. We develop a mixed least squares Monte Carlo--partial differential equation (LSMC-PDE) method
+for pricing Bermudan style options on assets under stochastic volatility. The algorithm is formulated
+for an arbitrary number of assets and volatility processes, and we prove the algorithm converges
+almost surely for a class of models. We also introduce a multilevel Monte Carlo/multigrid method
+to improve the algorithm's computational complexity. Our numerical examples focus on the single
+(2d) and multidimensional (4d) Heston models, and we compare our hybrid algorithm with classical
+LSMC approaches. In each case, we find that the hybrid algorithm outperforms standard LSMC in
+terms of estimating prices and optimal exercise boundaries.
+Key words. option pricing, LSMC, PDE, multigrid methods
+AMS subject classifications. 91G60, 91G20, 65C05
+DOI. 10.1137/19M1249035
+
+1. Introduction. In recent years, mixed Monte Carlo--partial differential equation (MCPDE) methods for European options have seen an increase in research activity. In the context
+of stochastic volatility (SV) models with one-way coupling, these methods revolve around
+simulating the SV process, computing an expectation by solving a PDE conditional on the
+volatility path, and averaging over paths. The approach has been around for some time as in
+Hull and White (1987) and Lewis (2002) but has seen renewed interest in Ang (2013), Lipp
+et al. (2013), Loeper and Pironneau (2009), Dang et al. (2015), Dang et al. (2017), and Cozma
+and Reisinger (2017).
+In the context of high-dimensional European option pricing problems, under SV, finite
+difference methods cannot be readily applied, and the correlations between the underlying
+processes often make the system nonaffine, which rules out Fourier-based quadrature methods. Also, full Monte Carlo (MC) methods applied to such systems suffer from high variance and computational costs. An alternative is to find a middle ground between the two
+approaches where one simulates the underlying volatility processes and solves the resulting
+lower-dimensional conditional PDEs, which may often be handled efficiently. This mixed
+method results in dimension reduction from the PDE perspective and variance reduction
+from the MC perspective.
+As previous research which utilizes this strategy is focused on pricing European style
+\ast 
+
+Received by the editors March 11, 2019; accepted for publication (in revised form) January 2, 2020; published
+electronically March 12, 2020. The first version of this paper was posted on SSRN on November 16, 2016, and is
+available at https://ssrn.com/abstract=2870962.
+https://doi.org/10.1137/19M1249035
+Funding: The work of the second and third authors was partially supported by NSERC.
+\dagger 
+Department of Statistical Science, University of Toronto, Toronto, ON, M5S 3G3, Canada (dfarahany
+@gmail.com, sebastian.jaimungal@utoronto.ca).
+\ddagger 
+Department of Computer Science, University of Toronto, Toronto, ON, M5S 3G4, Canada (krj@cs.toronto.edu).
+201
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+202
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+options and addresses the dimension and variance reduction in computing relevant expected
+values, we analyze the mixed MC-PDE framework for Bermudan style options. The Bermudan
+context requires dealing with a high-dimensional PDE between exercise dates, along with a
+high-dimensional grid for accurately locating the exercise region; the latter is an issue that
+arises when moving from European to Bermudan options. When pricing Bermudan options,
+the primary object of interest is the optimal stopping policy and the exercise boundaries that
+it defines. We note that one can always approximate the price of an American style option by
+considering a Bermudan option with a high number of exercise dates, as discussed in Bouchard
+and Warin (2012).
+To deal with the above issues, we develop a hybrid method which mixes the least squares
+Monte Carlo (LSMC) approaches of Longstaff and Schwartz (2001) and Tsitsiklis and Van Roy
+(2001) with PDE techniques. The essence of our version of a mixed LSMC-PDE algorithm is
+to
+1. simulate paths of the underlying SV process,
+2. solve the conditional expectation (using a PDE approach) along each path, and
+3. regress these conditional expectations onto a family of basis functions over the volatility
+state-space.
+The algorithm may be viewed as an extension of Tsitsiklis and Van Roy (2001) and reduces
+the monitoring of a high-dimensional grid by replacing the volatility dimensions with a few
+regression coefficients. The approach provides variance reduction from the MC perspective,
+provides dimension reduction from the PDE perspective, and alters the regression problems
+that are solved at each time step such that they are simpler than in standard LSMC. Our
+approach has its roots in Lipp et al. (2013), where it is very briefly mentioned but not analyzed. Our contribution is a precise development of the algorithm, proof of convergence, and
+discussion of complexity and complexity reduction methods, followed by a series of numerical
+examples.
+When applied to SV problems, LSMC tends to be fairly inaccurate in determining the
+optimal exercise boundaries. In the literature, there have been a few direct modifications to
+LSMC, applied to SV problems, such as in Gramacy and Ludkovski (2015) and Ludkovski
+(2018), that address this issue. There have also been other types of probabilistic approaches
+such as in Ait Sahlia et al. (2010) and Agarwal et al. (2016). The approach of Ait Sahlia et al.
+(2010) is specific to the Heston model and appears to be nonapplicable to models outside
+the affine class. Agarwal et al. (2016) develop a highly efficient method for multiscale SV
+models. The work of Gramacy and Ludkovski (2015) and Ludkovski (2018) casts LSMC as a
+classification problem using various experimental designs and regression methods, and, as one
+of their examples, considers a one-dimensional mean-reverting SV model. The approach of
+Jain and Oosterlee (2015) also looks promising, although it typically requires a choice of basis
+functions for which one can compute (or approximate) expectations in closed form, and needs
+to be developed case-by-case. It is also worth noting the work of Rambharat and Brockwell
+(2010), which deals with the related problem of Bermudan option pricing under unobservable
+SV.
+The remainder of this paper is organized as follows. In section 2, we set up our model and
+provide the basic mechanics of the algorithm. In sections 2 and 3 we develop theoretical aspects
+of the algorithm such as formalizing the underlying probability spaces, deriving expressions
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+MIXING LSMC AND PDE METHODS
+
+203
+
+for the regression coefficients, and showing the algorithm converges almost surely for pure-SV
+models. Section 4 shows how multilevel Monte Carlo/multigrids may be incorporated and also
+gives an overview of the overall algorithm's complexity. In section 5 we apply the algorithm
+to the Heston model and multidimensional Heston model and present estimates of prices and
+optimal exercise boundaries. These results are also compared to finite difference and standard
+LSMC approaches.
+2. A hybrid LSMC-PDE algorithm.
+2.1. The model. We suppose the existence of a probability space (\Omega , \BbbF , \BbbQ ) which may
+(1)
+(d ) (1)
+accommodate a (dS + dv )-dimensional stochastic process (St , vt ) = (St , . . . , St s , vt , . . . ,
+(d )
+vt v )t\in [0,T ] satisfying a system of SDEs with a strong, unique solution. We begin by defining
+mappings
+\mu S : [0, T ] \times  \BbbR dv \rightarrow  \BbbR dS ,
+
+\sigma S : [0, T ] \times  \BbbR dv \rightarrow  \BbbR dS ,
+
+\mu v : [0, T ] \times  \BbbR dv \rightarrow  \BbbR dv ,
+
+\sigma v : [0, T ] \times  \BbbR dv \rightarrow  \BbbR dv
+
+and a dS + dv -dimensional Brownian motion, W = (WtS , Wtv )t\in [0,T ] , with correlation matrix,
+\rho . The process (St , vt )t\in [0,T ] is assumed to satisfy the following system of SDEs:
+dSt = St \odot \mu S (t, vt ) dt + St \odot \sigma S (t, vt )\odot  dWtS ,
+dvt =
+
+\mu v (t, vt ) dt +
+
+\sigma v (t, vt )\odot  dWtv ,
+
+where x, y \in  \BbbR m and x \odot  y := (x1 y1 , . . . , xm ym ) is an elementwise product. As we shall
+see, our approach allows for an arbitrary (as long as it is positive semidefinite) stock-volatility
+correlation structure.
+The above SDE classifies (St , vt ) as a pure-SV model, examples of which have been developed in Stein and Stein (1991), Heston (1993), Feng et al. (2010), and Grasselli (2017) among
+others. The work in this paper may also be extended easily to multifactor pure-SV models
+such as in Christoffersen et al. (2009). While the algorithm we discuss in this paper may
+conceivably be applied to SV models with a nonlinear local volatility (LV) component, our
+derivations, numerical examples, and proof of convergence pertain to only pure-SV models.
+Another property of (St , vt ) is that it exhibits ``one-way coupling"": the SDE for vt may be
+simulated independently of St . We shall make this notion more precise in section 2.4.
+2.2. Bermudan option pricing. Let \{ t0 , . . . , tM \}  \subset  [0, T ] be an ordered set of exercise
+dates with \Delta tk = tk+1  -  tk , and let hti (S) : \BbbR dS \rightarrow  \BbbR  be our exercise function at each date.
+We often suppress the subscript k in \Delta tk and htk to simplify notation when the context is
+clear. We also suppose the risk-free rate is a constant, r > 0.
+Valuing a Bermudan option requires developing an algorithm for evaluating Vt =
+sup\tau  \in Tt \BbbE \BbbQ  [ e - r\tau  h\tau  (S\tau  ) |  \scrF t ], where \scrF t = \scrF tS \vee  \scrF tv and Tt is the set of \scrF -stopping times
+taking values in \{ tk : k \in  \{ 1, . . . , M \}  and tk > t\} . By the Markov property, Vt depends only
+on (t, St , vt ), and we can write Vt = V (t, St , vt ) for some function V : \BbbR + \times  \BbbR dS \times  \BbbR dv \mapsto \rightarrow  \BbbR .
+At time T = tM we have V (tM , StM , vtM ) = htM (StM ). We then define a new function,
+C(t, S, v), denoted as the continuation value, at times tk by
+\bigl[ 
+\bigr] 
+C(tk , S, v) = e - r\Delta tk \BbbE \BbbQ  V (tk+1 , Stk+1 , vtk+1 ) |  Stk = S, vtk = v .
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+204
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+By the discrete dynamic programming principle (DPP), for k < M , we may express V (tk , Stk ,
+vtk ) as the maximum of the continuation value and the immediate exercise value at tk :
+Vtk = max (htk (Stk ) , C(tk , Stk , vtk )) .
+From this point on, for notational simplicity, we condense notation and replace our tk subscripts with simply k. We also replace arguments depending on time by subscripts.
+2.3. Algorithm overview. We now describe a hybrid method for computing Vk (S, v) which
+is based on the Tsitsiklis and Van Roy (2001) approach but uses conditional PDEs to incorporate dimensional and variance reduction. We begin by giving an intuitive explanation, and
+we provide a formal, pseudocode-based, description in Appendix A.
+We simulate N paths of v starting from the initial value v0 . Each path of vt over [tk , tk+1 ]
+dS
+dv
+is represented as [v]k+1
+k . Given a product set \scrS  \subset  \BbbR  , we compute Vk over the domain \scrS  \times \BbbR  .
+The set \scrS  is the domain of the conditional expectations that we compute; in practice, it is
+the grid for our numerical PDE solver. We suppose the discretized form of \scrS  has Ns points
+in each dimension so that there are NsdS points in total. Given the value Vk+1 (Sk+1 , vk+1 ) of
+the option at time tk+1 , we proceed to compute the continuation value at tk . The algorithm
+begins at time tM = T where VM (SM , vM ) = hM (SM ).
+2.3.1. Solving along \bfitS  to obtain the pre-surface. For each simulation path j \in  \frakN 
+(\frakN  = \{ 1, . . . , N \} ), we compute (beginning with k = M  -  1)
+(2.1)
+
+Ckj (si ) := e - r\Delta t \BbbE \BbbQ 
+
+\Bigl[ 
+
+Vk+1 (Sk+1 , vk+1 ) |  Sk = si , [v j ]k+1
+k
+
+\Bigr] 
+
+for all si \in  \scrS . These may be computed simultaneously over \scrS  for each path using a numerical
+PDE solver. The details of this step may be found in section 2.4 below.
+2.3.2. Regress across \bfitv  to obtain the completed surface. For each sj \in  \scrS , from the
+previous step, we have N realizations of the continuation value along each volatility path, i.e.,
+\{ Ckj (si )\} j\in \frakN  .
+B
+Next, we apply least squares regression to project this onto a family \{ \phi m (\cdot )\} dm=1
+of linearly
+independent basis functions over our volatility space (see Figure 1). This results in a vector
+of coefficients a(si ) of length dB and provides the continuation value at Stk = si for any point
+in the volatility space as follows:
+Ck (si , v) =
+
+dB
+\sum 
+
+am,k (si )\phi m (v) = ak (si ) \cdot  \phi (v).
+
+m=1
+
+2.3.3. Obtaining the option price. The price of the option is then given by Vk (si , v) =
+max(hk (si ), Ck (si , v)). These steps are repeated from sections 2.3.1 and 2.3.2 for all times tk
+where k = M  -  1, . . . , 1.
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+MIXING LSMC AND PDE METHODS
+
+205
+
+Pre−Surface
+
+Full Surface
+
+0.05
+Continuation Value
+
+Continuation Value
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+0.05
+0.04
+0.03
+0.02
+0.01
+0
+0.45
+
+0.04
+0.03
+0.02
+0.01
+0
+
+0.4
+
+5
+6
+
+0.35
+7
+
+0.3
+
+Variance
+
+6
+0.35
+
+7
+0.3
+
+8
+
+0.25
+
+5
+
+0.4
+
+0.2
+
+10
+
+8
+0.25
+
+9
+Variance
+
+Stock
+
+9
+0.2
+
+10
+
+Stock
+
+Figure 1. The pre-surface and completed continuation surface. The pre-surface is generated by solving a
+PDE along each variance path. It is smooth along the S axis and noisy across the v-axis. The completed surface
+is generated by regressing across the v-axis.
+
+2.3.4. A direct estimate on the time zero price. Since at time zero there is only a single
+value for v0 , we obtain an estimate for our time-zero prices by
+\left( 
+\right) 
+N
+\sum 
+\bigl[ 
+\bigr] 
+Vd,0 (si , v0 ) = max h(si ) , N1
+e - r\Delta t \BbbE \BbbQ  V1 (S1 , v1 ) |  S0 = si , [v j ]10
+j=1
+
+which is often biased high. Following Jain and Oosterlee (2015), we call this the direct
+estimator.
+2.3.5. A lower estimate on the time-zero price. Given our estimated regression coefficients, we obtain a suboptimal exercise policy \tau  (t, S, v) defined on \{ t1 , . . . , tM  - 1 \}  \times  \scrS  \times  \BbbR dv .
+Thus, we may define a lower estimate via the expectation
+\bigl[ 
+\bigr] 
+(2.2)
+\BbbE \BbbQ  e - r\tau  h(S\tau  ) |  S0 , v0 .
+In traditional LSMC, one simulates a new independent set of paths (St , vt ) to approximate
+(2.2). In the class of models we study, simulating both St and vt undermines the variance
+reduction obtained by the algorithm, and we instead use a hybrid approach.
+To this end, we denote the tk holding and exercise regions by \Gamma k and \Gamma ck , respectively. We
+then simulate N new independent paths of vt on [0, T ], compute
+\bigl[ 
+\bigr] 
+(2.3)
+\BbbE \BbbQ  e - r\tau  h(S\tau  ) |  S0 , [v j ]T0
+via a PDE approach for j \in  \frakN , and take the average. To compute (2.3), for each j \in  \frakN , first
+j
+set VM
+(S, v) = hM (S). Next, compute
+\Bigl[ 
+\Bigr] 
+j
+j
+ - r\Delta t \BbbQ 
+j M
+UM
+(S)
+=
+e
+\BbbE 
+V
+(S
+,
+v
+)
+| 
+S
+=
+S,
+[v
+]
+tM  - 1
+M M
+M  - 1
+ - 1
+M
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+206
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+via a PDE method for all S \in  \scrS . The option price at time t = tM  - 1 is then given by
+j
+j
+VM
+ - 1 (S) = UM  - 1 (S) \cdot  I(S,v j
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+M  - 1 )\in \Gamma M  - 1
+
++ hM  - 1 (S) \cdot  I(S,vj
+
+c
+M  - 1 )\in \Gamma M  - 1
+
+.
+
+After repeating this procedure for times k = M  -  2, . . . , 1 we obtain the lower estimate
+(2.4)
+
+N
+\Bigr] 
+1 \sum   - r\Delta t \BbbQ  \Bigl[  j
+e
+\BbbE 
+V1 (S1 , v1 ) |  St1 = S, [v j ]10
+Vl,0 (S) =
+N
+j=1
+
+for all S \in  \scrS .
+2.4. Numerical computation of conditional expectations. In this section we provide the
+details on how to numerically compute expressions of the form
+\Bigl[ 
+\Bigr] 
+t
+\BbbE \BbbQ  h(Stn+1 , vtn+1 ) |  Stn = S , [v]tn+1
+n
+using numerical solutions of PDEs. Our derivation of the conditional PDE follows the methodology of Dang et al. (2017), and our numerical method to solve the conditional PDEs is Fourier
+space time-stepping (FST) as developed in Jackson et al. (2008).
+2.4.1. Change of variables. We begin by converting our asset price SDE into log-coordinates
+Xt := log St yielding the system
+\bigl( 
+\bigr) 
+dXt = \mu S (t, vt )  -  21 \sigma S (t, vt )2 dt + \sigma S (t, vt ) \odot  dWtS ,
+\mu v (t, vt ) dt + \sigma v (t, vt ) \odot  dWtv ,
+
+dvt =
+
+where \sigma S (t, v)2 := \sigma S (t, v)\odot \sigma S (t, v). Next, applying the Cholesky decomposition to the matrix
+\widetilde  := (W
+\widetilde  S , W
+\widetilde  v )
+\rho  = [\rho ij ], we find an upper triangular matrix A = [aij ] and Brownian motion W
+\widetilde  and W
+\widetilde  has independent components. Next, we decompose A in block
+such that W = A \cdot  W
+form as
+\biggl[ 
+\biggr] 
+ASS ASv
+A=
+AvS Avv
+where
+\bullet  [ASS ]i,j = Ai,j for 1 \leq  i \leq  dS , 1 \leq  j \leq  dS ,
+\bullet  [ASv ]i,j = Ai,j+dS for 1 \leq  i \leq  dS , 1 \leq  j \leq  dv ,
+\bullet  [AvS ]i,j = Ai+dS ,j for 1 \leq  i \leq  dv , 1 \leq  j \leq  dS , and
+\bullet  [Avv ]i,j = Ai+dS ,j+dS for 1 \leq  i \leq  dv , 1 \leq  j \leq  dv .
+We then rewrite the system as
+dXt =(\mu S (t, vt )  -  12 \sigma S (t, vt )2 ) dt+
+
+dS
+\sum 
+
+\widetilde tS,j +
+\sigma S (t, vt ) \odot  [ASS ]j \odot  dW
+
+j=1
+
+dvt =
+
+\mu v (t, vt ) dt
+
+dv
+\sum 
+
+\widetilde tv,j ,
+\sigma S (t, vt ) \odot  [ASv ]j \odot  dW
+
+j=1
+
++
+
+dv
+\sum 
+
+\widetilde tv,j ,
+\sigma v (t, vt ) \odot  [Avv ]j \odot  dW
+
+j=1
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+MIXING LSMC AND PDE METHODS
+
+207
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+where [A\alpha \beta  ]i is the ith column of A\alpha \beta  .
+In this form, vt may be simulated first and then inserted into Xt . To this end, define two
+new processes Yt , Zt on [tn , tn+1 ],
+Yt = Xtn
+
+d
+
+t
+
+S
+\sum 
+1
++
+(\mu S (t, vs )  -  \sigma S (t, vt )2 ) ds +
+2
+tn
+
+\int 
+
+j=1
+
+Zt =
+
+dv \int  t
+\sum 
+j=1
+
+\int 
+
+t
+
+\widetilde sS,j ,
+\sigma S (s, vs ) \odot  [ASS ]j \odot  dW
+
+tn
+
+\widetilde  v,j ,
+\sigma S (t, vs ) \odot  [ASv ]j \odot  dW
+s
+
+tn
+
+and note that Xtn = Ytn and Xt = Yt + Zt . Next, define the function g(X, v) := h(exp(X), v)
+so that
+\bigl[ 
+\bigr] 
+\bigl[ 
+\bigr] 
+\BbbE \BbbQ  h(Sn+1 , vn+1 ) |  Sn = S, [v]n+1
+= \BbbE \BbbQ  g(Xn+1 , vn+1 ) |  Xn = x, [v]n+1
+n
+n
+\bigl[ 
+\bigr] 
+= \BbbE \BbbQ  g(Yn+1 + Zn+1 , vn+1 ) |  Yn = y, [v]n+1
+.
+n
+2.4.2. Conditional PDE and Fourier solution. Finally, we rewrite our original expectation in terms of the function u(tn , y),
+\Bigl[ 
+\Bigr] 
+t
+u(tn , y) = \BbbE \BbbQ  g(Ytn+1 + Ztn+1 , vtn+1 ) |  Ytn = y, [v]tn+1
+,
+n
+t
+
+treating [v]tn+1
+as a deterministic path for y \in  log \scrS , t \in  [tn , tn+1 ]. By the Feynman--Kac
+n
+theorem, the function u(tn , y) may be written as the solution of the following PDE:
+\left\{ 
+dS \sum 
+dS
+dS
+\sum 
+\sum 
+1
+bi,j (t) \partial y2i ,yj u(t, y) = 0 ,
+\partial t u(t, y) +
+ai (t)\partial yi u(t, y) + 2
+(2.5)
+i=1 j=1
+i=1
+u(tn+1 , y) = g(y + Ztn+1 , vtn+1 ),
+\sum  S
+[\sigma S (t, vt )]2j [ASS ]2i,j .
+where a(t) = \mu S (t, vt )  -  21 \sigma S (t, vt )2 and bi,j (t) = dj=i
+Applying the Fourier transform to (2.5) over \BbbR dS , we obtain
+\right) 
+\left( 
+\left\{ 
+dS \sum 
+dS
+dS
+\sum 
+\sum 
+bi,j (t)\omega i \omega j u(t,
+\widehat  y) = 0 ,
+\partial t u(t,
+\widehat  \omega ) + i
+aj (t)\omega j  -  12
+(2.6)
+i=1 j=1
+j=1
+u(t
+\widehat  n+1 , \omega ) = ei\omega \cdot Ztn+1 g(\omega ,
+\widehat  vtn+1 ) ,
+where \omega  \cdot  Ztn+1 denotes the inner product on \BbbR dS . For each \omega  in Fourier space, this ODE may
+be solved analytically to obtain the following:
+\left( 
+\right) 
+\int  tn+1
+\int  tn+1
+dS
+dS \sum 
+dS
+\sum 
+\sum 
+1
+\omega i \omega j
+bi,j (s)ds
+u(t,
+\widehat  \omega ) = u(t
+\widehat  n+1 , \omega ) \cdot  exp i
+\omega i
+ai (s)ds  - 
+2
+t
+t
+i=1 j=1
+i=1
+\right) 
+\left( 
+\int  tn+1
+\int  tn+1
+dS \sum 
+dS
+dS
+\sum 
+\sum 
+1
+\omega i \omega j
+bi,j (s)ds .
+= g(\omega ,
+\widehat  vtn+1 ) \cdot  exp i\omega  \cdot  Ztn+1 + i
+\omega i
+ai (s)ds  - 
+2
+t
+t
+i=1
+
+i=1 j=1
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+208
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+2.4.3. Numerical approximation. Defining the characteristic exponent
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+\Psi (\omega , tn , tn+1 ) = i\omega  \cdot  Ztn+1 + i
+
+dS
+\sum 
+i=1
+
+\int 
+
+tn+1
+
+\omega i
+tn
+
+d
+
+d
+
+S \sum 
+S
+1 \sum 
+ai (s)ds  - 
+\omega i \omega j
+2
+
+i=1 j=1
+
+\int 
+
+tn+1
+
+bi,j (s)ds,
+tn
+
+or, more compactly, \Psi n,n+1 := \Psi (\omega , tn , tn+1 ), and using the FST's discretization methodology
+with fast Fourier transforms (FFTs), we have the following recursion:
+un = FFT - 1
+dS [FFTdS [gn+1 ] exp (\Psi n,n+1 )] ,
+where gn , un are the discretizations of g(tn , y), u(tn , y), respectively, and FFTdS denotes the
+dS -dimensional fast Fourier transform. A change of variables back to S-space then provides a
+numerical approximation of the original expectation.
+2.5. Discussion of algorithm. We refer the reader to Appendix A for a pseudocode-based
+formal description.
+In section 5, we show that the algorithm accurately, for a given computational budget,
+determines the time-zero value surface and optimal exercise regions. This may be attributed
+to the presence of our PDE grid, \scrS . When the conditional PDEs are solved along each
+path, we obtain our pre-surface as described in subsection 2.3.1. At this point one has a
+choice: global or local regression. Our regression approach can be viewed as a special type
+of dimension reduced, local regression which is tailored to the presence of \scrS  and is equivalent
+to local regression onto NsdS carefully chosen regions. If Ns = 128 and dS = dv = 2, we are
+regressing onto 16, 384 families of basis functions at the cost of inverting a single matrix of
+size dB \times  dB where dB is about 10, and a single matrix-multiplication for each S \in  \scrS ; the
+latter step introduces nontrivial costs as dS increases. The fact that we must only invert a
+single regression matrix, independent of S \in  \scrS , at each time step will be made more clear in
+section 3. Also, Cn (sj , v) is typically simple to fit as a function of v and seems to resist the
+basis selection problem.
+Working with \scrS  has other advantages as well. In comparison to standard approaches to
+LSMC, there is a fundamental shift in how we compare the continuation value to the exercise
+value and locate the exercise boundary. At time n, when setting the value of Vn for each
+si \in  \scrS  we have
+\bigl( 
+\bigr) 
+VnN (si , v) = max hn (si ), CnN (si , v) ,
+and we note that hn (si ) is a deterministic constant as opposed to a function of a random
+variable. Thus, we have reduced the problem of locating the boundary from a global problem
+over (S, v)-space to a sequence of lower-dimensional problems which are simpler in nature and
+exhibit less noise. Also, compared to LSMC, instead of an estimate of Vn at a single point,
+(S0 , v0 ) \in  \BbbR dS +dv , one obtains a semiglobal solution, i.e., a value for all S \in  \scrS  and v0 \in  \BbbR dv ,
+owing to the PDE aspect of the algorithm. Obtaining a solution for all S \in  \scrS  allows us to
+compute sensitivities with respect to S with little extra computation.
+Generally speaking, deriving the conditional PDE is nontrivial, and to the best of our
+knowledge there are two approaches in the literature: the drift discretization method in Lipp
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+MIXING LSMC AND PDE METHODS
+
+209
+
+et al. (2013), Cozma and Reisinger (2017), and Dang et al. (2015) and the conditionally affine
+decomposition of Dang et al. (2017). The drift-discretization approach is fairly general and
+may be applied to a wide class of models, including those with a nonlinear LV component, i.e.,
+stochastic LV models. The resulting PDEs may then be solved using a finite difference type
+approach as in Lipp et al. (2013). We follow the conditionally affine approach as it applies to
+our pure-SV model and avoids time-stepping error and drift discretization.
+Finally, from the PDE perspective, we begin with a deterministic PDE problem and, using
+one-way coupling, we convert it to a lower-dimensional stochastic PDE (SPDE) problem. The
+SPDEs we solve are essentially Black--Scholes equations where the coefficients and terminal
+condition depend on the random simulated process, v. The multiperiod aspect of the problem
+is then handled using regression as outlined above. In light of the connection to SPDEs, in
+section 4, we develop a generic multilevel Monte Carlo (MLMC) scheme which completes the
+algorithm.
+3. Theoretical aspects of the algorithm. In this section we provide a more theoretical
+perspective on the mechanics of the algorithm. We begin in subsection 3.2, where we introduce
+notions that are needed for the convergence result. In section 3.2 we derive expressions for the
+estimated regression coefficients. Subsection 3.4 introduces a truncation scheme to ensure the
+algorithm is well defined, and subsection 3.5 shows the algorithm convergence almost surely
+under certain extra continuity conditions.
+3.1. Notation. We denote Euclidean norms of elements x \in  \BbbR n or x \in  \BbbM n\times m (\BbbR ) by | x| .
+Given any function h : \BbbR n \rightarrow  \BbbR , we write | | h| | \infty  := supx\in \BbbR n | h(x)|  and supp h := cl\{ x \in 
+\BbbR n |  | h(x)|  > 0\} . Letting X be an open subset of \BbbR n , we define C0 (X) to be the set of
+continuous functions on f : X \rightarrow  \BbbR  that vanish at infinity. By ``vanish at infinity"" we mean
+that for every \varepsilon  > 0, the set \{ x \in  X |  | f (x)|  > \varepsilon \}  is compact. We also let Cc (X) be the set
+of compactly supported, continuous functions on X.
+3.2. Conditional expectations and the sampling space.
+3.2.1. Filtrations and conditional probabilities. We recall the existence of a probability
+space (\Omega , \BbbF , \BbbQ ) which accommodates the process (St , vt ) satisfying a system of SDEs with a
+strong, unique solution. In this section, we make rigorous the notion of conditioning on a
+volatility path.
+v = \sigma (v )
+S
+Wv
+v
+Let \scrF s,t
+u u\in [s,t] , \scrF s,t = \sigma (Su )u\in [s,t] , and \scrF s,t = \sigma (Wu )u\in [s,t] , i.e., the natural
+filtrations generated by v, S, and W v , respectively. To extend this notation, we sometimes
+Z for some process Z. Given t \in  [0, T ], we define a new class of (conditional)
+write \scrF tZ := \scrF 0,t
+n
+probability measures \BbbQ tn ,S via \BbbQ tn ,S (B) = \BbbQ (B |  Stn = S) for B \in  \scrF tSn ,T \vee  \scrF tvn ,T .
+3.2.2. Conditioning on [\bfitv ]. In this section, we make concise the notion of conditioning
+on a volatility path [v].
+t
+For a realization of vt and Wtv on [tn , tn+1 ], which we denote as [v]tn+1
+, there exists a
+n
+finite-dimensional statistic of the path,
+\Lambda n : C0 ([tn , tn+1 ])dv +dW v \rightarrow  \BbbR d\Lambda  ,
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+210
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+such that the following Markovian-like relation holds:
+v
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+]
+\BbbE \BbbQ  [ h(Stn+1 , vtn+1 ) |  Stn = S , \scrF tW
+n ,tn+1
+(3.1)
+
+t
+
+), vtn+1 ].
+= \BbbE \BbbQ  [ h(Stn+1 , vtn+1 ) |  Stn = S , \Lambda n ([v]tn+1
+n
+
+This can be seen from\int the solution to the
+\int  t derived conditional PDE in section 2.4 which depend
+t
+only on the vectors [ tnn+1 ai (s) ds]i , [ tnn+1 bi,j (s) ds]i,j , and Ztn+1 . In our algorithm, when
+computing regression coefficients, we encounter expectations of the form
+\Bigl[ 
+\Bigr] 
+\bigm| 
+v
+,
+\BbbE  \phi (vtn )h(Stn+1 , vtn+1 ) \bigm|  Stn = S , \scrF tW
+n ,tn+1
+n+1
+where \phi  : \BbbR dv \rightarrow  \BbbR  which depend on the statistic \Theta n ([v]n+1
+n ) := (vtn , \Lambda n ([v]n ), vtn+1 ). To
+t
+n+1
+and simply write
+condense notation, we again replace \Theta n ([v]n+1
+n ) with [v]tn
+
+\BbbE \BbbQ 
+
+\Bigl[ 
+
+\Bigr] 
+\bigm| 
+\bigm| 
+\bigl[ 
+\bigr] 
+t
+\phi (vtn )h( Stn+1 , vtn+1 ) \bigm|  Stn = S , [v]tn+1
+:= \BbbE \BbbQ  \phi (vtn )h(Stn+1 , vtn+1 ) \bigm|  Stn = S , \Theta n ([v]n+1
+) .
+n
+n
+
+3.2.3. Re-expressing the conditional expectation. Equation (3.1) gives rise to the mappings Gf,tn ,S , defined by
+(3.2)
+
+Gf,tn ,S : \BbbR d\Theta  \rightarrow  \BbbR  ,
+Gf,tn ,S (\theta ) = \BbbE \BbbQ  [ f (Stn+1 , vtn+1 , vn ) |  Stn = S, \Theta n = \theta  ],
+
+and the conditional probability measures \BbbQ tn ,S,\theta  defined via
+\BbbQ tn ,S,\theta  (B) := \BbbQ ( B |  Stn = S, \Theta n = \theta )
+\widetilde  \Theta  denote the distribution of \Theta n on \BbbR d\Theta  our
+for B \in  \sigma (Stn+1 ) \vee  \sigma (vtn+1 ) \vee  \sigma (vtn ). Letting \BbbQ 
+n
+conditional expectation may be written as
+\int 
+\BbbQ 
+\BbbE  [f (Stn+1 , vtn+1 , vtn ) |  Stn = S, \Theta n = \theta  ] =
+f (Stn+1 (\omega ), vtn+1 , vtn ) d\BbbQ tn ,S,\theta  (\omega )
+\Omega 
+
+so that we have the following relation:
+
+(3.3)
+
+\BbbE \BbbQ  [ f (Stn+1 , vtn+1 , vtn ) |  Stn = S ]
+\int 
+\int 
+\widetilde  \Theta  (\theta ).
+=
+f (Stn+1 (\omega ), vtn+1 , vtn ) d\BbbQ tn ,S,\theta  (\omega ) d\BbbQ 
+n
+\BbbR d\Theta 
+
+\Omega 
+
+3.2.4. Inherited sampling probability space. A consequence of one-way coupling is the
+ability to simulate paths of vt independently of St . We now make sense of the notion of an
+i.i.d. collection of sample paths of vt . Since we only realize vt through the statistics \Theta n , we
+only describe how to generate i.i.d. copies of \Theta n .
+ - 1
+Denote the ordered subset \{ 0 = t0 , . . . , tn , tn+1 , . . . , tN = T \}  \subset  [0, T ], and let \{ [tn , tn+1 ]\} N
+n=0
+be the corresponding intervals. Given a path vt on [0, T ], define the d\Theta  \times N dimensional matrix
+\Theta ([v]) = [ \Theta 0 ([v]10 ) , . . . , \Theta N  - 1 ([v]N
+N  - 1 ) ].
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+MIXING LSMC AND PDE METHODS
+
+211
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+\widetilde  \Theta  on \BbbR N d\Theta  . Given \BbbQ 
+\widetilde  \Theta  , we introduce a new probaThis random matrix induces a measure \BbbQ 
+\prime 
+\prime 
+\prime 
+bility space (\Omega  , \scrF  , \BbbQ  ) equipped with a collection of independent random matrices
+\{ \Theta ([v j ]) \} \infty 
+j=1 ,
+\widetilde  \Theta  on \BbbR N d\Theta  . This construction follows from Kolsuch that each \Theta ([v j ]) has distribution \BbbQ 
+mogorov's extension theorem applied to measures on \BbbR N d\Theta  (for a proof on \BbbR  see Durrett
+(2010); for more general spaces see Aliprantis and Border (2006)). It then follows that each
+d\Theta 
+\widetilde 
+column \Theta n ([v j ]n+1
+n ) has distribution \BbbQ \Theta n on \BbbR  . Although the process St is not defined
+on \Omega \prime  , we can still compute relevant expectations involving this process using Gf,tn ,S (\Theta ) as
+defined in (3.2). We also recall that a random variable on \Omega \prime  corresponds to an equivalence
+class of mappings X : \Omega \prime  \rightarrow  \BbbR  that agree \BbbQ \prime  -a.s.
+3.2.5. Computing limits. When taking limits in our algorithm, we consider expressions
+of the form
+N
+\bigr] 
+1 \sum  \BbbQ 
+,
+\BbbE  [ f (Sn+1 , vtn+1 , vtn ) |  Stn = S, [v j ]n+1
+lim
+n
+N \rightarrow \infty  N
+j=1
+
+\prime 
+
+t
+
+where f is bounded, which converge to \BbbE \BbbQ  [Gf,tn ,S (\Theta  ([v]tn+1
+) ) ] a.s. under \BbbQ \prime  by the strong
+n
+law of large numbers (SLLN). For our purposes, however, we require convergence to
+\bigl[ 
+\bigr] 
+\BbbE \BbbQ  f (Stn+1 , vtn+1 , vtn ) |  Stn = S .
+To establish the equivalence between these expressions,
+\int 
+tn+1
+\BbbQ \prime 
+\prime  \prime 
+\BbbE  [Gf,tn ,S (\Theta  ([v]tn ) ) ] =
+Gf,tn ,S (\Theta n ([v(\omega  \prime  )]n+1
+n )) d\BbbQ  (\omega  )
+\prime 
+\Omega 
+\int 
+\widetilde  \Theta  (\theta )
+=
+Gf,tn ,S (\theta ) d\BbbQ 
+n
+d
+\Theta 
+\int \BbbR 
+\widetilde  \Theta  (\theta )
+=
+\BbbE \BbbQ  [f (Stn+1 , vtn+1 , vtn ) |  Stn = S, \Theta n = \theta  ] d\BbbQ 
+n
+d
+\Theta 
+\BbbR 
+\int 
+\int 
+\widetilde  \Theta  (\theta )
+=
+f (Stn+1 (\omega ), vtn+1 , vtn ) d\BbbQ tn ,S,\theta ,n (\omega ) d\BbbQ 
+n
+(3.4)
+
+\BbbR d\Theta 
+\BbbQ 
+
+\Omega 
+
+= \BbbE  [f (Stn+1 , vtn+1 , vtn ) |  Stn = S ],
+
+t
+\widetilde  \Theta  distributed.
+where the second equality follows from \Theta ([v]tn+1
+) being \BbbQ 
+n
+n
+
+3.3. Continuation functions. We remind the reader that for each n, the random variables
+are defined on the space \Omega \prime  and are i.i.d. (see the discussion in section 3.2.4). For
+notational convenience, we suppose the risk-free rate is 0. As our algorithm is based on the
+Tsitsiklis and Van Roy (2001) approach to LSMC, many of our expressions are similar.
+
+\infty 
+\{ [v j ]n+1
+n \} j=1
+
+3.3.1. Idealized continuation functions. For each n, we consider a family of idealized
+continuation functions, Cn , which are constructed by means of backwards induction. We
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+212
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+begin by writing CM \equiv  0 and Cn (S, v) = an (S) \cdot  \phi (v) for n < M , where an (S) results from
+regressing the random variable
+B
+\BbbE \BbbQ  [ max(hn+1 (Sn+1 ), Cn+1 (Sn+1 , vn+1 )) |  Sn = S, vn ] onto the basis \{ \phi m (\cdot )\} dm=1
+
+for each S \in  \scrS . The coefficient vector an (S) is the vector that minimizes the mapping
+Hn,S : \BbbR dB \rightarrow  \BbbR  defined by
+\biggl[ \Bigl( 
+\biggr] 
+\Bigr) 2
+\BbbQ 
+\BbbQ 
+(3.5)
+Hn,S (a) = \BbbE 
+\BbbE  [ fn+1 (Sn+1 , vn+1 ) |  Sn = S, vn ]  -  a \cdot  \phi (vn ) |  Sn = S ,
+where
+fn (S, v) = max(hn (S), Cn (S, v)) for n < M , and
+
+(3.6)
+
+fM (S, v) = hM (S) .
+
+To minimize H, we obtain the first order conditions and the normal equations, resulting in
+the coefficients
+\BbbQ 
+an (S) = A - 1
+n \cdot  \BbbE  [ \phi (vn )fn+1 (Sn+1 , vn+1 ) |  Sn = S ] ,
+
+where An = \BbbE \BbbQ  [\phi (vtn )\phi (vtn )\intercal  ].
+3.3.2. Almost-idealized continuation functions. Next, for a fixed tn , we define a new
+\widetilde nN (S, v) =
+type of continuation value, called the almost-idealized continuation functions, C
+N
+\widetilde 
+an (S) \cdot  \phi n (v). These random variables are obtained by running the dynamic programming
+algorithm with the idealized continuation value at all times k = M, . . . , n + 1. At time step
+n we then estimate \widetilde 
+aN
+n (S) using our N paths of vt and future idealized continuation values.
+This gives us the following regression coefficients:
+\widetilde 
+aN
+n (S)
+
+N
+\bigl[ 
+\bigr] 
+\bigl[  N \bigr]  - 1 1 \sum 
+\phi (vnj ) \cdot  \BbbE \BbbQ  fn+1 (Sn+1 , vn+1 ) |  Sn = S, [v j ]n+1
+,
+= An
+n
+N
+j=1
+
+1
+where AN
+n = N
+at time n + 1.
+
+\sum N
+
+j=1 \phi (vn )\phi (vn )
+
+T.
+
+Note that fn+1 involves the idealized continuation value
+
+3.3.3. Estimated continuation functions. The estimated continuation functions are the
+continuation functions produced from our algorithm: CnN (S, v) = aN
+n (S)\cdot \phi n (v). The regression
+coefficients are given by
+(3.7)
+
+N
+\Bigl[ 
+\Bigr] 
+\bigl[  N \bigr]  - 1 1 \sum 
+j
+j
+\BbbQ 
+N
+j n+1
+(S
+,
+v
+)
+| 
+S
+=
+S,
+[v
+]
+,
+aN
+(S)
+=
+A
+\cdot 
+\phi (v
+)
+\cdot 
+\BbbE 
+f
+n+1
+n
+n
+n
+n
+n+1
+n
+n+1
+N
+j=1
+
+where
+fnN (S, v) = max(hn (S), CnN (S, v)) for n < M , and
+N
+fM
+(S, v) = hM (S).
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+MIXING LSMC AND PDE METHODS
+
+213
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+3.4. Truncation scheme. We now state the following truncation scheme for our least
+squares regression. It ensures that the coefficients produced by the algorithm are well defined
+and converge in a sense to be described later on.
+Assumption 1 (Truncation conditions).
+B
+1. The basis functions \{ \phi m \} dm=1
+are bounded and supported on a compact rectangle.
+ - 1
+2. The inverse of the regression matrix satisfies supn,N | | [AN
+n ] | | \infty ,\BbbQ \prime  < \infty  provided the inverse is defined.
+3. For each i = 1, . . . , M , the exercise values hti (\cdot ) are bounded with compact support in
+\scrS  \subset  \BbbR dS .
+Condition 1 may be imposed by limiting the support of \{ \phi l \}  on a bounded domain as they
+are typically smooth. By making supp \phi  \subset  \BbbR dv a very large rectangle, the value function is
+essentially unaffected.
+ - 1 with [AN ] - 1 I n,N , where I n,N is the indicator
+Condition 2 is imposed by replacing [AN
+n]
+n
+R
+R
+N
+ - 1
+of the event that [An ] is uniformly bounded by some constant R. If R > | A - 1
+n | , then we
+n,N
+N
+ - 1
+ - 1
+\prime 
+have [An ] IR \rightarrow  An \BbbQ  -a.s. Again, by making R a very large constant, this has essentially
+no effect on the values obtained by the algorithm.
+Condition 3 on the functions h is always satisfied in practice as numerically solving a PDE
+involves truncation of h's domain.
+Lemma 1. Given the truncation conditions, the functions Hn,S defined in (3.5) are finite
+valued for all n = 1, . . . , M  -  1.
+The proof is omitted due to its simplicity. The next lemma establishes a useful relationship
+between the idealized, almost-idealized, and estimated coefficients.
+Lemma 2. Let n \in  \{ 1, . . . , M  -  2\} , S \in  \scrS . There exists a constant, c, which depends on
+our truncation conditions, such that
+N
+N
+| aN
+n (S)  -  an (S)|  \leq  c \cdot  \beta n (S) + \delta n (S),
+
+where
+\beta nN (S) =
+
+N
+\bigr] 
+1 \sum  \BbbQ  \bigl[  N
+| an+1 (Sn+1 )  -  an+1 (Sn+1 )|  |  Sn = S, [v j ]n+1
+\BbbE 
+n
+N
+j=1
+
+and
+(3.8)
+
+\delta nN (S) = | \widetilde 
+aN
+n (S)  -  an (S)| .
+
+Proof. Given n \in  \{ 1, . . . , M  -  1\}  and S \in  \scrS , we have
+N
+| aN
+aN
+aN
+n (S)  -  an (S)|  \leq  | an (S)  -  \widetilde 
+n (S)|  + | \widetilde 
+n (S)  -  an (S)| .
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+214
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+After simplifying, we find
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+| aN
+aN
+n (S)  -  \widetilde 
+n (S)| 
+ - 1
+\leq  | [AN
+n ]RA | \cdot 
+
+N
+\Bigr] 
+1 \sum  \BbbQ  \Bigl[  N
+j
+j
+\BbbE  | fn+1 (Sn+1 , vn+1
+)  -  fn+1 (Sn+1 , vn+1
+)|  |  Sn = S, [v j ]n+1
+\cdot  | \phi (vnj )| 
+n
+N
+j=1
+
+(3.9)
+
+\leq  c\prime  \cdot 
+
+1
+N
+
+N
+\sum 
+
+\Bigl[ 
+\Bigr] 
+j
+j
+N
+\BbbE \BbbQ  | fn+1
+(Sn+1 , vn+1
+)  -  fn+1 (Sn+1 , vn+1
+)|  |  Sn = S, [v j ]n+1
+.
+n
+
+j=1
+
+We then focus on the difference within the expectation. Using the inequality |  max(a, b)  - 
+max(a, c)|  \leq  | b  -  c| , we find
+\Bigl[ 
+\Bigr] 
+j
+j
+N
+\BbbE \BbbQ  | fn+1
+(Sn+1 , vn+1
+)  -  fn+1 (Sn+1 , vn+1
+)|  |  Sn = S, [v j ]n+1
+n
+\Bigl[ 
+j
+j
+N
+= \BbbE \BbbQ  |  max(hn+1 (Sn+1 ), Cn+1
+(Sn+1 , vn+1
+))  -  max(hn+1 (Sn+1 ), Cn+1 (Sn+1 , vn+1
+))|  |  Sn
+\Bigr] 
+= S, [v j ]n+1
+n
+\Bigr] 
+\Bigl[ 
+j
+j
+N
+)|  |  Sn = S, [v j ]n+1
+)  -  Cn+1 (Sn+1 , vn+1
+(Sn+1 , vn+1
+\leq  \BbbE \BbbQ  | Cn+1
+n
+\bigl[  N
+\bigr] 
+j
+\BbbQ 
+j n+1
+\leq  \BbbE  | an+1 (Sn+1 )  -  an+1 (Sn+1 )|  |  Sn = S, [v ]n
+\cdot  | \phi (vn+1 )| 
+(3.10)
+\bigl[ 
+\bigr] 
+j n+1
+\leq  c\prime \prime  \cdot  \BbbE \BbbQ  | aN
+,
+n+1 (Sn+1 )  -  an+1 (Sn+1 )|  |  Sn = S, [v ]n
+where c\prime  , c\prime \prime  depend on our truncation conditions. Substituting (3.10) into (3.9), we obtain
+the result.
+3.5. Almost-sure convergence under pure-SV models. In this section we prove that
+the coefficients also converge almost surely for a class of models with certain separability
+conditions that are satisfied by our SV model.
+Assumption 2 (Separability conditions). Let n \in  \{ 1, . . . , M  -  1\} .
+1. The process St , for all t \in  [0, T ], takes values in
+\Bigl\{ 
+\Bigr\} 
+\scrS  = (S (1) , . . . , S (dS ) ) \in  \BbbR dS |  S (i) > 0 \forall i = 1, . . . , dS
+
+a.s.
+
+2. If Sn = S almost surely, i.e., the process begins at S at time tn , then Sn+1 = S \odot  Rn =
+(1) (1)
+(d ) (d )
+(Sn Rn , . . . , Sn s Rn S ), where Rn does not depend on the value of Sn . Rn takes values
+in \scrS  a.s.
+3. The exercise function, h, is continuous with compact support in \scrS . The basis functions \phi 
+are compactly supported and continuous on \BbbR dv .
+Condition 1 limits our analysis to assets which take only positive values such as equities
+and foreign exchange rates.
+Condition 2 allows us to separate our future asset price as a product of its current price
+and return. The assumption that Rn take values in \scrS  implies that they are finite valued a.s.
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+MIXING LSMC AND PDE METHODS
+
+215
+(i)
+
+(i)
+
+(i)
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+S
+As a result, letting \varepsilon  > 0, there exist tuples \{ (rl , rh )\} di=1
+, where rl > 0, such that
+\Bigl\{ 
+\Bigr\} 
+(i)
+(i)
+(3.11)
+\Omega \varepsilon rl ,rh = rl \leq  Rn(i) \leq  rh |  \forall  n \in  \{ 1, . . . , M  -  1\} , \forall  i \in  \{ 1, . . . , dS \}  \subset  \Omega 
+
+satisfies \BbbQ (\Omega \varepsilon rl ,rh ) > 1  -  \varepsilon . We also write
+\Bigl\{ 
+\Bigr\} 
+(i)
+(i)
+Er\varepsilon l ,rh = R \in  \BbbR dS |  rl \leq  R(i) \leq  rh \forall  i \in  \{ 1, . . . , dS \}  .
+Given Er\varepsilon l ,rh , we may find an open set U \varepsilon  such that Er\varepsilon l ,rh \subset  U \varepsilon  and U \varepsilon  \subsetneq  \scrS . By Urysohn's
+lemma/Tietze's extension theorem (see Munkres (2000)), there exists a map \eta E : \scrS  \rightarrow  \BbbR  such
+that \eta E = 1 on Er\varepsilon l ,rh , \eta E = 0 on \scrS  \setminus  U \varepsilon  , and | | \eta E | | \infty  \leq  1, i.e., a bump function supported on
+E. In most cases, our notation will suppress dependence on rl , rh , \varepsilon .
+Condition 3 allows us to apply the Stone--Weierstrass (SW) theorem which underlies the
+``separation technique"" that will be demonstrated in upcoming lemmas. We apply the version
+of SW for functions on unbounded domains that vanish at infinity (see Folland (1999)). Suppose we are given the payoff function for a call option, i.e., g : \BbbR  \rightarrow  \BbbR  where g(x) = (x  -  K)+ .
+To modify g such that it falls within our assumption, we first truncate its support to obtain a
+function f (x) = (x  -  K)+ I(0,R1 ) (x) where R1 is large number. Finally, we continuously extend
+f on \BbbR  such that f = 0 on (R2 , \infty ) where R2 > R1 . A similar construction may be done for
+a put option payoff near 0 and payoffs on higher dimensional domains.
+Under these assumptions, we have the following main result.
+Theorem 1. Let n \in  \{ 1, . . . , M  -  1\}  and S \in  \scrS  be fixed. Then we have
+lim | aN
+n (S)  -  an (S)|  = 0
+
+N \rightarrow \infty 
+
+\BbbQ \prime  -almost surely.
+Theorem 1 tells us that for almost every choice of sequence of paths, our coefficients based
+on these paths converge to the true idealized coefficient. It then follows, since CnN (S, v) =
+aN
+n (S) \cdot  \phi (v), that the continuation values, option prices, and optimal exercise boundaries also
+converge almost surely (up to our basis assumption's bias).
+The proof borrows ideas from Tsitsiklis and Van Roy (2001) and Cl\'ement et al. (2002)
+and takes the following steps.
+1. Lemma 3. Carry out a geometric construction that allows us to approximately separate
+functions h of Stn that are continuous and compactly supported in \scrS . The function that
+provides the approximate separation is denoted as \psi .
+2. Lemma 4. Use the geometric construction to show the explicit relationship between h
+and the separating functions, \psi , and thus demonstrate what is referred to as a separating
+estimate.
+3. Lemma 5. Prove the theorem for n = M  -  1 and also obtain an almost-sure separating
+estimate for | aN
+M  - 1 (S)  -  aM  - 1 (S)| .
+4. Lemma 6. Prove the theorem for n = M  -  2 and also obtain an almost-sure separating
+estimate for | aN
+M  - 2 (S)  -  aM  - 2 (S)| . The separating estimate for n = M  -  2 involves the
+N
+function \delta M  - 2 (S) as defined in (3.8).
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+216
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+5. Lemma 7. Develop an almost-sure separating estimate for \delta nN for all n \in  \{ 1, . . . , M  -  2\} .
+6. Proposition 1. Prove the theorem for n = \{ 1, . . . , M  -  3\}  using Lemmas 6 and 7. Also
+obtain an almost-sure separating estimate for | aN
+n (S)  -  an (S)|  which is used during the
+induction.
+Lemma 3. Let \varepsilon  > 0 and h : \scrS  \rightarrow  \BbbR  be continuous and compactly supported in \scrS . Let
+\widetilde 
+h : \scrS  \times  \scrS  \rightarrow  \BbbR  be defined via
+\widetilde 
+h(S, R) = h(S \odot  R) \cdot  \eta E (R),
+where E results from (3.11). There exists a map \psi  : \scrS  \times  \scrS  \rightarrow  \BbbR  of the form
+\psi (S, R) =
+
+k
+\sum 
+
+\psi i,S (S)\psi i,R (R)
+
+i=1
+
+such that \psi i,S , \psi i,R \in  Cc (\scrS ) and | | \widetilde 
+h  -  \psi | | \infty  < \varepsilon .
+Proof. It follows from the properties of the mapping i(S, R) = S \odot  R and compact support
+of \eta E and h that \widetilde 
+h is compactly supported in \scrS  \times  \scrS . We also have that \widetilde 
+h is continuous on
+\scrS  \times  \scrS .
+To construct \psi , we begin by defining the algebra of functions
+\Biggl\{  k
+\Biggr\} 
+\sum 
+\scrA  :=
+\psi i,S (S)\psi i,R (R) |  \psi i,S , \psi i,R \in  Cc (\scrS ), k \in  \BbbN 
+i=1
+
+and show \scrA  is dense in C0 (\scrS  \times  \scrS ) under the uniform metric.
+Given two distinct points \{ (Si , Ri )\} 2i=1 , without loss of generality, we assume S1 \not = S2 . We
+now find bump functions \eta S,1 , \eta S,2 \in  Cc (\scrS ) that separate S1 , S2 , i.e., \eta S,1 (S1 ) = 1, \eta S,1 (S2 ) = 0,
+\eta S,2 (S1 ) = 0, \eta S,2 (S2 ) = 1, along with a bump function \eta R \in  Cc (\scrS ) that is supported on R1
+and R2 . Letting \psi 1 (S, R) = \eta S,1 (S) \cdot  \eta R (R) and \psi 2 (S, R) = \eta S,2 (S) \cdot  \eta R (R), we have that \scrA 
+separates points. Since \scrA  contains bump functions supported at each point (S, R) \in  \scrS  \times  \scrS ,
+it vanishes nowhere.
+Lemma 4. Let \varepsilon  > 0 and h : \scrS  \rightarrow  \BbbR  be continuous and supported in \scrS . Let \widetilde 
+h be as in
+the statement of Lemma 3 and \psi (S, R) be a separable \varepsilon -approximation of \widetilde 
+h. There exist a
+random variable F (S) and function G(S) : \scrS  \rightarrow  \BbbR  such that
+\BbbQ 
+
+\BbbE 
+
+\bigl[ 
+
+\phi (vn )h(Sn+1 ) |  Sn =
+
+S, [v]n+1
+n
+
+\bigr] 
+
+= F (S) + \phi (vn )
+
+k
+\sum 
+
+\bigl[ 
+\bigr] 
+\psi S,i (S)\BbbE \BbbQ  \psi R,i (Rn ) |  [v]n+1
+,
+n
+
+i=1
+
+\BbbE \BbbQ  [\phi (vn )h(Sn+1 ) |  Sn = S] = G(S) +
+
+k
+\sum 
+
+\psi S,i (S)\BbbE \BbbQ  [ \phi (vn )\psi R,i (Rn )] ,
+
+i=1
+
+where | | F (S)| | \infty ,\BbbQ \prime  \leq  c \varepsilon , | G(S)|  \leq  c\prime  \varepsilon  for all S \in  \scrS  where c, c\prime  depend only on our truncation
+and separability conditions.
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+MIXING LSMC AND PDE METHODS
+
+217
+
+Proof. We will only show the first relation as the second is similar.
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+\bigl[ 
+\bigr] 
+\BbbE \BbbQ  \phi (vn )h(Sn+1 ) |  Sn = S, [v]n+1
+n
+\bigl[ 
+\bigr] 
+= \BbbE \BbbQ  [\phi (vn )h(S \odot  Rn )(1  -  \eta E (Rn )) |  Sn = S, [v]n+1
+] + \BbbE \BbbQ  \phi (vn )h(S \odot  Rn )\eta E (Rn ) |  Sn = S, [v]n+1
+n
+n
+\Bigl[ 
+\Bigr] 
+= F1 (S) + \BbbE \BbbQ  \phi (vn )\widetilde 
+h(S \odot  Rn ) |  Sn = S, [v]n+1
+n
+\Bigl[ 
+\Bigr] 
+\bigl[ 
+\bigr] 
+\BbbQ 
+= F1 (S) + \BbbE  \phi (vn )(\widetilde 
+h(S \odot  Rn )  -  \psi (S, Rn )) |  Sn = S, [v]n+1
++ \BbbE \BbbQ  \phi (vn )\psi (S, Rn ) |  Sn = S, [v]n+1
+n
+n
+\bigl[ 
+\bigr] 
+= F1 (S) + F2 (S) + \BbbE \BbbQ  \phi (vn )\psi (S, Rn ) |  Sn = S, [v]n+1
+n
+\bigl[ 
+\bigr] 
+= F1 (S) + F2 (S) + \BbbE \BbbQ  \phi (vn )\psi (S, Rn ) |  Sn = S, [v]n+1
+n
+= F1 (S) + F2 (S) + \phi (vn )
+
+k
+\sum 
+
+\bigl[ 
+\bigr] 
+.
+\psi S,i (S)\BbbE \BbbQ  \psi R,i (Rn ) |  [v]n+1
+n
+
+i=1
+
+It then follows that | | Fi (S)| | \infty ,\BbbQ \prime  < ci \varepsilon  for all S \in  \scrS  and i = 1, 2, where ci depend on our
+truncation and separability conditions. Finally, we set F (S) = F1 (S) + F2 (S).
+Lemma 5. Let \varepsilon  > 0. We have
+kM  - 1
+
+| aN
+M  - 1 (S)
+
+ -  aM  - 1 (S)|  \leq  cM  - 1 \varepsilon  +
+
+\sum 
+
+i
+
+,N
+
+ - 1
+\alpha MM - 1,M
+\psi S,iM  - 1 (S)
+
+iM  - 1 =1
+i
+
+i
+
+,N
+
+,N
+
+M  - 1
+ - 1
+\infty 
+a.s., where \alpha MM - 1,M
+are random variables that depend on \{ [v j ]M
+M  - 1 \} j=1 and limN \rightarrow \infty  \alpha M  - 1,M =
+0 a.s., \psi S,iM  - 1 satisfy the conditions of Lemma 4, and cM  - 1 depends on our truncation and
+separability conditions.
+
+Proof. Given \varepsilon  > 0, we have
+N
+ - 1
+| aN
+M  - 1 (S)  -  aM  - 1 (S)|  = |  [AM  - 1 ]
+
+N
+1 \sum 
+j
+\BbbQ 
+j M
+\phi (vM
+ - 1 )\BbbE  [h(SM ) |  [v ]M  - 1 , SM  - 1 = S]
+N
+j=1
+
+ - 
+
+\BbbQ 
+A - 1
+M  - 1 \BbbE  [h(SM )
+
+\phi (vM  - 1 ) |  SM  - 1 = S] | .
+
+By Lemma 4 we can find a constant c and a separable \varepsilon -approximation, \psi M  - 1 (S, R), such
+that
+kM
+N
+\sum 
+\bigl[  N \bigr]  - 1 1 \sum 
+\bigl[ 
+\bigr] 
+j
+| aN
+(S)
+ - 
+a
+(S)| 
+\leq 
+| 
+A
+\phi (v
+)
+\psi S,iM  - 1 (S)\BbbE \BbbQ  \psi R,iM  - 1 (RM  - 1 ) |  [v j ]M
+M  - 1
+M  - 1
+M  - 1
+M  - 1
+M  - 1
+N j=1
+i
+=1
+M  - 1
+
+ -  A - 1
+M  - 1
+
+kM
+\sum 
+
+\bigl[ 
+\bigr] 
+\psi S,iM  - 1 (S)\BbbE \BbbQ  \phi (vM  - 1 )\psi R,iM  - 1 (RM  - 1 ) |  + c \varepsilon 
+
+iM  - 1 =1
+kM  - 1
+
+\leq 
+
+\sum 
+
+i
+
+,N
+
+ - 1
+| \psi S,iM  - 1 (S)|  \cdot  \alpha MM - 1,M
++ c \varepsilon ,
+
+iM  - 1 =1
+
+where the last line follows from interchanging the summations, c depends on our truncation
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+218
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+and separability conditions, and
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+i  - 1 ,N
+\alpha MM - 1,M
+
+N
+\bigl[ 
+\bigr] 
+1 \sum 
+j
+\BbbQ 
+= | 
+\phi (vM
+\psi R,iM  - 1 (RM  - 1 ) |  [v j ]M
+M  - 1
+ - 1 )\BbbE 
+N
+j=1
+\bigl[ 
+\bigr] 
+ - 1
+\BbbQ 
+ -  AM  - 1 \BbbE  \phi (vM  - 1 )\psi R,iM  - 1 (RM  - 1 ) | .
+ - 1
+[AN
+M  - 1 ]
+
+i
+
+,N
+
+ - 1
+By the SLLN, limN \rightarrow \infty  \alpha MM - 1,M
+= 0 a.s. for all iM  - 1 \in  \{ 1, . . . , kM \} .
+
+Lemma 6. Let \varepsilon  > 0. We have
+kM  - 1
+
+| aN
+M  - 2 (S)
+
+ -  aM  - 2 (S)|  \leq 
+
+cN
+M  - 2
+
+\varepsilon  +
+
+kM  - 2
+i  - 1 ,N
+\alpha MM - 1,M
+
+\sum 
+iM  - 1 =1
+
+i
+
+\sum 
+
+,i
+
+ - 2 M  - 1
+\alpha MM - 2,M
+ - 1
+
+,N
+
+\psi S,iM  - 2 ,iM  - 1 (S)
+
+iM  - 2
+
+N
++ \delta M
+ - 2 (S)
+i
+
+,N
+
+ - 1
+j M  - 1 \infty 
+a.s. where \alpha MM - 2,M
+ - 1 are random variables that depend on \{ [v ]M  - 2 \} j=1 and satisfy
+
+i
+
+,N
+
+ - 2
+lim sup \alpha MM - 2,M
+ - 1 < \infty .
+
+N \rightarrow \infty 
+
+Also, lim supN \rightarrow \infty  cN
+M  - 2 < \infty  with a bound depending only on our truncation and separability
+N
+conditions and \psi S,iM  - 1 ,iM  - 2 satisfy the conditions of Lemma 4. Lastly, \delta M
+ - 2 is as defined in
+(3.8).
+Proof. Given \varepsilon  > 0 and using Lemmas 2 and 5, we have a.s.
+| aN
+c
+M  - 2 (S)  -  aM  - 2 (S)|  \leq  \widetilde 
+
+N
+\bigr] 
+1 \sum  \BbbQ  \bigl[  N
+ - 1
+N
+\BbbE  | aM  - 1 (SM  - 1 )  -  aM  - 1 (SM  - 1 )|  |  SM  - 2 = S, [v j ]M
+M  - 2 + \delta M  - 2 (S)
+N j=1
+kM  - 1
+
+\prime 
+
+\leq  c \varepsilon  +
+
+\sum 
+
+i
+
+,N
+
+ - 1
+\alpha MM - 1,M
+
+iM  - 1
+
++
+
+N
+\bigr] 
+1 \sum  \BbbQ  \bigl[ 
+ - 1
+\BbbE  \psi S,iM  - 1 (SM  - 1 ) |  SM  - 2 = S [v j ]M
+M  - 2
+N j=1
+
+N
+\delta M
+ - 2 (S).
+
+For each \psi S,iM  - 1 , we apply Lemma 4 and obtain a separable \varepsilon -approximating function \psi iM  - 1 (S, R)
+of the form
+kM  - 2
+
+\psi iM  - 1 (S, R) =
+
+\sum 
+
+\psi S,iM  - 2 ,iM  - 1 (S)\psi R,iM  - 2 ,iM  - 1 (R)
+
+iM  - 2 =1
+
+and apply it to the expectation. This results in
+kM  - 1
+
+\sum 
+
+\prime 
+| aN
+cN
+M  - 2 (S)  -  aM  - 2 (S)|  \leq  (c + \widetilde 
+M  - 2 )\varepsilon  +
+
+kM  - 2
+i
+
+,N
+
+ - 1
+\alpha MM - 1,M
+
+iM  - 1 =1
+
+i
+
+,N
+
+M  - 2
+where limN \rightarrow \infty  \widetilde 
+cN
+M  - 2 = 0 and \alpha M  - 2,M  - 1 =
+
+i
+
+i
+
+\sum 
+
+,i
+
+ - 2 M  - 1
+\alpha MM - 2,M
+ - 1
+
+,N
+
+N
+\psi iM  - 2 ,iM  - 1 (S) + \delta M
+ - 2 (S),
+
+iM  - 2 =1
+
+1
+N
+
+\sum N
+
+\BbbQ 
+j=1 \BbbE  [
+
+ - 1
+\psi R,iM  - 2 ,iM  - 1 (RM  - 2 ) |  [v j ]M
+M  - 2 ]. By
+
+,N
+
+M  - 2
+N
+the SLLN, \delta M
+ - 2 (S) and \alpha M  - 2,M  - 1 for each (iM  - 1 , iM  - 2 ) converge to 0 a.s. Finally, setting
+\prime 
+cN
+cN
+M  - 2 = c + \widetilde 
+M  - 2 implies the lemma.
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+MIXING LSMC AND PDE METHODS
+
+219
+
+Lemma 7. Let n \in  \{ 1, . . . , M  -  2\} , \delta nN (S) as in (3.8) and \varepsilon  > 0. We have
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+\delta nN (S)
+
+\leq  c \cdot  \varepsilon  +
+
+kn
+\sum 
+
+in ,N
+\beta n,n+1
+\psi in (S)
+
+in =1
+in ,N
+in ,N
+\infty 
+\BbbQ \prime  -a.s., where \beta n,n+1
+are random variables that depend on \{ [v j ]n+1
+n \} j=1 , limN \rightarrow \infty  \beta n,n+1 = 0
+a.s., c depends on our truncation and separability conditions, and \psi in satisfy the conditions
+of Lemma 4.
+
+Proof. We break the proof up into multiple stages.
+Preliminary estimates on ak , fk . Let fk be as defined in (3.6). We begin by showing that
+for each j \in  \{ n, . . . , M  -  1\} 
+aj (S) = Fj (S) + Gj (S),
+fj (S, v) = Hj (S, v) + Jj (S, v),
+where | Fk (S)|  \leq  ck \varepsilon , | Hk (S, v)|  \leq  c\prime k \varepsilon  with ck , c\prime k depending on our truncation conditions and
+\sum k
+separability conditions. The functions Gj admit the representation Gj (S) = ijj=1 cij ,j \psi S,ij (S)
+where cij ,j \in  \BbbR dB and \psi S,ij \in  Cc (\scrS ). Finally, Jj (S, v) = max(h(S), Gj (S) \cdot  \phi (v)). To this end,
+we let j = M  -  1 and have that
+\BbbQ 
+aM  - 1 (S) =A - 1
+M  - 1 \BbbE  [\phi (vM  - 1 )h(SM ) |  SM  - 1 = S]
+\BbbQ 
+=A - 1
+M  - 1 \BbbE  [\phi (vM  - 1 )h(S \odot  RM  - 1 )(1  -  \eta E (RM  - 1 )) ]
+\BbbQ 
++ A - 1
+M  - 1 \BbbE  [\phi (vM  - 1 )h(S \odot  RM  - 1 )\eta E (RM  - 1 )] ,
+
+(3.12)
+
+where E is as in (3.5), and we focus on the second term. We let
+\widetilde  M  - 1 : \BbbR 2dS +dv \rightarrow  \BbbR dB ,
+\Xi 
+\widetilde  M  - 1 (S, R, v1 ) = \phi (v1 )h(S \odot  R)\eta E (R)
+\Xi 
+= \phi (v1 )\widetilde 
+h(S, R)
+\sum kM  - 1
+and apply Lemma 3 to find an \varepsilon -separating function of the form \psi M  - 1 (S, R) =
+iM  - 1 =1
+\cdot \psi S,i
+(S)\psi R,i
+(R), where \psi S,i
+, \psi R,i
+\in  C 0 (\scrS ), and | | \widetilde 
+h  -  \psi M  - 1 | | \infty  < \varepsilon . This allows
+M  - 1
+
+M  - 1
+
+M  - 1
+
+M  - 1
+
+c
+
+us to write
+\widetilde  M  - 1 (S, R, v1 ) = F2,M  - 1 (S, R, v1 ) + \phi (v1 )\psi M  - 1 (S, R),
+\Xi 
+where F2,M  - 1 (S, R, v1 ) = \phi (v1 )(\widetilde 
+h(S, R)  -  \psi M  - 1 (S, R)) and \BbbE \BbbQ  [F2,M  - 1 (S, RM  - 1 , vM  - 1 )] < c \varepsilon 
+with c depending on our truncation and separability conditions.
+Returning to our expression in (3.12), we find
+kM  - 1
+
+aM  - 1 (S) = FM  - 1 (S) +
+
+\sum 
+
+ciM  - 1 ,M  - 1 \psi S,iM  - 1 (S)
+
+iM  - 1 =1
+
+=: FM  - 1 (S) + GM  - 1 (S),
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+220
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+where | FM  - 1 (S)|  \leq  cM  - 1 \varepsilon  for all S \in  \scrS , cM  - 1 depends on our truncation and separability
+conditions, and
+\bigl[ 
+\bigr] 
+ciM  - 1 ,M  - 1 = \BbbE \BbbQ  \phi (vM  - 1 )\psi R,iM  - 1 (RM  - 1 ) .
+We now turn to fM  - 1 (S, v):
+fM  - 1 (S, v) = max(h(S), aM  - 1 (S) \cdot  \phi (v))
+= max(h(S), FM  - 1 (S) \cdot  \phi (v) + GM  - 1 (S) \cdot  \phi (v))
+\Bigl[ 
+\Bigr] 
+= max(h(S), FM  - 1 (S) \cdot  \phi (v) + GM  - 1 (S) \cdot  \phi (v))  -  max(h(S), GM  - 1 (S) \cdot  \phi (v))
++ max(h(S), GM  - 1 (S) \cdot  \phi (v)).
+Equating HM  - 1 (S, v) to the term in brackets and JM  - 1 (S, v) := max(h(S), GM  - 1 (S) \cdot  \phi (v))
+gives us the required form and concludes the claim for j = M  -  1.
+Now let j \in  \{ 1, . . . , M  -  2\} ; we have
+\BbbQ 
+aj (S) = A - 1
+j \BbbE  [\phi (vj )fj+1 (Sj+1 , vj+1 )]
+\BbbQ 
+= A - 1
+j \BbbE  [\phi (vj )Hj+1 (Sj+1 , vj+1 )]
+\bigr] 
+\bigl[ 
+\BbbQ 
++ A - 1
+\phi (vj ) max(h(S \odot  Rj ), Gj+1 (S \odot  Rj ) \cdot  \phi (vj+1 ))(1  -  \eta Ej+1 (Rn )))
+j \BbbE 
+\bigl[ 
+\bigr] 
+\BbbQ 
++ A - 1
+\phi (vj ) max(h(S \odot  Rj ), Gj+1 (S \odot  Rj ) \cdot  \phi (vj+1 ))\eta Ej+1 (Rn ) ,
+j \BbbE 
+\varepsilon 
+where Ej+1 is as in (3.11) so that \BbbQ (\Omega \varepsilon j +1 ,c ) < | | Jj+1
+| | \infty  , and we focus on the final term.
+\sum kj+1
+dB
+By assumption, Gj+1 (S) =
+ij+1 =1 cij+1 \psi S,ij+1 (S) where cij+1 \in  \BbbR  . Letting dij+1 (v) =
+cij+1 \cdot  \phi (v), we are led to consider the function
+
+\widetilde  j : \BbbR 2dS +2dv \rightarrow  \BbbR dB ,
+\Xi 
+\left( 
+h(S \odot  R)\eta Ej+1 (R),
+
+\widetilde  j (S, R, v1 , v2 ) = \phi (v1 ) max
+\Xi 
+
+\right) 
+
+kj+1
+
+\sum 
+
+dij+1 (v2 )\psi S,ij+1 (S \odot  R)\eta Ej+1 (R)
+
+ij+1 =1
+
+\left( 
+= \phi (v1 ) max
+
+\widetilde 
+h(S, R),
+
+\right) 
+
+kj+1
+
+\sum 
+
+dij+1 (v2 )\psi \widetilde S,ij+1 (S, R)
+
+,
+
+ij+1 =1
+
+where \psi \widetilde S,ij+1 (S, R) = \psi S,ij+1 (S, R)\eta Ej+1 (R). Before carrying out a construction very similar
+\sum kj+1
+\widetilde 
+to the j = M  -  1 case, we let Aj+1 = | | \widetilde 
+h| | \infty  + ij+1
+=1 | | dij+1 | | \infty  | | \psi S,ij+1 | | \infty  . Next, we note
+that
+\left( 
+\right) 
+kj+1
+\Bigl( 
+\Bigl( 
+\Bigr) \Bigr) 
+\sum 
+max \widetilde 
+h,
+dij+1 \psi \widetilde S,ij+1 \in  Cc \scrS  \times  \scrS  \times  \BbbR dv
+ij+1 =1
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+MIXING LSMC AND PDE METHODS
+
+221
+
+\sum k
+and find a function of the form \psi j (S, R, v) = ijj=1 \psi S,ij (S)\psi R,v,ij (R, v) such that \psi S,ij \in 
+Cc (\scrS ), \psi R,v,ij \in  Cc (\scrS  \times  \BbbR dv ), and
+\bigm| \bigm| 
+\bigm| \bigm| 
+\left( 
+\right) 
+\bigm| \bigm| 
+\bigm| \bigm| 
+kj+1
+\sum 
+\bigm| \bigm| 
+\bigm| \bigm| 
+\widetilde 
+\bigm| \bigm| max \widetilde 
+\bigm| \bigm|  < \varepsilon .
+h,
+d
+\psi 
+ - 
+\psi 
+i
+j
+S,i
+j+1
+j+1
+\bigm| \bigm| 
+\bigm| \bigm| 
+\bigm| \bigm| 
+\bigm| \bigm| 
+ij+1 =1
+\infty 
+
+Finally, we write aj (S) = Fj,1 (S) + Fj,2 (S) + Fj,3 (S) +
+
+\sum kj
+
+ij =1 cij ,j \psi S,ij (S),
+
+where
+
+\BbbQ 
+Fj,1 (S) = A - 1
+j \BbbE  [\phi (vj )Hj+1 (Sj+1 , vj+1 ) |  Sj = S] ,
+\bigl[ 
+\bigr] 
+\BbbQ 
+Fj,2 (S) = A - 1
+\phi (vj ) max(h(S \odot  Rj ), Gj+1 (S \odot  Rj ) \cdot  \phi (vj+1 ))(1  -  \eta Ej+1 (Rn ))) ,
+j \BbbE 
+\Bigr] 
+\Bigl[ 
+\widetilde  j (S, Rj , vj , vj+1 )  -  \phi (vj )\psi j (S, Rj , vj+1 )
+Fj,3 (S) = \BbbE \BbbQ  \Xi 
+
+so that, for i = 1, 2, 3, we have | | Fj,i | | \infty  \leq  c\prime j,i \varepsilon , where c\prime j,i depend on our truncation and
+\bigl[ 
+\bigr] 
+separability conditions and cij ,j = \BbbE  \phi (vj )\psi R,v,ij (Rj , vj+1 ) . Also we have that \psi S,ij (S) \in 
+Cc (\scrS ) . Writing Fj = Fj,1 + Fj,2 + Fj,3 and Gj (S) to be the final term completes the claim for
+aj (S). Showing the result for fj (S, v) is analogous to the base case, and so we omit the proof.
+Estimates of \delta nN (S). We write
+\delta nN (S)
+
+N
+\bigl[ 
+\bigr] 
+\bigl[  N \bigr]  - 1 1 \sum 
+\BbbE \BbbQ  \phi (vn )fn+1 (Sn+1 , vn+1 ) |  Sn = S, [v j ]n+1
+= |  An
+n
+N
+j=1
+
+\BbbQ 
+ -  A - 1
+n \BbbE  [\phi (vn )fn+1 (Sn+1 , vn+1 ) |  Sn = S] | 
+N
+\bigl[  \bigr]  - 1 1 \sum 
+\bigl[ 
+\leq  |  AN
+\BbbE \BbbQ  \phi (vn )Jn+1 (Sn+1 , vn+1 )
+n
+N
+j=1
+ - 1
+ -  An \BbbE  [\phi (vn )Jn+1 (Sn+1 , vn+1 ) |  Sn = S] + c
+
+\bigl[  \bigr]  - 1 1
+\leq  |  AN
+n
+N
+ - 
+
+N
+\sum 
+
+|  Sn = S, [v j ]n+1
+n
+
+\bigr] 
+
+\varepsilon 
+
+\bigl[ 
+\bigr] 
+\phi (vnj )\BbbE \BbbQ  max(h(Sn+1 ), Gn (Sn+1 ) \cdot  \phi (vn+1 ))\eta E (Rn ) |  Sn = S, [v j ]n+1
+n
+
+j=1
+
+\BbbQ 
+A - 1
+n \BbbE  [\phi (vn ) max(h(Sn+1 ), Gn (Sn+1 )
+
+\cdot  \phi (vn+1 ))\eta E (Rn ) |  Sn = S] |  + c\prime  \varepsilon ,
+
+where c and c\prime  depend on our truncation conditions. We now focus on the expression within
+our expectations and define the function
+\widetilde  \prime  : \BbbR 2dS +2dv \rightarrow  \BbbR dB ,
+\Xi 
+n
+\widetilde  \prime n (S, R, v1 , v2 ) = \phi (v1 ) max(h(S \odot  R), Gn (S \odot  R) \cdot  \phi (v2 )) \eta E (R)
+\Xi 
+= \phi (v1 ) max(h(S \odot  R) \eta E (R), Gn (S \odot  R)\eta E (R) \cdot  \phi (v2 ))
+\widetilde  n (S, R) \cdot  \phi (v2 ).
+= \phi (v1 ) max(\widetilde 
+h(S, R), G
+Applying techniques that are exactly analogous to previous steps, we obtain a separating esti\widetilde  \prime  of the form \Xi 
+\widetilde  \prime  (S, R, v1 , v2 ) = F (S, R, v1 , v2 ) + \phi (v1 ) \sum kn \psi S,in (S)\psi R,v,in (R, v2 ),
+mate for \Xi 
+n
+in =1
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+222
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+where F is appropriately bounded and \psi S,in \in  Cc0 (\scrS ). This leads to \delta nN (S) \leq 
+\sum kn
+in ,N
+in =1 | \psi S,in (S)|  \cdot  \beta n,n+1 , where c again depends on our truncation conditions and
+
+c \varepsilon  +
+
+N
+\bigl[ 
+\bigr]  - 1 1 \sum 
+\bigl[ 
+\bigr] 
+\bigl[ 
+\bigr] 
+l,N
+\BbbQ 
+\beta n,n+1
+= |  AN
+\phi (vnj )\BbbE \BbbQ  \psi R,v,in (Rn , vn+1 ) |  [v j ]n+1
+ - A - 1
+\phi (vnj )\psi R,v,in (Rn , vn+1 ) | .
+n
+n
+n \BbbE 
+N j=1
+
+in ,N
+By the SLLN, for each in , we have that limN \rightarrow \infty  \beta n,n+1
+= 0 a.s., completing the proof.
+
+Proposition 1. Let n \in  \{ 1, . . . , M  -  3\}  and \varepsilon  > 0. We have
+
+N
+N
+N
+| aN
+n (S)  -  an (S)|  \leq  cn \varepsilon  + \delta n (S) + \alpha n (S) +
+
+(3.13)
+
+M
+ - 2
+\sum 
+
+N
+\beta l,n
+(S)
+
+l=n+1
+
+a.s., where
+kM  - 2
+
+kM  - 1
+
+\alpha nN (S)
+
+=
+
+i  - 1 ,N
+\alpha MM - 1,M
+
+\sum 
+
+=
+
+ml
+\sum 
+
+\sum 
+
+l,il ,il - 1 ,N
+\beta l - 2,l - 1
+
+...
+
+il - 1 =1
+
+j
+l
+ - 1
+= 0, lim sup \alpha k - 1,k
+lim \alpha MM - 1,M
+
+N \rightarrow \infty 
+
+i ,...,i
+
+\alpha inn ,in+1M  - 1
+
+,N
+
+\cdot  \psi in,\alpha 
+(S),
+n ,...,iM  - 1
+
+mn
+\sum 
+
+l,il ,...,in ,N
+\beta n,n+1
+\cdot  \psi in,\beta 
+(S),
+l ,...,in
+
+in =1
+
+i ,...,i ,N
+
+,N
+
+kn
+\sum 
+in =1
+
+ml - 1
+l,il ,N
+\beta l - 1,l
+
+il =1
+
+i
+
+...
+
+iM  - 2 =1
+
+iM  - 1 =1
+
+N
+\beta l,n
+(S)
+
+i  - 2 ,iM  - 1 ,N
+\alpha MM - 2,M
+ - 1
+
+\sum 
+
+< \infty  \forall  k \in  \{ n, . . . , M  -  1\} 
+
+N
+
+a.s. and
+\forall  l \in  \{ n + 1, . . . , M  -  2\}  \forall j \in  \{ n, . . . , l\} ,
+l,i ,...,il ,N
+
+l,il ,N
+j
+lim \beta l - 1,l
+= 0, lim sup \beta k - 1,k
+
+N \rightarrow \infty 
+
+< \infty 
+
+N
+
+almost surely. The bounds on lim supN cN
+n depend on our truncation and separability condik,\beta 
+tions, and \psi ik,\alpha 
+,
+\psi 
+satisfy
+the
+conditions
+of Lemma 3.
+il ,...,in
+l ,...,in
+By taking limits on both sides and noting the properties of the random variables, mappings,
+and constants described, the main theorem then follows.
+Proof of Proposition. We begin by letting n = M  -  3, and by Lemmas 2 and 6 we have
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+MIXING LSMC AND PDE METHODS
+
+223
+
+almost surely
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+| aN
+M  - 3 (S)  -  aM  - 3 (S)| 
+N
+\Bigr] 
+1 \sum  \BbbQ  \Bigl[  N
+N
+j M  - 2
+\leq  \delta M
+(S)
++
+\widetilde 
+c
+\BbbE 
+| a
+(S
+)
+ - 
+a
+(S
+)| 
+| 
+S
+=
+S,
+[v
+]
+M  - 2 M  - 2
+M  - 3
+ - 3
+M  - 2 M  - 2
+M  - 3
+N
+j=1
+
+\leq 
+
+N
+\delta M
+ - 3 (S)
+
++
+
+cN
+M  - 2
+
+(3.14)
+kM  - 1
+
+kM  - 2
+i  - 1 ,N
+\alpha MM - 1,M
+
+\sum 
+
++ \widetilde 
+c
+
+iM  - 1 =1
+
+i  - 2 ,iM  - 1 ,N
+\alpha MM - 2,M
+ - 1
+
+\sum 
+
+N
+\Bigr] 
+1 \sum  \BbbQ  \Bigl[ 
+ - 2
+\BbbE  \psi S,iM  - 2 ,iM  - 1 (SM  - 2 ) |  SM  - 3 = S, [v j ]M
+M  - 3
+N
+j=1
+
+iM  - 2
+
+(3.15)
+N
+1 \sum  \BbbQ  N
+ - 2
+\BbbE  [\delta M  - 2 (SM  - 2 ) |  SM  - 3 = S, [v j ]M
++ \widetilde 
+c
+M  - 3 ].
+N
+j=1
+
+Line (3.14) may be handled just as in the proof of Lemma 6. As for line (3.15), we use Lemma
+7 and write
+N
+1 \sum  \BbbQ  N
+ - 2
+\BbbE  [\delta M  - 2 (SM  - 2 ) |  SM  - 3 = S, [v j ]M
+M  - 3 ]
+N
+j=1
+
+mM  - 2
+
+\leq  c \varepsilon  +
+
+M  - 2,i
+
+\sum 
+
+ - 2
+\beta M  - 2,MM - 1
+
+,N
+
+iM  - 2 =1
+M  - 2,i
+
+N
+1 \sum  \BbbQ 
+ - 2
+\BbbE  [\psi iM  - 2 (SM  - 2 ) |  SM  - 3 = S, [v j ]M
+M  - 3 ],
+N
+j=1
+
+,N
+
+ - 2
+= 0 a.s. and we apply the usual separation technique, the details
+where limN \rightarrow \infty  \beta M  - 3,MM - 2
+of which we omit. We then obtain
+
+| aN
+M  - 3 (S)  -  aM  - 3 (S)| 
+N
+\leq  cN
+M  - 3 + \delta M  - 3 (S)
+kM  - 1
+
++
+
+\sum 
+
+kM  - 2
+i  - 1 ,N
+\alpha MM - 1,M
+
+iM  - 1 =1
+
+\sum 
+iM  - 2
+
+kM  - 2
+
++
+
+\sum 
+iM  - 2 =1
+
+kM  - 3
+i  - 2 ,iM  - 1 ,N
+\alpha MM - 2,M
+ - 1
+
+\sum 
+
+i
+
+,i
+
+ - 3 M  - 2
+\alpha MM - 3,M
+ - 2
+
+,iM  - 1 ,N
+
+M  - 3,\alpha 
+(S)
+\cdot  \psi S,i
+M  - 3 ,iM  - 2 ,iM  - 1
+
+iM  - 3
+mM  - 3
+
+M  - 2,i
+
+ - 2
+\beta M  - 2,MM - 1
+
+,N
+
+\sum 
+
+M  - 2,i
+
+ - 2
+\beta M  - 3,MM - 2
+
+,iM  - 3 ,N
+
+ - 2,\beta 
+\psi iM
+(S)
+M  - 3 ,iM  - 2
+
+iM  - 3 =1
+
+almost surely, which corresponds to l = M  -  2, and the above random variables satisfy the
+necessary conditions. The remainder of the induction works exactly analogously to the base
+case and proofs of the previous lemmas, which establishes the proposition.
+4. Overview of complexity and multilevel Monte Carlo/multigrids. By viewing our
+conditional PDEs from the SPDE perspective, we are naturally led to consider multilevel
+Monte Carlo (MLMC)/multigrid methods as in Giles (2015) to reduce the complexity. For
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+224
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+the direct estimator, our coefficients depend on the expectation of the solutions of our SPDEs,
+which may be computed using MLMC. Also, the low estimator is expressed as an expectation
+which may be computed using MLMC. The MLMC adjustment tends to reduce the run times
+by at least an order of magnitude. MLMC approaches have also appeared in the mixed
+MC-PDE works of Ang (2013) and Dang (2017).
+A pseudocode description of the methodology based on this idea, and outlined below, is
+provided in Algorithm 3 in Appendix A.
+4.1. Multilevel Monte Carlo/multigrids.
+4.1.1. MLMC for computing the estimated coefficients. Assume we have L independent
+(l)
+v
+v
+v
+simulations of vt on [0, T ], denoted \{ (vt )\} L
+l=0 , with Nl paths where Nl > Nl+1 . Also, let
+(j,l)
+
+Pn (S) denote the numerical solution of the conditional PDE on the jth path with grid
+\scrS  .
+resolutions Nl\scrS  , in each dimension, over [tn , tn+1 ] where Nl\scrS  < Nl+1
+Using the usual multilevel MC approach, we may write
+\Biggl[ 
+\Biggr] 
+Nl
+N0
+L - 1
+\sum 
+\sum  1 \sum 
+\bigl[ 
+\bigr] 
+1
+ - 
+1
+N0
+(4.1) aN
+\phi (vnj,0 )\cdot Pn(j,0) (S)+
+\phi (vnj,l )\cdot (Pnj,l+1 (S) - Pnj,l (S)) ,
+n (S) \approx  An
+N0v
+Nl
+j=1
+
+l=0
+
+j=1
+
+where each of Pnj,l (S) is interpolated to have a resolution that matches the grid at level L.
+A na\"{\i}ve implementation may end up carrying out many thousands of interpolations when
+computing (4.1), and also when generating terminal conditions for the PDEs. Our pseudocode
+description (Algorithm 3 in Appendix A) shows how to keep the total number of interpolations
+to a minimum.
+4.1.2. MLMC for low biased estimates of the time zero price. We again carry out L
+(l)
+v
+v
+independent simulations of vt on [0, T ], denoted as \{ (vt )\} L
+l=0 , with Nl paths where Nl >
+v . Letting P (j,l) (S) denote the numerical solution of the conditional PDE on the jth path
+Nl+1
+0
+\scrS  , we have
+with grid resolution Nl\scrS  over [0, T ] where Nl\scrS  < Nl+1
+v
+
+v
+
+Nl
+N0
+L - 1
+\sum  1 \sum 
+1 \sum 
+(j,0)
+Vl,0 (S) \approx  v
+P0 (S) +
+(P0j,l+1 (S)  -  P0j,l (S)) ,
+N0
+Nlv
+j=1
+
+l=0
+
+j=1
+
+where again we interpolate the lower resolution grids to match the highest resolution grid.
+We do not provide a pseudocode description for this part as it is relatively simple.
+4.2. An overview of complexity. While a complete complexity analysis lies outside the
+scope of this paper, we provide an overview of the sources of costs and error, along with a
+discussion of the complexity of our MLMC-FST scheme.
+The direct estimator has three main stages: simulation of paths, solution of conditional
+PDEs, and the regression step. Assuming an Euler discretization for the simulation of paths,
+the FST method to solve the conditional PDEs, and Gauss--Jordan elimination for inverting
+AN
+n , we obtain the following expression for the algorithm's cost:
+C = C\mathrm{P}\mathrm{a}\mathrm{t}\mathrm{h}.
+
+\mathrm{S}\mathrm{i}\mathrm{m}.
+
++ C\mathrm{P}\mathrm{D}\mathrm{E} + C\mathrm{R}\mathrm{e}\mathrm{g}.
+
+\sim  Nv \cdot  Nt + NSdS \cdot  (log NS ) \cdot  Nv + (Nv \cdot  dB + d3B + d2B \cdot  NSdS ).
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+MIXING LSMC AND PDE METHODS
+
+225
+
+The terms in C\mathrm{R}\mathrm{e}\mathrm{g}. correspond to the costs of constructing AN
+n , computing its inverse, and
+dS
+N
+ - 1
+multiplying [An ] to a length dB vector at each of the NS regression sites.
+We make the following rough estimate of the algorithm's error at a single point of our
+grid, S \in  \scrS :
+\varepsilon (S) \sim  \varepsilon \mathrm{P}\mathrm{a}\mathrm{t}\mathrm{h}. \mathrm{S}\mathrm{i}\mathrm{m}. + \varepsilon \mathrm{P}\mathrm{D}\mathrm{E} + \varepsilon \mathrm{R}\mathrm{e}\mathrm{g}.
+\biggr) 
+\biggl( 
+\biggr)  \biggl( 
+1
+1
+1
+1
++ E(dB , Nv , Nt , NS ),
+\sim  \surd 
++
++
++ \surd 
+Nt
+NS2
+Nv
+Nv
+where determining E is a topic for future papers. For other forms of LSMC, the structure
+of \varepsilon \mathrm{R}\mathrm{e}\mathrm{g}. has been investigated in Glasserman et al. (2004), Stentoft (2004), Egloff (2005),
+and Belomestny (2011). Another important question for future papers is how the quantities
+Nv , Nt , NS , dB contribute to the error, and ought to be optimally balanced, especially in the
+context of MLMC that we discuss below.
+In section 5, alongside implementing the hybrid LSMC/PDE algorithm for Heston-type
+models, we also investigate how the bias, variance, and cost behave on the various levels
+of our MLMC-FST scheme in the context of single-period expected values. By the general
+multilevel theorem (GMLT) (see Cliffe et al. (2011) and Giles (2015)), we are able to suggest
+a bound for the complexity of the MLMC-FST component in isolation from the rest of the
+algorithm. The choice of the highest resolution level for the PDE stage may not be optimal
+for the entire algorithm as the finest grid is used in the regression stage. The optimal choice of
+the finest grid should also take the costs and errors of the regression into account---a topic we
+do not fully address in this paper. On the other hand, the GMLT sheds light on the potential
+improvements brought about by MLMC to the main bottleneck of the algorithm. The work
+of Giles (2015) also provides an optimal allocation scheme for the number of paths on each
+level; however, the traditional scheme is for a scalar-valued single-period problem as opposed
+to a vector-valued multiperiod problem. While our MLMC scheme deals primarily with the
+grids used to solve the PDEs, one could also incorporate multiple discretization levels for the
+simulated paths, vt . Since the main bottleneck of the algorithm tends to lie with the PDE
+stage, we leave the paths out of our MLMC scheme for simplicity.
+5. Numerical examples. In this section, we compare the performance of our algorithm
+to the standard LSMC algorithm for the following:
+1. The Heston model
+\surd 
+\surd 
+dSt = St (r dt + vt dWtS ) ,
+and
+dvt = \kappa (\theta   -  vt ) dt + \eta  vt dWtv ,
+where d[W S , W v ]t = \rho  dt.
+2. The multidimensional Heston (mdHeston) model
+\sqrt{} 
+\sqrt{} 
+(1)
+(1)
+(1)
+(1)
+(1)
+(1)
+(1)
+(3)
+dSt = St (r dt + vt dWt ) ,
+dvt = \kappa 1 (\theta 1  -  vt )dt + \eta 1 vt dWt ,
+\sqrt{} 
+\sqrt{} 
+(2)
+(2)
+(2)
+(2)
+(2)
+(2)
+(2)
+(4)
+dSt = St (r dt + vt dWt ) ,
+dvt = \kappa 2 (\theta 2  -  vt )dt + \eta 2 vt dWt ,
+where (W (i) )4i=1 is a four-dimensional Brownian motion with full correlation structure
+\rho  = [\rho i,j ].
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+226
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+We price a Bermudan option with payoff function h(S). In each case, we show results for
+time-zero prices and optimal exercise boundaries (OEBs). For the standard Heston model, we
+also implement an explicit finite difference method which we regard as a reference solution as
+opposed to a benchmark. Finally, we carry out the MLMC-FST tests discussed in section 4.
+5.1. Procedures and settings for the main algorithm and MLMC-FST tests. We provide a brief procedure for our tests along with Tables 1--8 showing our option and model
+parameters.
+5.1.1. Main algorithms.
+1. Carry out Ntrials of the direct and low estimators for various grid resolutions and numbers
+of paths. Compute the mean prices and their standard deviations.
+\bullet  For the Heston model, report the reference price from the finite difference scheme.
+2. For each of the Ntrials , using the coefficients from the direct estimator, compute the OEB.
+By averaging over each grid point, obtain the mean OEB.
+\bullet  For the Heston model, report the reference OEB from the finite difference scheme (and
+shown in Figure 2).
+\bullet  For the multidimensional Heston model, report only certain slices of the average OEB.
+5.1.2. MLMC-FST level tests.
+1. For each level l \in  \{ l1 , . . . , ln \} , compute | \BbbE [P0l (S0 )  -  P0 (S0 )]|  over Ntrials . The quantity
+P0 (S0 ) corresponds to the solution of the conditional PDE solved at a relatively high
+resolution, NS,t .
+2. For each level l \in  \{ l1 , . . . , ln \} , compute \BbbV [Yl (S0 )] = \BbbE [(Yl (S0 )  -  \BbbE [Yl (S0 )])2 ] over Ntrials .
+3. For each level l \in  \{ l1 , . . . , ln \} , measure the expected CPU time for computing Cl , \BbbE  [Cl ]
+over Ntrials .
+Table 1
+Choices of bases for both methods. We denote by dB the total number of basis functions used and by deg
+the highest power of the functions in our basis.
+Method
+
+Basis functions
+
+LSMC
+
+(S (i) )m \cdot  (S (j) )n \cdot  (v (k) )p \cdot  (v (l) )q for
+1 \leq  i, j \leq  dS , 1 \leq  k, l \leq  dv and h(S (1) , . . . , S (dS ) )r , m, n, p, q, r \in  \BbbN 0
+(v (i) )n \cdot  (v (j) )m for 1 \leq  i, j \leq  dv , n, m \in  \BbbN 0
+
+LSMC/PDE
+
+Table 2
+Bermudan option settings.
+Model type
+Heston
+mdHeston
+
+Payoff
+h(S)\Bigl( = (K  -  S)+
+
+h(S (1) , S (2) ) = K  -  max(S (1) , S (2) )
+
+\Bigr) 
+
+T
+1
+
+K
+10
+
+Exercise frequency
+T /12
+
+1
+
+10
+
+T /12
+
++
+
+5.2. Discussion of results. We provide a discussion of the results from the two examples
+we investigated above. We first provide example-specific comments for each model, followed
+by comments which apply to both examples.
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+MIXING LSMC AND PDE METHODS
+
+227
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+Table 3
+Parameters used for the Heston model.
+r
+0.02
+
+S0
+10
+
+v0
+0.15
+
+\kappa 
+5
+
+\theta 
+0.16
+
+\eta 
+0.9
+
+\rho 
+0.1
+
+Table 4
+Parameters used for the multidimensional Heston model.
+r
+0.025
+\left[ 
+[\rho i,j ] =
+
+(1)
+
+(1)
+
+S0
+10
+
+v0
+0.45
+
+1
+
+\rho S 1 ,S 2
+1
+\rho v1 ,S 2
+\rho v2 ,S 2
+
+\rho S 2 ,S 1
+\rho v1 ,S 1
+\rho v2 ,S 1
+
+\kappa 1
+1.52
+
+\theta 1
+0.45
+
+\rho S 1 ,v1
+\rho S 2 ,v1
+1
+\rho v2 ,v1
+
+\eta 1
+0.4
+\right] 
+
+\rho S 1 ,v2
+\rho S 2 ,v2
+\rho v1 ,v2
+1
+
+(2)
+
+(2)
+
+S0
+10
+\left[ 
+
+v0
+0.3
+
+1
+0.2
+=
+ - 0.3
+ - 0.15
+
+\kappa 2
+1.3
+
+0.2
+1
+ - 0.11
+ - 0.35
+
+\theta 2
+0.30
+ - 0.3
+ - 0.11
+1
+0.2
+
+\eta 2
+0.43
+\right] 
+ - 0.15
+ - 0.35
+0.2
+1
+
+Table 5
+Parameters used in our MLMC-FST tests.
+NS,l
+2 , . . . , 29
+
+NS,t
+210
+
+5
+
+Ntrials
+1 000
+
+Table 6
+Parameters used for the explicit finite difference method. Boundary conditions are as specified in Ikonen
+and Toivanen (2008).
+Ns
+29
+
+Nv
+27
+
+Nt
+1 000 000
+
+vmin
+0
+
+vmax
+1
+
+Smin
+0
+
+Smax
+53
+
+Table 7
+Number of paths and degree of bases used for each model with LSMC. An Euler discretization time step of
+Nstep = 1 000 was used.
+Model type
+Heston
+mdHeston
+
+NS,v
+500 000
+500 000
+
+Basis degree
+3
+4
+
+Table 8
+(2)
+MLMC, FST, and basis set up for the LSMC-PDE algorithm. Multiple values of NS correspond to the
+different trials that will be presented. These settings are applied to both the Heston and multidimensional Heston
+models.
+Model type
+Heston/mdHeston
+Heston/mdHeston
+Heston/mdHeston
+
+l
+0
+1
+2
+
+(l)
+
+Nv
+10 000
+1 000
+100
+(i)
+
+(l)
+
+NS
+25
+26
+7
+2 , 28 , 29
+
+(log S (i) /S0 )min
+ - 3
+
+Model type
+Heston
+mdHeston
+
+Basis degree
+3
+3
+
+(i)
+
+(log S (i) /S0 )max
+3
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+228
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+Figure 2. Reference boundary obtained by finite difference. The black regions indicate the exercise areas,
+and the white regions indicate the holding areas.
+Table 9
+Resulting ATM and non-ATM price estimates for the Heston model LSMC-PDE. We show results for
+(S0 , v0 ) for various S0 \in  \scrS  and a fixed v0 . Reference prices for 0.95 \cdot  S0 , S0 , 1.05 \cdot  S0 are 1.6712, 1.4507,
+1.2565, respectively. The values in brackets correspond to standard deviations.
+(2)
+
+Ns
+27
+28
+29
+
+Est. type
+Direct
+Low
+Direct
+Low
+Direct
+Low
+
+0.95 \cdot  S0
+1.6747 (0.0011)
+1.6746 (0.0013)
+1.6739 (0.0013)
+1.6738 (0.0012)
+1.6735 (0.0011)
+1.6735 (0.0014)
+
+S0
+1.4541 (0.0012)
+1.4540 (0.0015)
+1.4534 (0.0014)
+1.4532 (0.0013)
+1.4530 (0.0013)
+1.4529 (0.0016)
+
+1.05 \cdot  S0
+1.2598 (0.0013)
+1.2597 (0.0016)
+1.2591 (0.0015)
+1.2588 (0.0014)
+1.2586 (0.0014)
+1.2585 (0.0017)
+
+Run time (s)
+7
+6
+7
+6
+7
+6
+
+Table 10
+Resulting ATM price estimate for the Heston model using the LSMC algorithm. The reference value
+obtained from finite difference is 1.4507. The values in brackets correspond to standard deviations.
+Estimate type
+Direct
+Low
+
+(S0 , v0 )
+1.4494 (0.0020)
+1.4487 (0.0023)
+
+Run time (s)
+47
+38
+
+5.2.1. Heston model. Our choices of parameters for this problem are borrowed from
+Ikonen and Toivanen (2008) with a lower value for r, the risk free rate, and higher maturity.
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+MIXING LSMC AND PDE METHODS
+
+229
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+Table 11
+Resulting values for MLMC-FST tests for the Heston model. The parameters \alpha , \beta , \gamma  correspond to slopes
+of logarithmic bias, variance, and cost.
+Slope type
+
+Estimate
+
+R2
+
+\alpha 
+\beta 
+\gamma 
+
+2.12
+4.16
+0.30
+
+0.9993
+0.9989
+0.9409
+
+Table 12
+Resulting ATM and non-ATM price estimates for LSMC-PDE. We show results for (S0 , v0 ) for various
+S0 \in  \scrS  and a fixed v0 . The values in brackets correspond to standard deviations.
+(2)
+
+Ns
+27
+28
+29
+(2)
+
+Ns
+27
+28
+29
+
+Est. type
+Direct
+Low
+Direct
+Low
+Direct
+Low
+
+Est. type
+Direct
+Low
+Direct
+Low
+Direct
+Low
+(1)
+
+(2)
+
+(0.95 \cdot  S0 , S0 )
+1.2526 (0.0056)
+1.2525 (0.0050)
+1.2506 (0.0055)
+1.2506 (0.0050)
+1.2508 (0.0058)
+1.2502 (0.0061)
+
+(1)
+
+(S0
+1.1853
+1.1852
+1.1834
+1.1833
+1.1836
+1.1830
+
+(2)
+
+, S0 )
+(0.0055)
+(0.0049)
+(0.0055)
+(0.0049)
+(0.0057)
+(0.0060)
+
+(1)
+
+(2)
+
+(1.05 \cdot  S0 , S0 )
+1.1209 (0.0054)
+1.1208 (0.0049)
+1.1191 (0.0054)
+1.1190 (0.0049)
+1.1194 (0.0057)
+1.1187 (0.0059)
+
+Run times (s)
+67
+43
+102
+64
+177
+105
+(1)
+
+(2)
+
+(S0 , 0.95 \cdot  S0 )
+1.2846 (0.0056)
+1.2845 (0.0050)
+1.2826 (0.0056)
+1.2825 (0.0050)
+1.2828 (0.0058)
+1.2821 (0.0061)
+
+(1)
+
+(2)
+
+(S0 , 1.05 \cdot  S0 )
+1.0931 (0.0054)
+1.0940 (0.0048)
+1.0914 (0.0054)
+1.0913 (0.0048)
+1.0916 (0.0056)
+1.0910 (0.0059)
+
+Table 13
+Resulting ATM price statistics for the LSMC algorithm. The values in brackets correspond to standard
+deviations.
+Estimate type
+Direct
+Low
+
+(S0 , v0 )
+1.2121 (0.0016)
+1.1765 (0.0018)
+
+Run times (s)
+83
+73
+
+Table 14
+Resulting values for MLMC-FST tests for the multidimensional Heston model. The parameters \alpha , \beta , \gamma 
+correspond to slopes of logarithmic bias, variance, and cost.
+Slope type
+\alpha 
+\beta 
+\gamma 
+
+Estimate
+2.03
+2.63
+1.65
+
+R2
+0.9995
+0.9640
+0.9785
+
+We also differ in that we value a Bermudan option instead of an American option.
+Based on Figure 3, we see the hybrid algorithm's errors appear along the interface of
+the holding and exercise regions, and it is able to closely approximate the true boundary
+across all exercise dates. The consistency arises from the comparison of the exercise value
+and continuation value being broken into a collection of cross-sectional comparisons for each
+S \in  \scrS  as discussed in section 2. At time n, for each S \prime  \in  \scrS , we have an estimate of the
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+230
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+(2)
+
+Figure 3. Difference boundary for the LSMC-PDE algorithm corresponding to NS = 28 . Yellow regions
+indicate correctness with probability 1, and blue regions indicate incorrectness with probability 1.
+
+function CnN (S \prime  , v) which is monotonically increasing in v. Our goal is then to locate the
+points v \ast  \in  \BbbR  such that C N (S \prime  , v \ast  ) = h(S \prime  ), which is simple to compute since h(S \prime  ) is a
+deterministic constant. We do, however, see some noise in determining v \ast  across trials, which
+is due to randomness in C N (S \prime  , \cdot ). From Figures 4, we see that the LSMC boundary is not
+particularly accurate for all exercise dates, with greater accuracy at the later dates. This is
+due to the accumulation of errors as one moves recursively through time and the lack of paths
+that are in-the-money at earlier exercise dates.
+As indicated in Tables 9 and 10, the hybrid algorithm is better able to estimate time-zero
+prices, in comparison to the reference value. This accuracy in our prices follows from the
+quality of our OEBs. We note that the direct estimator and low estimator are fairly close
+to each other and suggest that the low estimator is somewhat redundant in this case. The
+full LSMC algorithm also provides a direct estimate of the price that is also close to the low
+estimator; however, this price is biased too low, as evidenced by the reference value. Since
+the low estimate of the LSMC-PDE algorithm is higher than the low estimate of the LSMC
+algorithm, by definition it is better. We also note the hybrid algorithm provides estimates
+for other S0 \in  \scrS  and fixed v0 , as opposed to a single point in LSMC. The non-ATM price
+estimates are of the same quality as the ATM estimate.
+(2)
+For run times, we see that regardless of the choice of N\scrS  , the run times remain effectively
+(2)
+(2)
+unchanged which implies that the Nv = 100 conditional PDEs solved at N\scrS  are highly out-
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+MIXING LSMC AND PDE METHODS
+
+231
+
+Figure 4. Difference boundary for the LSMC algorithm. Yellow regions indicate correctness with probability
+1, and blue regions indicate incorrectness with probability 1.
+(0)
+
+(1)
+
+weighed by the work done at resolutions N\scrS  , N\scrS  . We also see the direct estimator takes an
+extra second compared to the low estimator, roughly implying that the multigrid PDE stage
+takes approximately 86\% of the run time.
+Lastly, there is some discrepancy in the prices obtained by finite differences and the LSMCPDE algorithms, mostly in the third decimal place. This discrepancy is likely due to the bias
+introduced from path discretization, interpolation of time-zero prices, and spatial discretization.
+It is worth noting that the PDE approach is best for this 2d example, as it has lower complexity. This example is used to demonstrate the performance of the LSMC-PDE algorithm
+in a fully observable setting.
+5.2.2. Multidimensional Heston model. As our OEBs are four-dimensional objects, they
+are not fully observable; hence we show v-slices of the OEB, as we have some intuition about
+how they should look. In Figures 5, 6, and 7, we show three types of slices, v1 = \theta 1 , v2 = \theta 2 ,
+the ``central slice,"" along with two other off-center slices. For brevity we show only the last,
+middle, and first exercise dates.
+Overall the hybrid and LSMC algorithms have comparable precision in determining the
+region over 100 trials. However, we note that the boundaries produced by the LSMC-PDE
+algorithm are considerably different, just as in the standard Heston model. In looking at the
+price estimates in Tables 12 and 13, we see that the lower estimates produced by the hybrid
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+232
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+Figure 5. A slice of the boundaries when v1 = \theta 1 , v2 = \theta 2 . Yellow regions indicate holding with probability
+1, and blue regions indicate exercising with probability 1. The top and bottom figures correspond to LSMC-PDE
+(2)
+and LSMC, respectively. The resolution for LSMC-PDE is N\scrS  = 28 .
+
+algorithm are generally lower, and so we are more inclined to trust the OEBs produced by
+the hybrid algorithm.
+In terms of price estimates, the tightness of the direct and low estimators for LSMC-PDE
+suggests that, again, the low estimator is somewhat redundant. In this case, for LSMC, the
+direct estimator is considerably higher than the low estimator, indicating a relatively high
+degree of bias introduced by the regression scheme. We also note that, again for the hybrid
+algorithm, we are able to get accurate non-ATM price estimates. This suggests that the LSMC
+boundary is consistently wrong in many places.
+Looking at run times, we see that unlike in the standard Heston model, the PDEs solved
+(2)
+at resolution N\scrS  weigh significantly on the run times. Also, for the direct estimator, we see
+that the PDE stage typically takes approximately 63\% of the run time, indicating an increase
+in regression costs compared to the standard Heston model.
+5.2.3. Overall comments. Our choice of MLMC scheme was for simplicity and conservativeness, and hence was not optimized, as alluded to before.
+One issue that arises from our results is the question of whether the hybrid algorithm is
+more efficient. For the Heston model, we see that the hybrid algorithm provides substantial
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+MIXING LSMC AND PDE METHODS
+
+233
+
+Figure 6. A slice of the boundaries when v1 = 0.5 \cdot  \theta 1 , v2 = \theta 2 . Yellow regions indicate holding with
+probability 1, and blue regions indicate exercising with probability 1. The top and bottom figures correspond to
+(2)
+LSMC-PDE and LSMC, respectively. The resolution for LSMC-PDE is N\scrS  = 28 .
+
+variance reduction in time-zero prices and OEBs, especially given that LSMC was allowed
+a larger computational budget. It is interesting to note, however, that while the standard
+deviations for prices are relatively close to each other, the OEBs for LSMC ``seem"" much
+noisier than the hybrid algorithm's, although this is based on subjective examination. For the
+multidimensional Heston model, we note that the variance of the hybrid algorithm's prices, for
+a comparable computational budget, is higher, although their boundaries have very similar
+levels of noisiness. This again points to a disconnect in the variance of the two estimated
+objects. On the other hand, it is important to note that for the hybrid algorithm, we obtain
+prices for all S \in  \scrS  and not simply the ATM point, as in standard LSMC. Having the prices
+for these S \in  \scrS  also allows us to compute the \Delta  and \Gamma  of the option without any extra
+simulations. As a result, the hybrid algorithm provides considerably more information than
+standard LSMC. Also, the information provided by the hybrid algorithm tends to be more
+accurate in terms of quality of the boundary and bias, as noted before.
+Next, we turn to our MLMC-FST tests. From Tables 11 and 14 and Figures 8--12, by the
+GMLT it is suggested, since \alpha  > 21 min(\beta , \gamma ) and \beta  > \gamma , that optimal complexity is attainable.
+That is, there exist a collection of levels and a path allocation such that one can obtain a root
+mean squared error (RMSE) of O(\varepsilon ) with cost O(\varepsilon  - 2 ) (up to a certain time-step resolution).
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+234
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+Figure 7. A slice of the boundaries when v1 = \theta 1 , v2 = 1.5 \cdot  \theta 2 . Yellow regions indicate holding with
+probability 1, and blue regions indicate exercising with probability 1. The top and bottom figures correspond to
+(2)
+LSMC-PDE and LSMC, respectively. The resolution for LSMC-PDE is N\scrS  = 28 .
+
+This, again, is for our single-period computations in isolation from the entire hybrid algorithm.
+As one moves from the 2d example to the 4d example, we see that the accuracy across levels,
+measured by \alpha , remains unchanged. On the other hand, the variances and costs increase
+considerably as we increased the number of volatility processes and dimension of S. These
+results suggest that we may not conclude optimal complexity, via the GMLT, in the analogous
+case when dS = 3, dv = 3, although we leave this investigation to future study.
+All run times were measured on a 3.60 GHz Intel Xeon CPU using MATLAB 2016. For
+the results in Tables 9--13, all run times were measured by repeating the following process
+three times: clearing the memory, running the algorithm, and measuring the run time. The
+reported run time was then taken to be the maximum of the three.
+6. Conclusions. By combining conditional PDEs with the LSMC approach of Tsitsiklis
+and Van Roy (2001), we have developed an algorithm that improves traditional LSMC methods
+in the context of SV models for medium-dimensional problems. The hybrid algorithm also
+provides an extension of PDE methods beyond lower-dimensional problems, at the expense of
+variance and a semiglobal solution.
+From a theoretical perspective we provide a proof of almost-sure convergence which uses
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+MIXING LSMC AND PDE METHODS
+
+235
+
+geometric arguments and requires a few modifications to the basis, regression matrix, and
+payoff function. The proof is also highly dependent on separability of the model. Future
+research into theoretical properties of the algorithm ought to search for a proof with more
+natural assumptions and farther reach in terms of types of SV models. Another important
+point is that the proof is for a stylized form of the algorithm where \scrS  is a continuum rather
+than a finite grid of points. It seems a more appropriate proof would make assumptions on the
+properties of the conditional expectations, viewing them as numerical solutions of the conditional PDE. As discussed in section 4, a major question is quantifying the rate of convergence,
+which essentially requires a central limit theorem type result as one component. To obtain
+this result, it would appear that our separation technique will not carry over, and so one would
+likely again require a more sophisticated treatment of the conditional expectation functions.
+Our treatment in section 4 essentially assumes that a CLT holds. With a quantification of
+the error associated to the regression scheme, one can then quantify the entire algorithm's
+complexity---a topic for future work. Also, as alluded to before, there is a need to find an
+optimal allocation scheme for the MLMC component of the algorithm and prove convergence
+under this scheme.
+There is also the question of developing duality-based high biased estimators as in Rogers
+(2002) and Haugh and Kogan (2004). Such estimates would allow us to form proper confidence
+intervals for our time-zero prices.
+In terms of computing sensitivities, as mentioned before, the details may be found in
+Farahany (2018); one can also find applications to the double Heston model (Christoffersen
+et al. (2009)), a mean-reverting commodity model with jumps, and concrete derivations of
+conditional PDEs.
+
+Appendix A. Formal algorithm descriptions.
+
+A.1. LSMC-PDE algorithm.
+
+A.2. MLMC/multirids. We provide guidelines for computing an (S) over the time interval
+[tn , tn+1 ] in a manner that keeps the number of interpolations to a minimum. Given our
+coefficient matrix an+1 (S) at level L, we next proceed by carrying out Algorithms 2 and 3.
+
+Appendix B. Optimal exercise boundaries.
+
+Appendix C. MLMC-FST test plots. Figures 8, 9, and 10 show the bias, variance, and
+expected cost on each level for the Heston model. Blue dots represent estimates, and red lines
+represent the line of best fit. Figures 11, 12, and 13 show the bias, variance, and expected
+cost on each level for the multidimensional Heston model. Blue dots represent estimates, and
+red lines represent the line of best fit.
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+236
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+Algorithm 1 LSMC-PDE: Exercise Boundaries and Direct Estimator.
+1: Simulate N paths of vt
+2: for n = M : 2 do
+3:
+if n = M then
+4:
+Set Vn (si , v) = hn (si )
+5:
+end if
+6:
+for j = 1 : N do
+\bigl[ 
+\bigr] 
+7:
+Compute \BbbE  Vn (Sn , vnj ) |  Sn - 1 = si , [v j ]n
+n - 1
+8:
+end for
+9:
+for i = 1 : N\biggl\{ sdS do
+\biggr\} 
+\bigl[ 
+\bigr]  N
+10:
+Regress e - r\Delta t \BbbE  Vn (Sn , vnj ) |  Sn - 1 = si , [v j ]n
+n - 1
+
+ \triangleleft  For i = 1, . . . , NsdS
+ \triangleleft  Initialize boundary for PDE solver
+ \triangleleft  For i = 1, . . . , NsdS
+
+B
+onto \{ \phi m (v)\} dm=1
+
+j=1
+dS
+
+s
+ \triangleleft  Obtain [an - 1 (si )]N
+i=1
+
+11:
+12:
+13:
+14:
+15:
+16:
+17:
+18:
+
+Set Cn - 1 (si , v) = an - 1 (si ) \cdot  \phi (v)
+end for
+ \triangleleft  Obtain a matrix of dimension NsdS \times  dB
+Set Vn - 1 (si , v) = max(hn - 1 (si ), Cn - 1 (si , v))
+ \triangleleft  For i = 1, . . . , NsdS
+end for
+for j = 1 : N do
+\bigl[ 
+\bigr] 
+Compute e - r\Delta t \BbbE  V1 (S1 , v1j ) |  S0 = si , [v j ]10
+ \triangleleft  For i = 1, . . . , NsdS
+end for
+\Bigl( 
+\bigr] \Bigr) 
+\sum N  - r\Delta t \bigl[ 
+\BbbE  V1 (S1 , v1i ) |  S0 = si , [v i ]10
+Set Vh,0 (si , v0 ) = max h0 (si ), N1
+i=1 e
+ \triangleleft  For i = 1, . . . , NsdS
+ \triangleleft  High estimate of the time-zero prices
+
+19: return Vh,0 (si , v0 ) for i = 1, . . . , NsdS
+
+Algorithm 2 LSMC-PDE: Lower Estimator.
+1:
+2:
+3:
+4:
+5:
+6:
+7:
+8:
+9:
+10:
+11:
+12:
+
+Simulate Nv,2 paths of vt
+for j = 1, . . . , Nv,2 do
+for n = M : 2 do
+if n = M then
+j
+Set Vnj (si , vM
+) = hn (si )
+end if
+j
+Compute Un - 1
+(si ) = e - r\Delta t \BbbE [Vn (Sn , vnj ) |  Sn - 1 = si , [v i ]n
+n - 1 ]
+j
+j
+j
+j
+) + h(si )I\Gamma cn (si , vn - 1
+)
+Set Vn - 1 (si ) = Un - 1
+(si )I\Gamma n (si , vn - 1
+end for
+j
+Set Vl,0
+(si ) = e - r\Delta t \BbbE [V1 (S1 , v1j ) |  S0 = si , [v i ]n
+n - 1 ]
+end for
+\sum Nv,2 j
+1
+Set Vl,0 (si ) = Nv,2
+j=1 Vl,0 (si )
+
+13: return Vl,0 (si , v0 ) for i = 1, . . . , NsdS
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+ \triangleleft  For i = 1, . . . , NsdS
+
+ \triangleleft  For i = 1, . . . , NsdS
+ \triangleleft  For i = 1, . . . , NsdS
+ \triangleleft  For i = 1, . . . , NsdS
+
+MIXING LSMC AND PDE METHODS
+
+237
+
+1: for l = 0 : L  -  1 do
+2:
+Interpolate an+1 (S) from resolution level L to level l.
+3: end for
+4: for l = L  -  1 : 0 do
+5:
+for j = 1 : Nlv do
+6:
+Generate boundary conditions for the PDEs to be solved at resolutions l and l + 1.
+ \triangleleft  Requires computing the matrix an (S) \cdot  \phi (vnj ) using an (S) at grid level l, l + 1.
+j,l
+7:
+Compute Pn (S) and Pnj,l+1 (S) via a numerical PDE technique.
+8:
+end for
+\sum Nlv
+\sum Nlv
+9:
+Compute N1v j=1
+\phi (vnj,l )Pnj,l (S) and N1v j=1
+\phi (vnj,l )Pnj,l+1 (S)
+l
+l
+10:
+Interpolate both to grid level
+\Bigl(  L
+\Bigr) 
+\sum Nlv
+\phi (vnj,l ) Pnj,l+1 (S)  -  Pnj,l (S)
+11:
+Compute N1v j=1
+l
+12: end for
+Repeat the above procedure for level 0 and compute an (S) which is defined on grid level L as in (4.1).
+
+-11.6
+
+-16
+
+-5
+-6
+
+-18
+
+-11.8
+
+-7
+-20
+
+-9
+-10
+-11
+
+-12
+
+log 2 E[Cl]
+
+log 2 V[Pl - P l-1 ]
+
+log 2 | E[Pl - P] |
+
+-8
+
+-22
+
+-24
+
+-12.2
+
+-12.4
+-12
+
+-26
+
+-13
+
+-12.6
+
+-28
+-14
+
+-12.8
+
+-30
+
+-15
+5
+
+5.5
+
+6
+
+6.5
+
+7
+
+7.5
+
+8
+
+8.5
+
+6
+
+9
+
+6.5
+
+7
+
+7.5
+
+8
+
+8.5
+
+9
+
+6
+
+6.5
+
+7
+
+7.5
+
+8
+
+8.5
+
+9
+
+resolution level
+
+resolution level
+
+resolution level
+
+Figure 9. Variance on each resFigure 10. Expected cost on
+Figure 8. Bias on each resolution level. The slope of the plot is olution level. The slope of the plot each resolution level. The slope of
+is denoted as \beta .
+the plot is denoted as \gamma .
+denoted as \alpha .
+
+-5
+
+-18
+
+-6
+
+-19
+
+-7
+
+-20
+
+-8
+
+-21
+
+-4
+
+-5
+
+-9
+-10
+
+log 2 E[Cl]
+
+log 2 V[Pl - P l-1 ]
+
+-6
+
+log 2 | E[Pl - P] |
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+Algorithm 3 MLMC/Multigrids For an (S).
+
+-22
+-23
+
+-11
+
+-24
+
+-12
+
+-25
+
+-7
+
+-8
+
+-9
+
+-10
+
+-26
+
+-13
+
+-11
+
+-27
+
+-14
+5
+
+5.5
+
+6
+
+6.5
+
+7
+
+7.5
+
+resolution level
+
+8
+
+8.5
+
+9
+
+6
+
+6.5
+
+7
+
+7.5
+
+8
+
+8.5
+
+9
+
+6
+
+6.5
+
+7
+
+resolution level
+
+7.5
+
+8
+
+8.5
+
+9
+
+resolution level
+
+Figure 12. Variance on each
+Figure 13. Expected cost on
+Figure 11. Bias on each resolution level. The slope of the plot is resolution level. The slope of the each resolution level. The slope of
+plot is denoted as \beta .
+the plot is denoted as \gamma .
+denoted as \alpha .
+
+Acknowledgment. The authors would like to thank three anonymous referees for helpful
+comments that ultimately improved the paper.
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+238
+
+D. FARAHANY, K. R. JACKSON, AND S. JAIMUNGAL
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+REFERENCES
+A. Agarwal, S. Juneja, and R. Sircar (2016), American options under stochastic volatility: Control variates, maturity randomization \& multiscale asymptotics, Quant. Finance, 16, pp. 17--30.
+F. Ait Sahlia, M. Goswami, and S. Guha (2010), American option pricing under stochastic volatility: An
+efficient numerical approach, Comput. Management Sci., 7, pp. 171--187.
+C. Aliprantis and K. Border (2006), Infinite Dimensional Analysis: A Hitchhiker's Guide, Springer, New
+York.
+X. X. Ang (2013), A Mixed PDE/Monte Carlo Approach as an Efficient Way to Price under High-Dimensional
+Systems, Master's thesis, University of Oxford, Oxford, UK.
+D. Belomestny (2011), Pricing Bermudan options by nonparametric regression: Optimal rates of convergence
+for lower estimates, Finance Stoch., 15, pp. 655--683.
+B. Bouchard and X. Warin (2012), Monte-Carlo valuation of American options: Facts and new algorithms
+to improve existing methods, in Numerical Methods in Finance, Springer, New York, pp. 215--255.
+P. Christoffersen, S. Heston, and K. Jacobs (2009), The shape and term structure of the index option
+smirk: Why multifactor stochastic volatility models work so well, Management Sci., 55, pp. 1914--1932
+\'
+E. Clement,
+D. Lamberton, and P. Protter (2002), An analysis of a least squares regression method for
+American option pricing, Finance Stoch., 6, pp. 449--471.
+K. A. Cliffe, M. B. Giles, R. Scheichl, and A. L Teckentrup (2011), Multilevel Monte Carlo methods
+and applications to elliptic PDEs with random coefficients, Comput. Vis. Sci., 14, pp. 3--15.
+A. Cozma and C. Reisinger (2017), A mixed Monte Carlo and partial differential equation variance reduction
+method for foreign exchange options under the Heston--Cox--Ingersoll--Ross model, J. Comput. Finance, 20,
+pp. 109--149.
+D.-M. Dang (2017), A multi-level dimension reduction Monte-Carlo method for jump-diffusion models, J.
+Comput. Appl. Math., 324, pp. 49--71.
+D.-M. Dang, K. R. Jackson, and M. Mohammadi (2015), Dimension and variance reduction for Monte
+Carlo methods for high-dimensional models in finance, Appl. Math. Finance, 22, pp. 522--552.
+D.-M. Dang, K. R. Jackson, and S. Sues (2017), A dimension and variance reduction Monte-Carlo method
+for option pricing under jump-diffusion models, Appl. Math. Finance, pp. 1--41.
+R. Durrett (2010), Probability: Theory and Examples, Cambridge University Press, Cambridge, UK.
+D. Egloff (2005), Monte Carlo algorithms for optimal stopping and statistical learning, Ann. Appl. Probab.,
+15, pp. 1396--1432.
+D. Farahany (2018), Mixing Monte Carlo and Partial Differential Equation Methods for Multi-Dimensional
+Optimal Stopping Problems under Stochastic Volatility, Ph.D. thesis, University of Toronto Toronto,
+Canada.
+J. Feng, M. Forde, and J.-P. Fouque (2010), Short-maturity asymptotics for a fast mean-reverting Heston
+stochastic volatility model, SIAM J. Financial Math., 1, pp. 126--141, https://doi.org/10.1137/090745465.
+G. B. Folland (1999), Real Analysis: Modern Techniques and Their Applications, Wiley, New York.
+M. B. Giles (2015), Multilevel Monte Carlo methods, Acta Numer., 24, pp. 259--328.
+P. Glasserman and B. Yu (2004), Number of paths versus number of basis functions in American option
+pricing, Ann. Appl. Probab., 14, pp. 2090--2119.
+R. B. Gramacy and M. Ludkovski (2015), Sequential design for optimal stopping problems, SIAM J. Financial Math., 6, pp. 748--775, https://doi.org/10.1137/140980089.
+M. Grasselli (2017), The 4/2 stochastic volatility model: A unified approach for the Heston and the 3/2
+model, Math. Finance, 27, pp. 1013--1034.
+M. B. Haugh and L. Kogan (2004), Pricing American options: A duality approach, Oper. Res., 52, pp.
+258--270.
+S. L. Heston (1993), A closed-form solution for options with stochastic volatility with applications to bond and
+currency options, Rev. Financial Stud., 6, pp. 327--343.
+J. Hull and A. White (1987), The pricing of options on assets with stochastic volatilities, J. Finance, 42,
+pp. 281--300.
+S. Ikonen and J. Toivanen (2008), Efficient numerical methods for pricing American options under stochastic
+volatility, Numer. Methods Partial Differential Equations, 24, pp. 104--126.
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+Downloaded 05/09/20 to 129.173.72.87. Redistribution subject to SIAM license or copyright; see http://www.siam.org/journals/ojsa.php
+
+MIXING LSMC AND PDE METHODS
+
+239
+
+K. R. Jackson, S. Jaimungal, and V. Surkov (2008), Fourier space time-stepping for option pricing with
+L\'evy models, J. Comput. Finance, 12, pp. 1--29.
+S. Jain and C. W. Oosterlee (2015), The stochastic grid bundling method: Efficient pricing of Bermudan
+options and their Greeks, Appl. Math. Comput., 269, pp. 412--431.
+A. L. Lewis (2002), The mixing approach to stochastic volatility and jump models, Wilmott Magazine, http:
+//web.math.ku.dk/\sim rolf/teaching/ctff03/020328 lewis.pdf.
+T. Lipp, G. Loeper, and O. Pironneau (2013), Mixing Monte-Carlo and partial differential equations for
+pricing options, Chinese Ann. Math. Ser. B, 34, pp. 255--276.
+G. Loeper and O. Pironneau (2009), A mixed PDE/Monte-Carlo method for stochastic volatility models,
+C. R. Math. Acad. Sci. Paris, 347, pp. 559--563.
+F. A. Longstaff and E. S. Schwartz (2001), Valuing American options by simulation: A simple least-squares
+approach, Rev. Financial Stud., 14, pp. 113--147.
+M. Ludkovski (2018), Kriging metamodels and experimental design for Bermudan option pricing, J. Comput.
+Finance, 22, pp. 37--77.
+J. R. Munkres (2000), Topology, Prentice Hall, Upper Saddle River, NJ.
+B. R. Rambharat and A. E. Brockwell (2010), Sequential Monte Carlo pricing of American-style options
+under stochastic volatility models, Ann. Appl. Stat., 4, pp. 222--265.
+L. C. G. Rogers (2002), Monte Carlo valuation of American options, Math. Finance, 12, pp. 271--286.
+E. M. Stein and J. C. Stein (1991), Stock price distributions with stochastic volatility: An analytic approach,
+Rev. Financial Stud., 4, pp. 727--752.
+L. Stentoft (2004), Convergence of the least squares Monte Carlo approach to American option valuation,
+Management Sci., 50, pp. 1193--1203.
+J. N. Tsitsiklis and B. V. Roy (2001), Regression methods for pricing complex American-style options, IEEE
+Trans. Neural Networks, 12, pp. 694--703.
+
+Copyright © by SIAM. Unauthorized reproduction of this article is prohibited.
+
+

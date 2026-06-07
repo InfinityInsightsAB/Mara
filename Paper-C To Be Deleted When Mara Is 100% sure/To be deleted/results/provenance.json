@@ -1,0 +1,28 @@
+{
+  "case_id": "bgk_r02_t1_delta05_nex12_diagnostic",
+  "created_by": "delta05_diagnostic_runner.py",
+  "engine_hashes": {
+    "benchmark_engine_sha256": "9f68fa764ddd504f255f0bd81f5638093b041a929b8bc6a2d059845d2d390253",
+    "hybrid_engine_sha256": "2a82bc91a770ffcb6d37c8dcc7dc811df5b79c57d1e66165ef51ce1962b5151c"
+  },
+  "model_env": {
+    "GDMR_DELTA1": "0.5",
+    "GDMR_DELTA2": "0.5",
+    "GDMR_EXERCISE_DATES": "12",
+    "GDMR_KAPPA1": "5.5",
+    "GDMR_KAPPA2": "0.1",
+    "GDMR_MATURITY": "1.0",
+    "GDMR_R": "0.02",
+    "GDMR_RHO12": "-0.982",
+    "GDMR_RHO13": "-0.727",
+    "GDMR_RHO23": "0.59",
+    "GDMR_S0": "100.0",
+    "GDMR_THETA": "0.078",
+    "GDMR_V0": "0.114",
+    "GDMR_VP0": "0.110",
+    "GDMR_XI1": "2.689",
+    "GDMR_XI2": "0.502"
+  },
+  "note": "All outputs are sandbox-local under To be deleted.",
+  "root": "D:\\Mara PhD\\Paper-C\\To be deleted"
+}

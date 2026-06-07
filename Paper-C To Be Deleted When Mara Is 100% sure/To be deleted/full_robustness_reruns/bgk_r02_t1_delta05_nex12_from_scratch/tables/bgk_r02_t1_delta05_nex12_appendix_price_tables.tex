@@ -1,0 +1,91 @@
+\section*{Sandbox Robustness Price Tables}
+\begin{table}[H]\centering
+\caption{Sandbox robustness benchmark prices. Prices are rounded to three decimals.}
+\begin{tabular}{lrrrrr}
+\toprule
+Strike & 70 & 80 & 90 & 100 & 110 \\
+\midrule
+LSMC benchmark & 3.364 & 4.961 & 7.082 & 9.921 & 13.858 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]\centering
+\caption{Sandbox robustness fixed-path step-sweep prices with 20,000 paths. Prices are rounded to three decimals.}
+\begin{tabular}{lrrrr}
+\toprule
+Method/step & 24 & 48 & 72 & 96 \\
+\midrule
+LSMC K=70 & 4.361 & 4.124 & 3.891 & 3.862 \\
+Hybrid LSMC-PDE K=70 & 4.151 & 3.871 & 3.739 & 3.720 \\
+LSMC K=80 & 6.348 & 5.998 & 5.783 & 5.690 \\
+Hybrid LSMC-PDE K=80 & 6.070 & 5.704 & 5.516 & 5.492 \\
+LSMC K=90 & 8.904 & 8.388 & 8.141 & 8.055 \\
+Hybrid LSMC-PDE K=90 & 8.532 & 8.086 & 7.835 & 7.808 \\
+LSMC K=100 & 12.267 & 11.642 & 11.259 & 11.113 \\
+Hybrid LSMC-PDE K=100 & 11.739 & 11.226 & 10.922 & 10.887 \\
+LSMC K=110 & 16.486 & 15.856 & 15.416 & 15.222 \\
+Hybrid LSMC-PDE K=110 & 16.087 & 15.529 & 15.196 & 15.141 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]\centering
+\caption{Sandbox robustness fixed-path step-sweep prices with 60,000 paths. Prices are rounded to three decimals.}
+\begin{tabular}{lrrrr}
+\toprule
+Method/step & 24 & 48 & 72 & 96 \\
+\midrule
+LSMC K=70 & 4.264 & 4.051 & 3.897 & 3.771 \\
+Hybrid LSMC-PDE K=70 & 4.189 & 3.952 & 3.827 & 3.715 \\
+LSMC K=80 & 6.184 & 5.910 & 5.730 & 5.535 \\
+Hybrid LSMC-PDE K=80 & 6.131 & 5.809 & 5.637 & 5.484 \\
+LSMC K=90 & 8.717 & 8.329 & 8.102 & 7.868 \\
+Hybrid LSMC-PDE K=90 & 8.620 & 8.214 & 7.987 & 7.792 \\
+LSMC K=100 & 12.008 & 11.508 & 11.187 & 10.957 \\
+Hybrid LSMC-PDE K=100 & 11.853 & 11.371 & 11.090 & 10.861 \\
+LSMC K=110 & 16.238 & 15.613 & 15.355 & 15.084 \\
+Hybrid LSMC-PDE K=110 & 16.222 & 15.686 & 15.361 & 15.114 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]\centering
+\caption{Sandbox robustness fixed 48-step path-sweep prices. Prices are rounded to three decimals.}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Method/strike & 250 & 1,000 & 5,000 & 10,000 & 20,000 & 40,000 & 60,000 \\
+\midrule
+LSMC K=70 & 5.373 & 4.611 & 4.120 & 4.079 & 4.124 & 4.015 & 4.051 \\
+Hybrid LSMC-PDE K=70 & 4.394 & 4.117 & 3.966 & 3.859 & 3.871 & 3.911 & 3.952 \\
+LSMC K=80 & 7.685 & 6.616 & 5.948 & 6.007 & 5.998 & 5.864 & 5.910 \\
+Hybrid LSMC-PDE K=80 & 6.468 & 6.056 & 5.865 & 5.691 & 5.704 & 5.770 & 5.809 \\
+LSMC K=90 & 10.824 & 9.144 & 8.403 & 8.496 & 8.388 & 8.341 & 8.329 \\
+Hybrid LSMC-PDE K=90 & 9.094 & 8.530 & 8.316 & 8.070 & 8.086 & 8.180 & 8.214 \\
+LSMC K=100 & 14.442 & 12.184 & 11.723 & 11.618 & 11.642 & 11.505 & 11.508 \\
+Hybrid LSMC-PDE K=100 & 12.493 & 11.733 & 11.503 & 11.201 & 11.226 & 11.343 & 11.371 \\
+LSMC K=110 & 19.707 & 16.579 & 15.897 & 15.883 & 15.856 & 15.730 & 15.613 \\
+Hybrid LSMC-PDE K=110 & 17.095 & 16.070 & 15.816 & 15.493 & 15.529 & 15.653 & 15.686 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]\centering
+\caption{Sandbox robustness fixed 60-step path-sweep prices. Prices are rounded to three decimals.}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Method/strike & 250 & 1,000 & 5,000 & 10,000 & 20,000 & 40,000 & 60,000 \\
+\midrule
+LSMC K=70 & 5.620 & 4.630 & 4.166 & 4.116 & 3.991 & 3.988 & 3.964 \\
+Hybrid LSMC-PDE K=70 & 4.279 & 4.018 & 3.974 & 3.833 & 3.818 & 3.850 & 3.889 \\
+LSMC K=80 & 8.066 & 6.536 & 6.032 & 6.031 & 5.904 & 5.810 & 5.807 \\
+Hybrid LSMC-PDE K=80 & 6.252 & 5.887 & 5.835 & 5.650 & 5.622 & 5.681 & 5.718 \\
+LSMC K=90 & 11.118 & 9.089 & 8.371 & 8.530 & 8.376 & 8.219 & 8.231 \\
+Hybrid LSMC-PDE K=90 & 8.822 & 8.263 & 8.235 & 8.013 & 7.963 & 8.058 & 8.088 \\
+LSMC K=100 & 14.495 & 12.353 & 11.519 & 11.701 & 11.462 & 11.392 & 11.373 \\
+Hybrid LSMC-PDE K=100 & 12.137 & 11.341 & 11.370 & 11.122 & 11.053 & 11.185 & 11.211 \\
+LSMC K=110 & 19.846 & 16.566 & 15.869 & 15.815 & 15.721 & 15.576 & 15.531 \\
+Hybrid LSMC-PDE K=110 & 16.534 & 15.573 & 15.647 & 15.384 & 15.314 & 15.469 & 15.500 \\
+\bottomrule
+\end{tabular}
+\end{table}

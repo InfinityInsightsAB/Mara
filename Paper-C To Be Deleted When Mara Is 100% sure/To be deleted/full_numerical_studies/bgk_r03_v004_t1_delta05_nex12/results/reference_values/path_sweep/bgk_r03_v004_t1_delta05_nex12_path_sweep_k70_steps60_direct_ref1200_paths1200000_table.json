@@ -1,0 +1,40 @@
+{
+  "case_id": "bgk_r03_v004_t1_delta05_nex12",
+  "scenario": "K=70 put",
+  "strike": 70,
+  "euler_steps": 60,
+  "path_grid": [
+    250,
+    500,
+    1000,
+    2000,
+    5000,
+    10000,
+    20000,
+    40000,
+    60000
+  ],
+  "methods": [
+    "benchmark",
+    "hybrid"
+  ],
+  "reference_direct_price": 0.157901,
+  "model_env": {
+    "GDMR_S0": "100.0",
+    "GDMR_V0": "0.04",
+    "GDMR_VP0": "0.04",
+    "GDMR_R": "0.03",
+    "GDMR_KAPPA1": "2.0",
+    "GDMR_KAPPA2": "1.0",
+    "GDMR_THETA": "0.04",
+    "GDMR_XI1": "0.35",
+    "GDMR_XI2": "0.20",
+    "GDMR_DELTA1": "0.5",
+    "GDMR_DELTA2": "0.5",
+    "GDMR_RHO12": "0.20",
+    "GDMR_RHO13": "0.10",
+    "GDMR_RHO23": "0.10",
+    "GDMR_MATURITY": "1.0",
+    "GDMR_EXERCISE_DATES": "12"
+  }
+}

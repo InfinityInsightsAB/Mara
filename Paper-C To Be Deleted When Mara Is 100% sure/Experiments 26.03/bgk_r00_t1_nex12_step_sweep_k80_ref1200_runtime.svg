@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="800" viewBox="0 0 1260 800">
+<rect width="100%" height="100%" fill="#f3efe7"/>
+<rect x="30" y="28" width="1200" height="744" rx="28" fill="#fffdf9" stroke="#ddd4c6"/>
+<text x="72" y="88" font-family="Segoe UI, Arial, sans-serif" font-size="31" font-weight="700" fill="#17202a">K=80 put: Runtime vs Euler steps</text>
+<text x="72" y="118" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#475569">Runtime is measured wall-clock time in seconds for the direct-and-low run behind each method output.</text>
+<text x="72" y="146" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#64748b">The vertical axis uses a log scale so the benchmark and hybrid curves remain visible together.</text>
+<text x="72" y="174" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#64748b">Benchmark uses 1,000,000 paths; Hybrid uses 60,000 paths with the tuned OTM numerical setting.</text>
+<line x1="115" y1="250" x2="115" y2="620" stroke="#334155" stroke-width="1.6"/>
+<line x1="115" y1="620" x2="1150" y2="620" stroke="#334155" stroke-width="1.6"/>
+<line x1="115" y1="620.00" x2="1150" y2="620.00" stroke="#ece5d8" stroke-width="1"/>
+<text x="103" y="625.00" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">1</text>
+<line x1="115" y1="496.67" x2="1150" y2="496.67" stroke="#ece5d8" stroke-width="1"/>
+<text x="103" y="501.67" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">10</text>
+<line x1="115" y1="373.33" x2="1150" y2="373.33" stroke="#ece5d8" stroke-width="1"/>
+<text x="103" y="378.33" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">100</text>
+<line x1="115" y1="250.00" x2="1150" y2="250.00" stroke="#ece5d8" stroke-width="1"/>
+<text x="103" y="255.00" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">1000</text>
+<line x1="115.00" y1="250" x2="115.00" y2="620" stroke="#f3eee4" stroke-width="1"/>
+<text x="115.00" y="644" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">12</text>
+<line x1="230.00" y1="250" x2="230.00" y2="620" stroke="#f3eee4" stroke-width="1"/>
+<text x="230.00" y="644" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">24</text>
+<line x1="460.00" y1="250" x2="460.00" y2="620" stroke="#f3eee4" stroke-width="1"/>
+<text x="460.00" y="644" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">48</text>
+<line x1="690.00" y1="250" x2="690.00" y2="620" stroke="#f3eee4" stroke-width="1"/>
+<text x="690.00" y="644" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">72</text>
+<line x1="1150.00" y1="250" x2="1150.00" y2="620" stroke="#f3eee4" stroke-width="1"/>
+<text x="1150.00" y="644" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">120</text>
+<text x="37" y="435.00" transform="rotate(-90 37 435.00)" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#475569">Runtime (seconds, log scale)</text>
+<text x="632.50" y="672" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#475569">Euler steps</text>
+<line x1="72" y1="210" x2="106" y2="210" stroke="#1d4ed8" stroke-width="4"/>
+<circle cx="89" cy="210" r="5.5" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<text x="118" y="215" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#334155">LSMC</text>
+<polyline fill="none" stroke="#1d4ed8" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" points="115.00,499.62 230.00,492.02 460.00,473.42 690.00,458.13 1150.00,438.68"/>
+<circle cx="115.00" cy="499.62" r="5.8" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="230.00" cy="492.02" r="5.8" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="460.00" cy="473.42" r="5.8" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="690.00" cy="458.13" r="5.8" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="1150.00" cy="438.68" r="5.8" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<line x1="402" y1="210" x2="436" y2="210" stroke="#d97706" stroke-width="4"/>
+<circle cx="419" cy="210" r="5.5" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<text x="448" y="215" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#334155">Hybrid LSMC-PDE</text>
+<polyline fill="none" stroke="#d97706" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" points="115.00,331.45 230.00,326.43 460.00,327.23 690.00,327.77 1150.00,327.89"/>
+<circle cx="115.00" cy="331.45" r="5.8" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="230.00" cy="326.43" r="5.8" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="460.00" cy="327.23" r="5.8" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="690.00" cy="327.77" r="5.8" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="1150.00" cy="327.89" r="5.8" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+</svg>

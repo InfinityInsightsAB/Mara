@@ -1,0 +1,43 @@
+COMMAND: C:\Python312\python.exe D:\Mara PhD\Paper-C\To be deleted\engine\run_bgk_r03_hybrid_put.py
+
+STDOUT:
+Hybrid LSMC-PDE for a Bermudan put
+Model: generalized Gatheral double mean-reverting (gDMR)
+Option type:                    put
+Spot:                           100.00
+Strike:                         100.00
+Maturity:                       1.00
+Rate:                           0.0200
+Training volatility paths:      20000
+Low-estimator volatility paths: 1000
+Exercise dates:                 12
+Euler steps:                    240
+Internal steps:                 20
+Asset grid points:              601
+Asset low factor:               0.1500
+Asset high factor:              6.0000
+FST pad factor:                 4
+FST batch size:                 256
+Vol basis degree:               3
+Vol basis size:                 10
+Vol truncation quantile:        0.9995
+Vol truncation v cap:           3.160543
+Vol truncation vp cap:          0.937302
+Seed:                           2026
+Low seed:                       2103
+beta2:                          -0.848397
+beta3:                          -0.226446
+sigma_perp^2:                   0.002248
+Time-zero exercise in low:      False
+Hybrid direct price:            10.515626
+Hybrid direct error:            0.042007
+Hybrid low price:               9.668674
+Hybrid low error:               0.537051
+RESULT_JSON: {"K": 100.0, "S0": 100.0, "T": 1.0, "asset_grid_points": 601, "asset_high_factor": 6.0, "asset_low_factor": 0.15, "beta2": -0.8483969934038962, "beta3": -0.22644577389170112, "delta1": 0.5, "delta2": 0.5, "euler_steps": 240, "exercise_dates": 12, "fst_batch_size": 256, "fst_pad_factor": 4, "hybrid_direct_error": 0.04200715068576558, "hybrid_direct_price": 10.515626428411545, "hybrid_low_error": 0.5370513597819244, "hybrid_low_price": 9.668674395500828, "internal_steps": 20.0, "kappa1": 5.5, "kappa2": 0.1, "low_paths": 1000, "low_seed": 2103, "method": "Hybrid LSMC-PDE with FFT", "option_type": "put", "paths": 20000, "r": 0.02, "rho12": -0.982, "rho13": -0.727, "rho23": 0.59, "seed": 2026, "sigma_perp_sq": 0.0022480748581070686, "theta": 0.078, "time_zero_exercise_in_low": false, "v0": 0.114, "v_cap": 3.160543441772461, "vol_basis_degree": 3, "vol_basis_size": 10, "vol_quantile": 0.9995, "vp0": 0.11, "vp_cap": 0.93730229139328, "xi1": 2.689, "xi2": 0.502}
+
+
+STDERR:
+
+
+EXIT_CODE: 0
+RUNTIME_SECONDS: 71.540578

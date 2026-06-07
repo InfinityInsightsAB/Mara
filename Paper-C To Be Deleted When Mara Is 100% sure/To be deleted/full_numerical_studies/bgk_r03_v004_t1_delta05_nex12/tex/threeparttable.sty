@@ -1,0 +1,17 @@
+% Local minimal fallback for the Springer render environment.
+% It supports the manuscript's existing threeparttable/table-note markup.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{threeparttable}[2026/05/02 local minimal fallback]
+\providecommand{\tnote}[1]{\textsuperscript{#1}}
+\makeatletter
+\@ifundefined{threeparttable}{%
+  \newenvironment{threeparttable}{}{}%
+}{}
+\@ifundefined{tablenotes}{%
+  \newenvironment{tablenotes}[1][]{%
+    \begin{list}{}{\setlength{\leftmargin}{0pt}\setlength{\itemsep}{0pt}\setlength{\parsep}{0pt}}%
+  }{%
+    \end{list}%
+  }%
+}{}
+\makeatother

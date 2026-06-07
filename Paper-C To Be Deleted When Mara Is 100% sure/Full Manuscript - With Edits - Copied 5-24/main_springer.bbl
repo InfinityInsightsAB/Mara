@@ -1,0 +1,284 @@
+%% BioMed_Central_Bib_Style_v1.01
+
+\begin{thebibliography}{17}
+% BibTex style file: bmc-mathphys.bst (version 2.1), 2014-07-24
+\ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi
+\ifx \binits  \undefined \def \binits#1{#1}\fi
+\ifx \bauthor  \undefined \def \bauthor#1{#1}\fi
+\ifx \batitle  \undefined \def \batitle#1{#1}\fi
+\ifx \bjtitle  \undefined \def \bjtitle#1{#1}\fi
+\ifx \bvolume  \undefined \def \bvolume#1{\textbf{#1}}\fi
+\ifx \byear  \undefined \def \byear#1{#1}\fi
+\ifx \bissue  \undefined \def \bissue#1{#1}\fi
+\ifx \bfpage  \undefined \def \bfpage#1{#1}\fi
+\ifx \blpage  \undefined \def \blpage #1{#1}\fi
+\ifx \burl  \undefined \def \burl#1{\textsf{#1}}\fi
+\ifx \doiurl  \undefined \def \doiurl#1{\url{https://doi.org/#1}}\fi
+\ifx \betal  \undefined \def \betal{\textit{et al.}}\fi
+\ifx \binstitute  \undefined \def \binstitute#1{#1}\fi
+\ifx \binstitutionaled  \undefined \def \binstitutionaled#1{#1}\fi
+\ifx \bctitle  \undefined \def \bctitle#1{#1}\fi
+\ifx \beditor  \undefined \def \beditor#1{#1}\fi
+\ifx \bpublisher  \undefined \def \bpublisher#1{#1}\fi
+\ifx \bbtitle  \undefined \def \bbtitle#1{#1}\fi
+\ifx \bedition  \undefined \def \bedition#1{#1}\fi
+\ifx \bseriesno  \undefined \def \bseriesno#1{#1}\fi
+\ifx \blocation  \undefined \def \blocation#1{#1}\fi
+\ifx \bsertitle  \undefined \def \bsertitle#1{#1}\fi
+\ifx \bsnm \undefined \def \bsnm#1{#1}\fi
+\ifx \bsuffix \undefined \def \bsuffix#1{#1}\fi
+\ifx \bparticle \undefined \def \bparticle#1{#1}\fi
+\ifx \barticle \undefined \def \barticle#1{#1}\fi
+\bibcommenthead
+\ifx \bconfdate \undefined \def \bconfdate #1{#1}\fi
+\ifx \botherref \undefined \def \botherref #1{#1}\fi
+\ifx \url \undefined \def \url#1{\textsf{#1}}\fi
+\ifx \bchapter \undefined \def \bchapter#1{#1}\fi
+\ifx \bbook \undefined \def \bbook#1{#1}\fi
+\ifx \bcomment \undefined \def \bcomment#1{#1}\fi
+\ifx \oauthor \undefined \def \oauthor#1{#1}\fi
+\ifx \citeauthoryear \undefined \def \citeauthoryear#1{#1}\fi
+\ifx \endbibitem  \undefined \def \endbibitem {}\fi
+\ifx \bconflocation  \undefined \def \bconflocation#1{#1}\fi
+\ifx \arxivurl  \undefined \def \arxivurl#1{\textsf{#1}}\fi
+\csname PreBibitemsHook\endcsname
+
+%%% 1
+\bibitem[\protect\citeauthoryear{Farahany et~al.}{2020}]{farahany2020mixing}
+\begin{barticle}
+\bauthor{\bsnm{Farahany}, \binits{D.}},
+\bauthor{\bsnm{Jackson}, \binits{K.R.}},
+\bauthor{\bsnm{Jaimungal}, \binits{S.}}:
+\batitle{Mixing monte carlo and {PDE} methods to price bermudan options under stochastic volatility}.
+\bjtitle{SIAM Journal on Financial Mathematics}
+\bvolume{11}(\bissue{1}),
+\bfpage{201}--\blpage{239}
+(\byear{2020})
+\doiurl{10.1137/19M1249035}
+\end{barticle}
+\endbibitem
+
+%%% 2
+\bibitem[\protect\citeauthoryear{Longstaff and Schwartz}{2001}]{longstaff2001valuing}
+\begin{barticle}
+\bauthor{\bsnm{Longstaff}, \binits{F.A.}},
+\bauthor{\bsnm{Schwartz}, \binits{E.S.}}:
+\batitle{Valuing {A}merican options by simulation: A simple least-squares approach}.
+\bjtitle{The Review of Financial Studies}
+\bvolume{14}(\bissue{1}),
+\bfpage{113}--\blpage{147}
+(\byear{2001})
+\doiurl{10.1093/rfs/14.1.113}
+\end{barticle}
+\endbibitem
+
+%%% 3
+\bibitem[\protect\citeauthoryear{Tsitsiklis and Van~Roy}{2001}]{tsitsiklis2001regression}
+\begin{barticle}
+\bauthor{\bsnm{Tsitsiklis}, \binits{J.N.}},
+\bauthor{\bsnm{Van~Roy}, \binits{B.}}:
+\batitle{Regression methods for pricing complex {A}merican-style options}.
+\bjtitle{IEEE Transactions on Neural Networks}
+\bvolume{12}(\bissue{4}),
+\bfpage{694}--\blpage{703}
+(\byear{2001})
+\doiurl{10.1109/72.935083}
+\end{barticle}
+\endbibitem
+
+%%% 4
+\bibitem[\protect\citeauthoryear{Cl{\'e}ment et~al.}{2002}]{clement2002analysis}
+\begin{barticle}
+\bauthor{\bsnm{Cl{\'e}ment}, \binits{E.}},
+\bauthor{\bsnm{Lamberton}, \binits{D.}},
+\bauthor{\bsnm{Protter}, \binits{P.}}:
+\batitle{An analysis of a least squares regression method for {A}merican option pricing}.
+\bjtitle{Finance and Stochastics}
+\bvolume{6}(\bissue{4}),
+\bfpage{449}--\blpage{471}
+(\byear{2002})
+\doiurl{10.1007/s007800200071}
+\end{barticle}
+\endbibitem
+
+%%% 5
+\bibitem[\protect\citeauthoryear{Loeper and Pironneau}{2009}]{loeper2009mixed}
+\begin{barticle}
+\bauthor{\bsnm{Loeper}, \binits{G.}},
+\bauthor{\bsnm{Pironneau}, \binits{O.}}:
+\batitle{A mixed {PDE}/{M}onte-{C}arlo method for stochastic volatility models}.
+\bjtitle{Comptes Rendus Mathematique}
+\bvolume{347}(\bissue{9--10}),
+\bfpage{559}--\blpage{563}
+(\byear{2009})
+\doiurl{10.1016/j.crma.2009.02.021}
+\end{barticle}
+\endbibitem
+
+%%% 6
+\bibitem[\protect\citeauthoryear{Lipp et~al.}{2013}]{lipp2013mixing}
+\begin{barticle}
+\bauthor{\bsnm{Lipp}, \binits{T.}},
+\bauthor{\bsnm{Loeper}, \binits{G.}},
+\bauthor{\bsnm{Pironneau}, \binits{O.}}:
+\batitle{Mixing {M}onte-{C}arlo and partial differential equations for pricing options}.
+\bjtitle{Chinese Annals of Mathematics, Series B}
+\bvolume{34}(\bissue{2}),
+\bfpage{255}--\blpage{276}
+(\byear{2013})
+\doiurl{10.1007/s11401-013-0763-2}
+\end{barticle}
+\endbibitem
+
+%%% 7
+\bibitem[\protect\citeauthoryear{Cozma and Reisinger}{2017}]{cozma2017mixed}
+\begin{barticle}
+\bauthor{\bsnm{Cozma}, \binits{A.}},
+\bauthor{\bsnm{Reisinger}, \binits{C.}}:
+\batitle{A mixed monte carlo and partial differential equation variance reduction method for foreign exchange options under the {Heston}--{Cox}--{Ingersoll}--{Ross} model}.
+\bjtitle{The Journal of Computational Finance}
+\bvolume{20}(\bissue{3}),
+\bfpage{109}--\blpage{149}
+(\byear{2017})
+\doiurl{10.21314/JCF.2016.318}
+\end{barticle}
+\endbibitem
+
+%%% 8
+\bibitem[\protect\citeauthoryear{Heston}{1993}]{heston1993closedform}
+\begin{barticle}
+\bauthor{\bsnm{Heston}, \binits{S.L.}}:
+\batitle{A closed-form solution for options with stochastic volatility with applications to bond and currency options}.
+\bjtitle{The Review of Financial Studies}
+\bvolume{6}(\bissue{2}),
+\bfpage{327}--\blpage{343}
+(\byear{1993})
+\doiurl{10.1093/rfs/6.2.327}
+\end{barticle}
+\endbibitem
+
+%%% 9
+\bibitem[\protect\citeauthoryear{Cox et~al.}{1985}]{cir1985termstructure}
+\begin{barticle}
+\bauthor{\bsnm{Cox}, \binits{J.C.}},
+\bauthor{\bsnm{Ingersoll}, \binits{J.E.}},
+\bauthor{\bsnm{Ross}, \binits{S.A.}}:
+\batitle{A theory of the term structure of interest rates}.
+\bjtitle{Econometrica}
+\bvolume{53}(\bissue{2}),
+\bfpage{385}--\blpage{407}
+(\byear{1985})
+\doiurl{10.2307/1911242}
+\end{barticle}
+\endbibitem
+
+%%% 10
+\bibitem[\protect\citeauthoryear{Gatheral}{2006}]{gatheral2006volsurface}
+\begin{bbook}
+\bauthor{\bsnm{Gatheral}, \binits{J.}}:
+\bbtitle{The Volatility Surface: A Practitioner's Guide}.
+\bpublisher{John Wiley \& Sons},
+\blocation{Hoboken, NJ}
+(\byear{2006}).
+\burl{https://www.wiley.com/en-us/The%2BVolatility%2BSurface%3A%2BA%2BPractitioner%27s%2BGuide-p-9780471792512}
+\end{bbook}
+\endbibitem
+
+%%% 11
+\bibitem[\protect\citeauthoryear{Bayer et~al.}{2013}]{bayer2013fast}
+\begin{barticle}
+\bauthor{\bsnm{Bayer}, \binits{C.}},
+\bauthor{\bsnm{Gatheral}, \binits{J.}},
+\bauthor{\bsnm{Karlsmark}, \binits{M.}}:
+\batitle{Fast ninomiya--victoir calibration of the double-mean-reverting model}.
+\bjtitle{Quantitative Finance}
+\bvolume{13}(\bissue{11}),
+\bfpage{1813}--\blpage{1829}
+(\byear{2013})
+\doiurl{10.1080/14697688.2013.818245}
+\end{barticle}
+\endbibitem
+
+%%% 12
+\bibitem[\protect\citeauthoryear{Cox}{1975}]{cox1975cev}
+\begin{botherref}
+\oauthor{\bsnm{Cox}, \binits{J.C.}}:
+Notes on Option Pricing {I}: Constant Elasticity of Variance Diffusions.
+Working paper, Stanford University
+(1975)
+\end{botherref}
+\endbibitem
+
+%%% 13
+\bibitem[\protect\citeauthoryear{Chan et~al.}{1992}]{chan1992empirical}
+\begin{barticle}
+\bauthor{\bsnm{Chan}, \binits{K.C.}},
+\bauthor{\bsnm{Karolyi}, \binits{G.A.}},
+\bauthor{\bsnm{Longstaff}, \binits{F.A.}},
+\bauthor{\bsnm{Sanders}, \binits{A.B.}}:
+\batitle{An empirical comparison of alternative models of the short-term interest rate}.
+\bjtitle{The Journal of Finance}
+\bvolume{47}(\bissue{3}),
+\bfpage{1209}--\blpage{1227}
+(\byear{1992})
+\doiurl{10.1111/j.1540-6261.1992.tb04011.x}
+\end{barticle}
+\endbibitem
+
+%%% 14
+\bibitem[\protect\citeauthoryear{Yamada and Watanabe}{1971}]{yamada1971uniqueness}
+\begin{barticle}
+\bauthor{\bsnm{Yamada}, \binits{T.}},
+\bauthor{\bsnm{Watanabe}, \binits{S.}}:
+\batitle{On the uniqueness of solutions of stochastic differential equations}.
+\bjtitle{Journal of Mathematics of Kyoto University}
+\bvolume{11}(\bissue{1}),
+\bfpage{155}--\blpage{167}
+(\byear{1971})
+\doiurl{10.1215/kjm/1250523691}
+\end{barticle}
+\endbibitem
+
+%%% 15
+\bibitem[\protect\citeauthoryear{Mishura et~al.}{2025}]{mishura2025gatheral}
+\begin{botherref}
+\oauthor{\bsnm{Mishura}, \binits{Y.}},
+\oauthor{\bsnm{Pilipenko}, \binits{A.}},
+\oauthor{\bsnm{Ralchenko}, \binits{K.}}:
+Gatheral double stochastic volatility model with skorokhod reflection.
+Theory of Probability and Mathematical Statistics
+(2025).
+To appear
+\end{botherref}
+\endbibitem
+
+%%% 16
+\bibitem[\protect\citeauthoryear{Andersen and Piterbarg}{2007}]{AndersenPiterbarg2007}
+\begin{barticle}
+\bauthor{\bsnm{Andersen}, \binits{L.B.}},
+\bauthor{\bsnm{Piterbarg}, \binits{V.V.}}:
+\batitle{Moment explosions in stochastic volatility models}.
+\bjtitle{Finance and Stochastics}
+\bvolume{11}(\bissue{1}),
+\bfpage{29}--\blpage{50}
+(\byear{2007})
+\end{barticle}
+\endbibitem
+
+%%% 17
+\bibitem[\protect\citeauthoryear{Karatzas and Shreve}{1991}]{karatzas1991brownian}
+\begin{bbook}
+\bauthor{\bsnm{Karatzas}, \binits{I.}},
+\bauthor{\bsnm{Shreve}, \binits{S.E.}}:
+\bbtitle{Brownian Motion and Stochastic Calculus},
+\bedition{2}nd edn.
+\bsertitle{Graduate Texts in Mathematics},
+vol. \bseriesno{113}.
+\bpublisher{Springer},
+\blocation{New York, NY}
+(\byear{1991}).
+\doiurl{10.1007/978-1-4612-0949-2}
+\end{bbook}
+\endbibitem
+
+\end{thebibliography}

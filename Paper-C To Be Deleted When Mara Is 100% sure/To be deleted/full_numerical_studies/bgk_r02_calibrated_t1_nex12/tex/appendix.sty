@@ -1,0 +1,22 @@
+% Local minimal fallback for sn-jnl when appendix is unavailable.
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{appendix}[2026/05/02 local minimal fallback]
+\makeatletter
+\newif\if@dotoc@pp
+\newif\if@dopage@pp
+\newif\if@chapter@pp
+\newif\if@dotitletoc@pp
+\newif\if@dohead@pp
+\newif\if@dotitle@pp
+\DeclareOption{title}{\@dotitle@pptrue}
+\DeclareOption*{}
+\ProcessOptions\relax
+\providecommand{\@resets@pp}{\appendix}
+\providecommand{\appendixpage}{}
+\providecommand{\addappheadtotoc}{}
+\providecommand{\@redotocentry@pp}[1]{}
+\providecommand{\@formatsecmark@pp}[1]{#1}
+\providecommand{\@ppsaveapp}{}
+\providecommand{\@pprestoresec}{}
+\newenvironment{appendices}{\appendix}{}
+\makeatother

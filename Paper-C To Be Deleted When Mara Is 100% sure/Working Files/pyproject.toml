@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "bermudan-lsmc-pde"
+version = "0.1.0"
+description = "Baseline hybrid LSMC-PDE implementation for Bermudan options."
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["numpy>=1.25"]
+
+[project.scripts]
+bermudan-pricing = "bermudan_pricing.main:main"
+bermudan-compare = "bermudan_pricing.experiments.compare_methods:main"
+bermudan-heston-benchmark = "bermudan_pricing.reference.heston_benchmark:main"

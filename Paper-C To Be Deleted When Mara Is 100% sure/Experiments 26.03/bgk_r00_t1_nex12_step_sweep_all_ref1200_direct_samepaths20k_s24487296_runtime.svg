@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="1120" viewBox="0 0 1440 1120">
+<rect width="100%" height="100%" fill="#f3efe7"/>
+<rect x="20" y="20" width="1400" height="1080" rx="28" fill="#fffdf9" stroke="#ddd4c6"/>
+<text x="56" y="78" font-family="Segoe UI, Arial, sans-serif" font-size="31" font-weight="700" fill="#17202a">Equal-path sweep: Runtime</text>
+<text x="56" y="108" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#475569">Wall-clock runtime by step count. The vertical axis uses a log scale so both methods remain visible.</text>
+<text x="56" y="132" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#64748b">Strikes: 110, 100, 90, 80, 70. Euler steps: 24, 48, 72, 96. Both methods use 20,000 direct paths.</text>
+<line x1="900" y1="146" x2="932" y2="146" stroke="#1d4ed8" stroke-width="4"/>
+<circle cx="916" cy="146" r="5.5" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<text x="942" y="151" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#334155">LSMC</text>
+<line x1="1080" y1="146" x2="1112" y2="146" stroke="#d97706" stroke-width="4"/>
+<circle cx="1096" cy="146" r="5.5" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<text x="1122" y="151" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#334155">Hybrid LSMC-PDE</text>
+<rect x="48.0" y="170.0" width="656.0" height="270.0" rx="20" fill="#fffaf0" stroke="#e5dccd"/>
+<text x="66.0" y="198.0" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#17202a">ITM put</text>
+<line x1="116.0" y1="396.0" x2="676.0" y2="396.0" stroke="#ece5d8" stroke-width="1"/>
+<text x="106.0" y="401.0" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">0.10 s</text>
+<line x1="116.0" y1="336.7" x2="676.0" y2="336.7" stroke="#ece5d8" stroke-width="1"/>
+<text x="106.0" y="341.7" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">1.00 s</text>
+<line x1="116.0" y1="277.3" x2="676.0" y2="277.3" stroke="#ece5d8" stroke-width="1"/>
+<text x="106.0" y="282.3" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">10 s</text>
+<line x1="116.0" y1="218.0" x2="676.0" y2="218.0" stroke="#ece5d8" stroke-width="1"/>
+<text x="106.0" y="223.0" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">100 s</text>
+<line x1="116.0" y1="218.0" x2="116.0" y2="396.0" stroke="#334155" stroke-width="1.5"/>
+<line x1="116.0" y1="396.0" x2="676.0" y2="396.0" stroke="#334155" stroke-width="1.5"/>
+<line x1="116.0" y1="218.0" x2="116.0" y2="396.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="116.0" y="418.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">24</text>
+<line x1="302.7" y1="218.0" x2="302.7" y2="396.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="302.7" y="418.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">48</text>
+<line x1="489.3" y1="218.0" x2="489.3" y2="396.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="489.3" y="418.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">72</text>
+<line x1="676.0" y1="218.0" x2="676.0" y2="396.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="676.0" y="418.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">96</text>
+<text x="64.0" y="307.0" transform="rotate(-90 64.0 307.0)" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#475569">Runtime (seconds, log scale)</text>
+<polyline fill="none" stroke="#1d4ed8" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" points="116.0,332.5 302.7,356.8 489.3,358.3 676.0,349.8"/>
+<circle cx="116.0" cy="332.5" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="302.7" cy="356.8" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="489.3" cy="358.3" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="676.0" cy="349.8" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<polyline fill="none" stroke="#d97706" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" points="116.0,224.8 302.7,225.0 489.3,225.0 676.0,224.8"/>
+<circle cx="116.0" cy="224.8" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="302.7" cy="225.0" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="489.3" cy="225.0" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="676.0" cy="224.8" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<rect x="736.0" y="170.0" width="656.0" height="270.0" rx="20" fill="#fffaf0" stroke="#e5dccd"/>
+<text x="754.0" y="198.0" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#17202a">ATM</text>
+<line x1="804.0" y1="396.0" x2="1364.0" y2="396.0" stroke="#ece5d8" stroke-width="1"/>
+<text x="794.0" y="401.0" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">0.10 s</text>
+<line x1="804.0" y1="336.7" x2="1364.0" y2="336.7" stroke="#ece5d8" stroke-width="1"/>
+<text x="794.0" y="341.7" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">1.00 s</text>
+<line x1="804.0" y1="277.3" x2="1364.0" y2="277.3" stroke="#ece5d8" stroke-width="1"/>
+<text x="794.0" y="282.3" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">10 s</text>
+<line x1="804.0" y1="218.0" x2="1364.0" y2="218.0" stroke="#ece5d8" stroke-width="1"/>
+<text x="794.0" y="223.0" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">100 s</text>
+<line x1="804.0" y1="218.0" x2="804.0" y2="396.0" stroke="#334155" stroke-width="1.5"/>
+<line x1="804.0" y1="396.0" x2="1364.0" y2="396.0" stroke="#334155" stroke-width="1.5"/>
+<line x1="804.0" y1="218.0" x2="804.0" y2="396.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="804.0" y="418.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">24</text>
+<line x1="990.7" y1="218.0" x2="990.7" y2="396.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="990.7" y="418.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">48</text>
+<line x1="1177.3" y1="218.0" x2="1177.3" y2="396.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="1177.3" y="418.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">72</text>
+<line x1="1364.0" y1="218.0" x2="1364.0" y2="396.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="1364.0" y="418.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">96</text>
+<polyline fill="none" stroke="#1d4ed8" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" points="804.0,363.6 990.7,357.3 1177.3,356.9 1364.0,352.9"/>
+<circle cx="804.0" cy="363.6" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="990.7" cy="357.3" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="1177.3" cy="356.9" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="1364.0" cy="352.9" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<polyline fill="none" stroke="#d97706" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" points="804.0,223.5 990.7,223.6 1177.3,224.4 1364.0,224.3"/>
+<circle cx="804.0" cy="223.5" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="990.7" cy="223.6" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="1177.3" cy="224.4" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="1364.0" cy="224.3" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<rect x="48.0" y="468.0" width="656.0" height="270.0" rx="20" fill="#fffaf0" stroke="#e5dccd"/>
+<text x="66.0" y="496.0" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#17202a">OTM put</text>
+<line x1="116.0" y1="694.0" x2="676.0" y2="694.0" stroke="#ece5d8" stroke-width="1"/>
+<text x="106.0" y="699.0" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">0.10 s</text>
+<line x1="116.0" y1="634.7" x2="676.0" y2="634.7" stroke="#ece5d8" stroke-width="1"/>
+<text x="106.0" y="639.7" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">1.00 s</text>
+<line x1="116.0" y1="575.3" x2="676.0" y2="575.3" stroke="#ece5d8" stroke-width="1"/>
+<text x="106.0" y="580.3" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">10 s</text>
+<line x1="116.0" y1="516.0" x2="676.0" y2="516.0" stroke="#ece5d8" stroke-width="1"/>
+<text x="106.0" y="521.0" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">100 s</text>
+<line x1="116.0" y1="516.0" x2="116.0" y2="694.0" stroke="#334155" stroke-width="1.5"/>
+<line x1="116.0" y1="694.0" x2="676.0" y2="694.0" stroke="#334155" stroke-width="1.5"/>
+<line x1="116.0" y1="516.0" x2="116.0" y2="694.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="116.0" y="716.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">24</text>
+<line x1="302.7" y1="516.0" x2="302.7" y2="694.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="302.7" y="716.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">48</text>
+<line x1="489.3" y1="516.0" x2="489.3" y2="694.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="489.3" y="716.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">72</text>
+<line x1="676.0" y1="516.0" x2="676.0" y2="694.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="676.0" y="716.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">96</text>
+<text x="64.0" y="605.0" transform="rotate(-90 64.0 605.0)" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#475569">Runtime (seconds, log scale)</text>
+<polyline fill="none" stroke="#1d4ed8" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" points="116.0,664.5 302.7,652.8 489.3,652.5 676.0,650.6"/>
+<circle cx="116.0" cy="664.5" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="302.7" cy="652.8" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="489.3" cy="652.5" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="676.0" cy="650.6" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<polyline fill="none" stroke="#d97706" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" points="116.0,521.4 302.7,520.9 489.3,522.2 676.0,522.2"/>
+<circle cx="116.0" cy="521.4" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="302.7" cy="520.9" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="489.3" cy="522.2" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="676.0" cy="522.2" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<rect x="736.0" y="468.0" width="656.0" height="270.0" rx="20" fill="#fffaf0" stroke="#e5dccd"/>
+<text x="754.0" y="496.0" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#17202a">K=80 put</text>
+<line x1="804.0" y1="694.0" x2="1364.0" y2="694.0" stroke="#ece5d8" stroke-width="1"/>
+<text x="794.0" y="699.0" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">0.10 s</text>
+<line x1="804.0" y1="634.7" x2="1364.0" y2="634.7" stroke="#ece5d8" stroke-width="1"/>
+<text x="794.0" y="639.7" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">1.00 s</text>
+<line x1="804.0" y1="575.3" x2="1364.0" y2="575.3" stroke="#ece5d8" stroke-width="1"/>
+<text x="794.0" y="580.3" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">10 s</text>
+<line x1="804.0" y1="516.0" x2="1364.0" y2="516.0" stroke="#ece5d8" stroke-width="1"/>
+<text x="794.0" y="521.0" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">100 s</text>
+<line x1="804.0" y1="516.0" x2="804.0" y2="694.0" stroke="#334155" stroke-width="1.5"/>
+<line x1="804.0" y1="694.0" x2="1364.0" y2="694.0" stroke="#334155" stroke-width="1.5"/>
+<line x1="804.0" y1="516.0" x2="804.0" y2="694.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="804.0" y="716.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">24</text>
+<line x1="990.7" y1="516.0" x2="990.7" y2="694.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="990.7" y="716.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">48</text>
+<line x1="1177.3" y1="516.0" x2="1177.3" y2="694.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="1177.3" y="716.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">72</text>
+<line x1="1364.0" y1="516.0" x2="1364.0" y2="694.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="1364.0" y="716.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">96</text>
+<polyline fill="none" stroke="#1d4ed8" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" points="804.0,659.5 990.7,655.1 1177.3,653.0 1364.0,647.1"/>
+<circle cx="804.0" cy="659.5" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="990.7" cy="655.1" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="1177.3" cy="653.0" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="1364.0" cy="647.1" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<polyline fill="none" stroke="#d97706" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" points="804.0,521.4 990.7,522.0 1177.3,522.2 1364.0,522.1"/>
+<circle cx="804.0" cy="521.4" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="990.7" cy="522.0" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="1177.3" cy="522.2" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="1364.0" cy="522.1" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<rect x="48.0" y="766.0" width="656.0" height="270.0" rx="20" fill="#fffaf0" stroke="#e5dccd"/>
+<text x="66.0" y="794.0" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#17202a">K=70 put</text>
+<line x1="116.0" y1="992.0" x2="676.0" y2="992.0" stroke="#ece5d8" stroke-width="1"/>
+<text x="106.0" y="997.0" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">0.10 s</text>
+<line x1="116.0" y1="932.7" x2="676.0" y2="932.7" stroke="#ece5d8" stroke-width="1"/>
+<text x="106.0" y="937.7" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">1.00 s</text>
+<line x1="116.0" y1="873.3" x2="676.0" y2="873.3" stroke="#ece5d8" stroke-width="1"/>
+<text x="106.0" y="878.3" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">10 s</text>
+<line x1="116.0" y1="814.0" x2="676.0" y2="814.0" stroke="#ece5d8" stroke-width="1"/>
+<text x="106.0" y="819.0" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">100 s</text>
+<line x1="116.0" y1="814.0" x2="116.0" y2="992.0" stroke="#334155" stroke-width="1.5"/>
+<line x1="116.0" y1="992.0" x2="676.0" y2="992.0" stroke="#334155" stroke-width="1.5"/>
+<line x1="116.0" y1="814.0" x2="116.0" y2="992.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="116.0" y="1014.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">24</text>
+<line x1="302.7" y1="814.0" x2="302.7" y2="992.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="302.7" y="1014.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">48</text>
+<line x1="489.3" y1="814.0" x2="489.3" y2="992.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="489.3" y="1014.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">72</text>
+<line x1="676.0" y1="814.0" x2="676.0" y2="992.0" stroke="#f3eee4" stroke-width="1"/>
+<text x="676.0" y="1014.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">96</text>
+<text x="64.0" y="903.0" transform="rotate(-90 64.0 903.0)" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#475569">Runtime (seconds, log scale)</text>
+<text x="396.0" y="1032.0" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#475569">Euler steps</text>
+<polyline fill="none" stroke="#1d4ed8" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" points="116.0,959.6 302.7,954.2 489.3,950.5 676.0,947.4"/>
+<circle cx="116.0" cy="959.6" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="302.7" cy="954.2" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="489.3" cy="950.5" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="676.0" cy="947.4" r="5.3" fill="#1d4ed8" stroke="#fffdf9" stroke-width="2"/>
+<polyline fill="none" stroke="#d97706" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" points="116.0,819.2 302.7,820.4 489.3,820.2 676.0,820.3"/>
+<circle cx="116.0" cy="819.2" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="302.7" cy="820.4" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="489.3" cy="820.2" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<circle cx="676.0" cy="820.3" r="5.3" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<rect x="736.0" y="766.0" width="656.0" height="270.0" rx="20" fill="#f7f1e4" stroke="#e5dccd"/>
+<text x="756.0" y="800.0" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700" fill="#17202a">Reading note</text>
+<text x="756.0" y="838.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#475569">Hybrid is most favorable in the middle of the step grid.</text>
+<text x="756.0" y="866.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#475569">48 to 72 steps is the strongest region in the combined study.</text>
+<text x="756.0" y="894.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#475569">SE and CI width stay much smaller for Hybrid at the same paths.</text>
+<text x="756.0" y="922.0" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#475569">Runtime still strongly favors LSMC.</text>
+</svg>

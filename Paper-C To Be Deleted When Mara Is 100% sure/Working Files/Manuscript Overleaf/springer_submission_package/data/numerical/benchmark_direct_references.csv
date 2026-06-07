@@ -1,0 +1,6 @@
+scenario,K,benchmark_direct_price,benchmark_direct_se,benchmark_direct_ci_lower,benchmark_direct_ci_upper
+K=70 put,70,2.699339,0.007474,2.684690,2.713988
+K=80 put,80,4.596899,0.009874,4.577546,4.616252
+OTM put,90,7.402999,0.012459,7.378579,7.427419
+ATM,100,11.356823,0.015058,11.327309,11.386337
+ITM put,110,16.645784,0.017243,16.611988,16.679580

@@ -1,0 +1,181 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage[hidelinks]{hyperref}
+
+\title{Current Numerical Results for the Bermudan Put Experiments}
+\date{13 March 2026}
+
+\begin{document}
+\maketitle
+
+\section*{Purpose of this note}
+
+This note collects the numerical results currently available from the standalone scripts.
+The idea is to have one short working document that can be shared and discussed easily.
+At this stage, the main point is to show where the benchmark stands, how the generalized
+double mean-reverting (gDMR) setup is behaving, and what changed after the recent tuning.
+
+\section*{1. Paper benchmark: Heston Bermudan put}
+
+The \texttt{paper\_setup} folder is kept as a benchmark against the Heston Bermudan put case
+reported by Farahany, Jackson, and Jaimungal. In this case we do have a published finite-difference
+reference value, so the comparison is quite direct.
+
+\begin{table}[h]
+\centering
+\caption{Benchmark comparison for the paper-style Heston setup.}
+\begin{tabular}{lrrrr}
+\toprule
+Estimator & Published value & Current run & $|$Run $-$ FD$|$ & Run $-$ published \\
+\midrule
+LSMC direct   & 1.4494 & 1.458896 & 0.008196 & +0.009496 \\
+LSMC low      & 1.4487 & 1.452544 & 0.001844 & +0.003844 \\
+Hybrid direct & 1.4530 & 1.452988 & 0.002288 & -0.000012 \\
+Hybrid low    & 1.4529 & 1.445493 & 0.005207 & -0.007407 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The finite-difference reference for this benchmark is 1.4507. The most encouraging point here is
+that the hybrid direct estimator is essentially on top of the published hybrid direct value, while
+the other estimators remain in the same numerical range as the paper.
+
+\section*{2. Current gDMR baseline: $\delta_1=\delta_2=0.50$}
+
+For the gDMR case there is no published finite-difference benchmark available in the project, so the
+current practical reference is the large LSMC direct run. The default baseline uses the following setup.
+
+\begin{table}[h]
+\centering
+\caption{Main numerical settings for the current gDMR baseline run.}
+\begin{tabular}{lr}
+\toprule
+Quantity & Value \\
+\midrule
+$S_0$ & 100 \\
+$K$ & 100 \\
+$T$ & 1 \\
+$r$ & 0.03 \\
+$v_0$ & 0.04 \\
+$v'_0$ & 0.04 \\
+$\kappa_1$ & 2.0 \\
+$\kappa_2$ & 1.0 \\
+$\theta$ & 0.04 \\
+$\xi_1$ & 0.35 \\
+$\xi_2$ & 0.20 \\
+$\delta_1$ & 0.50 \\
+$\delta_2$ & 0.50 \\
+LSMC paths & 1,000,000 \\
+Exercise dates & 100 \\
+Euler steps & 600 \\
+Hybrid paths $N$ & 30,000 \\
+Hybrid low paths $N_{\mathrm{low}}$ & 30,000 \\
+Asset grid points $N_S$ & 181 \\
+Hermite nodes & 64 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h]
+\centering
+\caption{Final baseline results for the current gDMR setup.}
+\begin{tabular}{lrrr}
+\toprule
+Estimator & Price & Standard error & Relative error \\
+\midrule
+LSMC direct   & 6.384535 & 0.007943 & reference \\
+LSMC low      & 6.387249 & 0.007939 & 0.04\% vs LSMC direct \\
+Hybrid direct & 6.421758 & 0.000652 & 0.58\% vs LSMC direct \\
+Hybrid low    & 6.265070 & 0.045711 & 1.87\% vs LSMC direct \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The main result here is that the hybrid direct estimator is now within 1\% of the LSMC direct reference.
+That is a clear improvement over the earlier hybrid runs and is, in my view, the strongest current numerical
+message from the gDMR experiments.
+
+\begin{table}[h]
+\centering
+\caption{Tuning path for the hybrid method in the gDMR baseline.}
+\begin{tabularx}{\textwidth}{lXrrr}
+\toprule
+Run & Key settings & Hybrid direct & Hybrid low & Direct rel. error vs LSMC direct \\
+\midrule
+Tier 1 & 10,000 paths, 121 grid points, 48 nodes, wide asset grid & 7.335311 & 6.621170 & 14.89\% \\
+Tier 2 & 20,000 paths, 161 grid points, 48 nodes, wide asset grid & 6.987310 & 6.511937 & 9.44\% \\
+Tier 3 & 40,000 paths, 201 grid points, 64 nodes, wide asset grid & 6.804899 & 6.424076 & 6.58\% \\
+Truncated Tier 2 & 20,000 paths, 161 grid points, 48 nodes, truncation added, wide asset grid & 6.756928 & 6.281426 & 5.84\% \\
+Previous default & 20,000 paths, 161 grid points, 48 nodes, truncation and tighter asset grid & 6.486941 & 6.279662 & 1.60\% \\
+Current default & 30,000 paths, 181 grid points, 64 nodes, truncation and tighter asset grid & 6.421758 & 6.265070 & 0.58\% \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+This progression suggests that the most important improvements were not cosmetic. The gains came mainly
+from three choices: a stronger Monte Carlo reference, truncation of the volatility regression domain, and
+a tighter asset grid around the strike.
+
+\section*{3. Additional gDMR experiment: $\delta_1=\delta_2=0.75$}
+
+I also ran a second gDMR experiment with $\delta_1=\delta_2=0.75$, keeping the same tuned numerical
+configuration as in the current baseline. This gives a simple way to see how the price level changes when
+both elasticity parameters are increased.
+
+\begin{table}[h]
+\centering
+\caption{Results for the equal-delta case $\delta_1=\delta_2=0.75$.}
+\begin{tabular}{lrrr}
+\toprule
+Estimator & Price & Standard error & Relative error \\
+\midrule
+LSMC direct   & 6.653560 & 0.007822 & reference \\
+LSMC low      & 6.655062 & 0.007819 & 0.02\% vs LSMC direct \\
+Hybrid direct & 6.696152 & 0.000375 & 0.64\% vs LSMC direct \\
+Hybrid low    & 6.545257 & 0.045080 & 1.63\% vs LSMC direct \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The 1\% direct-error target is still met in this equal-delta case. So, at least for the current parameter set,
+the hybrid direct estimator remains stable after moving from $\delta=0.50$ to $\delta=0.75$.
+
+\begin{table}[h]
+\centering
+\caption{Comparison of the two gDMR cases currently tested.}
+\begin{tabular}{lrrr}
+\toprule
+Estimator & $\delta=0.50$ & $\delta=0.75$ & Change \\
+\midrule
+LSMC direct   & 6.384535 & 6.653560 & +0.269025 \\
+LSMC low      & 6.387249 & 6.655062 & +0.267813 \\
+Hybrid direct & 6.421758 & 6.696152 & +0.274394 \\
+Hybrid low    & 6.265070 & 6.545257 & +0.280187 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Numerically, all four estimators move upward when the model is changed from $\delta_1=\delta_2=0.50$ to
+$\delta_1=\delta_2=0.75$. At the same time, the agreement between the direct estimators remains quite good.
+
+\section*{4. Main points to discuss}
+
+\begin{itemize}
+\item The paper benchmark looks healthy: the standalone implementation reproduces the published Heston numbers reasonably well, especially for the hybrid direct estimator.
+\item In the gDMR case, the strongest current result is that the tuned hybrid direct estimator now sits within 0.58\% of the LSMC direct reference.
+\item The low estimator is still visibly weaker than the direct estimator in the gDMR experiments, so this remains a natural place for further improvement.
+\item The equal-delta experiment with $\delta_1=\delta_2=0.75$ raises the price level, but it does not break the current numerical behavior of the direct hybrid method.
+\end{itemize}
+
+\section*{5. Short conclusion}
+
+At the moment, I think the main story is quite clear. The benchmark case gives confidence that the implementation
+is behaving sensibly, and the tuned gDMR setup now produces a hybrid direct value that is close to the Monte Carlo
+reference. That feels like a solid basis for discussion with the supervisor, even if the low estimator still needs
+more work.
+
+\end{document}

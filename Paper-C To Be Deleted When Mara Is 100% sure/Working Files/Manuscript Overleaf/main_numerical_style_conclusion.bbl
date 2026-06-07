@@ -1,0 +1,189 @@
+\begin{thebibliography}{24}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Black and Scholes(1973)]{black1973pricing}
+Fischer Black and Myron Scholes.
+\newblock The pricing of options and corporate liabilities.
+\newblock \emph{Journal of Political Economy}, 81\penalty0 (3):\penalty0
+  637--654, 1973.
+\newblock \doi{10.1086/260062}.
+
+\bibitem[Chan et~al.(1992)Chan, Karolyi, Longstaff, and
+  Sanders]{chan1992empirical}
+K.~C. Chan, G.~Andrew Karolyi, Francis~A. Longstaff, and Anthony~B. Sanders.
+\newblock An empirical comparison of alternative models of the short-term
+  interest rate.
+\newblock \emph{The Journal of Finance}, 47\penalty0 (3):\penalty0 1209--1227,
+  1992.
+\newblock \doi{10.1111/j.1540-6261.1992.tb04011.x}.
+
+\bibitem[Christoffersen et~al.(2009)Christoffersen, Heston, and
+  Jacobs]{christoffersen2009smirk}
+Peter Christoffersen, Steven Heston, and Kris Jacobs.
+\newblock The shape and term structure of the index option smirk: Why
+  multifactor stochastic volatility models work so well.
+\newblock \emph{Management Science}, 55\penalty0 (12):\penalty0 1914--1932,
+  2009.
+\newblock \doi{10.1287/mnsc.1090.1065}.
+
+\bibitem[Cl{\'e}ment et~al.(2002)Cl{\'e}ment, Lamberton, and
+  Protter]{clement2002analysis}
+Emmanuelle Cl{\'e}ment, Damien Lamberton, and Philip Protter.
+\newblock An analysis of a least squares regression method for {A}merican
+  option pricing.
+\newblock \emph{Finance and Stochastics}, 6\penalty0 (4):\penalty0 449--471,
+  2002.
+\newblock \doi{10.1007/s007800200071}.
+
+\bibitem[Cox(1975)]{cox1975cev}
+John~C. Cox.
+\newblock Notes on option pricing {I}: Constant elasticity of variance
+  diffusions, 1975.
+\newblock URL \url{https://www.jstor.org/stable/2327490}.
+\newblock Working paper, Stanford University.
+
+\bibitem[Cox et~al.(1979)Cox, Ross, and Rubinstein]{cox1979option}
+John~C. Cox, Stephen~A. Ross, and Mark Rubinstein.
+\newblock Option pricing: A simplified approach.
+\newblock \emph{Journal of Financial Economics}, 7\penalty0 (3):\penalty0
+  229--263, 1979.
+\newblock \doi{10.1016/0304-405X(79)90015-1}.
+
+\bibitem[Cox et~al.(1985)Cox, Ingersoll, and Ross]{cir1985termstructure}
+John~C. Cox, Jonathan~E. Ingersoll, and Stephen~A. Ross.
+\newblock A theory of the term structure of interest rates.
+\newblock \emph{Econometrica}, 53\penalty0 (2):\penalty0 385--407, 1985.
+\newblock \doi{10.2307/1911242}.
+
+\bibitem[Cozma and Reisinger(2017)]{cozma2017mixed}
+Andrei Cozma and Christoph Reisinger.
+\newblock A mixed monte carlo and partial differential equation variance
+  reduction method for foreign exchange options under the
+  {Heston}--{Cox}--{Ingersoll}--{Ross} model.
+\newblock \emph{The Journal of Computational Finance}, 20\penalty0
+  (3):\penalty0 109--149, 2017.
+\newblock \doi{10.21314/JCF.2016.318}.
+
+\bibitem[Farahany(2019)]{farahany2019thesis}
+David Farahany.
+\newblock \emph{Mixing Monte Carlo and Partial Differential Equation Methods
+  for Multi-dimensional Optimal Stopping Problems Under Stochastic Volatility}.
+\newblock PhD thesis, University of Toronto, 2019.
+\newblock URL
+  \url{https://www.cs.toronto.edu/pub/reports/na/Farahany_David_PhD_Thesis.pdf}.
+
+\bibitem[Farahany et~al.(2020)Farahany, Jackson, and
+  Jaimungal]{farahany2020mixing}
+David Farahany, K.~R. Jackson, and Sebastian Jaimungal.
+\newblock Mixing monte carlo and {PDE} methods to price bermudan options under
+  stochastic volatility.
+\newblock \emph{SIAM Journal on Financial Mathematics}, 11\penalty0
+  (1):\penalty0 201--239, 2020.
+\newblock \doi{10.1137/19M1249035}.
+
+\bibitem[Gatheral(2006{\natexlab{a}})]{gatheral2006volatility}
+Jim Gatheral.
+\newblock \emph{The Volatility Surface: A Practitioner's Guide}.
+\newblock Wiley, 2006{\natexlab{a}}.
+
+\bibitem[Gatheral(2006{\natexlab{b}})]{gatheral2006volsurface}
+Jim Gatheral.
+\newblock \emph{The Volatility Surface: A Practitioner's Guide}.
+\newblock John Wiley \& Sons, 2006{\natexlab{b}}.
+\newblock ISBN 9780471792512.
+\newblock URL
+  \url{https://www.wiley.com/en-us/The%2BVolatility%2BSurface%3A%2BA%2BPractitioner%27s%2BGuide-p-9780471792512}.
+
+\bibitem[Glasserman(2004)]{glasserman2004montecarlo}
+Paul Glasserman.
+\newblock \emph{Monte Carlo Methods in Financial Engineering}, volume~53 of
+  \emph{Stochastic Modelling and Applied Probability}.
+\newblock Springer, 2004.
+\newblock \doi{10.1007/978-0-387-21617-1}.
+
+\bibitem[Heston(1993)]{heston1993closedform}
+Steven~L. Heston.
+\newblock A closed-form solution for options with stochastic volatility with
+  applications to bond and currency options.
+\newblock \emph{The Review of Financial Studies}, 6\penalty0 (2):\penalty0
+  327--343, 1993.
+\newblock \doi{10.1093/rfs/6.2.327}.
+
+\bibitem[Jaillet et~al.(1990)Jaillet, Lamberton, and
+  Lapeyre]{jaillet1990variational}
+Patrick Jaillet, Damien Lamberton, and Bernard Lapeyre.
+\newblock Variational inequalities and the pricing of american options.
+\newblock \emph{Acta Applicandae Mathematicae}, 21:\penalty0 263--289, 1990.
+\newblock \doi{10.1007/BF00047211}.
+
+\bibitem[Karatzas and Shreve(1991)]{karatzas1991brownian}
+Ioannis Karatzas and Steven~E. Shreve.
+\newblock \emph{Brownian Motion and Stochastic Calculus}, volume 113 of
+  \emph{Graduate Texts in Mathematics}.
+\newblock Springer, 2 edition, 1991.
+\newblock \doi{10.1007/978-1-4612-0949-2}.
+
+\bibitem[Lipp et~al.(2013)Lipp, Loeper, and Pironneau]{lipp2013mixing}
+Thomas Lipp, Gr{\'e}goire Loeper, and Olivier Pironneau.
+\newblock Mixing {M}onte-{C}arlo and partial differential equations for pricing
+  options.
+\newblock \emph{Chinese Annals of Mathematics, Series B}, 34\penalty0
+  (2):\penalty0 255--276, 2013.
+\newblock \doi{10.1007/s11401-013-0763-2}.
+
+\bibitem[Loeper and Pironneau(2009)]{loeper2009mixed}
+Gr{\'e}goire Loeper and Olivier Pironneau.
+\newblock A mixed {PDE}/{M}onte-{C}arlo method for stochastic volatility
+  models.
+\newblock \emph{Comptes Rendus Mathematique}, 347\penalty0 (9--10):\penalty0
+  559--563, 2009.
+\newblock \doi{10.1016/j.crma.2009.02.021}.
+
+\bibitem[Longstaff and Schwartz(2001)]{longstaff2001valuing}
+Francis~A. Longstaff and Eduardo~S. Schwartz.
+\newblock Valuing {A}merican options by simulation: A simple least-squares
+  approach.
+\newblock \emph{The Review of Financial Studies}, 14\penalty0 (1):\penalty0
+  113--147, 2001.
+\newblock \doi{10.1093/rfs/14.1.113}.
+
+\bibitem[Merton(1973)]{merton1973theory}
+Robert~C. Merton.
+\newblock Theory of rational option pricing.
+\newblock \emph{The Bell Journal of Economics and Management Science},
+  4\penalty0 (1):\penalty0 141--183, 1973.
+\newblock \doi{10.2307/3003143}.
+
+\bibitem[Merton et~al.(1977)Merton, Brennan, and
+  Schwartz]{merton1977americanput}
+Robert~C. Merton, Michael~J. Brennan, and Eduardo~S. Schwartz.
+\newblock The valuation of american put options.
+\newblock \emph{The Journal of Finance}, 32\penalty0 (2):\penalty0 449--462,
+  1977.
+\newblock \doi{10.1111/j.1540-6261.1977.tb03284.x}.
+
+\bibitem[Mishura et~al.(2025)Mishura, Pilipenko, and
+  Ralchenko]{mishura2025skorokhod}
+Yuliya Mishura, Andrey Pilipenko, and Kostiantyn Ralchenko.
+\newblock Gatheral double stochastic volatility model with {Skorokhod}
+  reflection, 2025.
+
+\bibitem[Tsitsiklis and Van~Roy(2001)]{tsitsiklis2001regression}
+John~N. Tsitsiklis and Benjamin Van~Roy.
+\newblock Regression methods for pricing complex {A}merican-style options.
+\newblock \emph{IEEE Transactions on Neural Networks}, 12\penalty0
+  (4):\penalty0 694--703, 2001.
+\newblock \doi{10.1109/72.935083}.
+
+\bibitem[Yamada and Watanabe(1971)]{yamada1971uniqueness}
+Toshio Yamada and Shinzo Watanabe.
+\newblock On the uniqueness of solutions of stochastic differential equations.
+\newblock \emph{Journal of Mathematics of Kyoto University}, 11\penalty0
+  (1):\penalty0 155--167, 1971.
+\newblock \doi{10.1215/kjm/1250523691}.
+
+\end{thebibliography}

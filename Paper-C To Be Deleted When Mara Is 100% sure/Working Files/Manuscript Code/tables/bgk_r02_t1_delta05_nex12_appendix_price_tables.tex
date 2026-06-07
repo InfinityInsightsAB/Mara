@@ -1,0 +1,141 @@
+\begin{table}[H]
+\centering
+\caption{Parameter setting for the positive-rate square-root-exponent robustness case.}
+\label{tab:app-bgk-r02-t1-delta05-nex12-parameters}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{0.92\textwidth}{@{}l>{\raggedleft\arraybackslash}X@{}}
+\toprule
+Quantity & Value \\
+\midrule
+$S_0$ & $100$ \\
+$v_0$ & $0.114$ \\
+$v'_0$ & $0.110$ \\
+$r$ & $0.02$ \\
+$T$ & $1$ \\
+$\kappa_1,\kappa_2$ & $5.5,\;0.1$ \\
+$\theta$ & $0.078$ \\
+$\xi_1,\xi_2$ & $2.689,\;0.502$ \\
+$\delta_1,\delta_2$ & $0.5,\;0.5$ \\
+$\rho_{12},\rho_{13},\rho_{23}$ & $-0.982,\;-0.727,\;0.590$ \\
+Exercise dates & $12$ \\
+Strikes & $70,80,90,100,110$ \\
+Hybrid grid & $N_S=301$, $(a_{\min},a_{\max})=(0.30,3.50)$, $q_v=0.999$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Direct benchmark reference prices for the robustness case. Prices are rounded to three decimal places.}
+\label{tab:app-bgk-r02-t1-delta05-nex12-benchmark-prices}
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\begin{tabularx}{0.86\textwidth}{@{}l *{5}{>{\centering\arraybackslash}X}@{}}
+\toprule
+Reference setting & $K=70$ & $K=80$ & $K=90$ & $K=100$ & $K=110$ \\
+\midrule
+$1200$ steps, $1{,}200{,}000$ paths & 3.364 & 4.961 & 7.082 & 9.921 & 13.857 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Direct prices in the robustness fixed-path step sweep with 20{,}000 paths. Prices are rounded to three decimal places.}
+\label{tab:app-bgk-r02-t1-delta05-nex12-step-sweep-20k-prices}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{@{}c l *{5}{>{\centering\arraybackslash}X}@{}}
+\toprule
+Steps & Method & $K=70$ & $K=80$ & $K=90$ & $K=100$ & $K=110$ \\
+\midrule
+24 & LSMC & 4.361 & 6.348 & 8.904 & 12.267 & 16.486 \\
+24 & Hybrid & 4.151 & 6.070 & 8.532 & 11.739 & 16.087 \\
+48 & LSMC & 4.124 & 5.998 & 8.388 & 11.642 & 15.856 \\
+48 & Hybrid & 3.871 & 5.704 & 8.086 & 11.226 & 15.529 \\
+72 & LSMC & 3.891 & 5.783 & 8.141 & 11.259 & 15.416 \\
+72 & Hybrid & 3.739 & 5.516 & 7.835 & 10.922 & 15.196 \\
+96 & LSMC & 3.862 & 5.690 & 8.055 & 11.113 & 15.221 \\
+96 & Hybrid & 3.720 & 5.492 & 7.808 & 10.887 & 15.141 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Direct prices in the robustness fixed-path step sweep with 60{,}000 paths. Prices are rounded to three decimal places.}
+\label{tab:app-bgk-r02-t1-delta05-nex12-step-sweep-60k-prices}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{@{}c l *{5}{>{\centering\arraybackslash}X}@{}}
+\toprule
+Steps & Method & $K=70$ & $K=80$ & $K=90$ & $K=100$ & $K=110$ \\
+\midrule
+24 & LSMC & 4.264 & 6.184 & 8.717 & 12.008 & 16.238 \\
+24 & Hybrid & 4.189 & 6.131 & 8.620 & 11.853 & 16.222 \\
+48 & LSMC & 4.051 & 5.910 & 8.329 & 11.508 & 15.613 \\
+48 & Hybrid & 3.952 & 5.809 & 8.214 & 11.371 & 15.686 \\
+72 & LSMC & 3.897 & 5.730 & 8.102 & 11.187 & 15.355 \\
+72 & Hybrid & 3.827 & 5.637 & 7.987 & 11.090 & 15.361 \\
+96 & LSMC & 3.771 & 5.535 & 7.868 & 10.956 & 15.084 \\
+96 & Hybrid & 3.715 & 5.484 & 7.792 & 10.861 & 15.114 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Direct prices in the robustness fixed 48-step path sweep. Prices are rounded to three decimal places.}
+\label{tab:app-bgk-r02-t1-delta05-nex12-path-sweep-48-prices}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{@{}c l *{5}{>{\centering\arraybackslash}X}@{}}
+\toprule
+Paths & Method & $K=70$ & $K=80$ & $K=90$ & $K=100$ & $K=110$ \\
+\midrule
+250 & LSMC & 5.373 & 7.685 & 10.824 & 14.442 & 19.707 \\
+250 & Hybrid & 4.394 & 6.468 & 9.094 & 12.493 & 17.095 \\
+1{,}000 & LSMC & 4.611 & 6.616 & 9.144 & 12.184 & 16.579 \\
+1{,}000 & Hybrid & 4.117 & 6.056 & 8.530 & 11.733 & 16.070 \\
+5{,}000 & LSMC & 4.120 & 5.948 & 8.403 & 11.723 & 15.897 \\
+5{,}000 & Hybrid & 3.966 & 5.865 & 8.316 & 11.503 & 15.816 \\
+10{,}000 & LSMC & 4.079 & 6.007 & 8.496 & 11.618 & 15.883 \\
+10{,}000 & Hybrid & 3.859 & 5.691 & 8.070 & 11.201 & 15.493 \\
+20{,}000 & LSMC & 4.124 & 5.998 & 8.388 & 11.642 & 15.856 \\
+20{,}000 & Hybrid & 3.871 & 5.704 & 8.086 & 11.226 & 15.529 \\
+40{,}000 & LSMC & 4.015 & 5.864 & 8.341 & 11.505 & 15.730 \\
+40{,}000 & Hybrid & 3.911 & 5.770 & 8.180 & 11.343 & 15.653 \\
+60{,}000 & LSMC & 4.051 & 5.910 & 8.329 & 11.508 & 15.613 \\
+60{,}000 & Hybrid & 3.952 & 5.809 & 8.214 & 11.371 & 15.686 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Direct prices in the robustness fixed 60-step path sweep. Prices are rounded to three decimal places.}
+\label{tab:app-bgk-r02-t1-delta05-nex12-path-sweep-60-prices}
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{@{}c l *{5}{>{\centering\arraybackslash}X}@{}}
+\toprule
+Paths & Method & $K=70$ & $K=80$ & $K=90$ & $K=100$ & $K=110$ \\
+\midrule
+250 & LSMC & 5.620 & 8.066 & 11.118 & 14.495 & 19.846 \\
+250 & Hybrid & 4.279 & 6.252 & 8.822 & 12.137 & 16.534 \\
+1{,}000 & LSMC & 4.630 & 6.536 & 9.089 & 12.353 & 16.566 \\
+1{,}000 & Hybrid & 4.018 & 5.887 & 8.263 & 11.341 & 15.573 \\
+5{,}000 & LSMC & 4.166 & 6.032 & 8.371 & 11.519 & 15.869 \\
+5{,}000 & Hybrid & 3.974 & 5.835 & 8.235 & 11.370 & 15.647 \\
+10{,}000 & LSMC & 4.116 & 6.031 & 8.530 & 11.701 & 15.815 \\
+10{,}000 & Hybrid & 3.833 & 5.650 & 8.013 & 11.122 & 15.384 \\
+20{,}000 & LSMC & 3.991 & 5.904 & 8.376 & 11.462 & 15.721 \\
+20{,}000 & Hybrid & 3.818 & 5.622 & 7.963 & 11.053 & 15.314 \\
+40{,}000 & LSMC & 3.988 & 5.810 & 8.219 & 11.392 & 15.576 \\
+40{,}000 & Hybrid & 3.850 & 5.681 & 8.058 & 11.185 & 15.469 \\
+60{,}000 & LSMC & 3.964 & 5.807 & 8.231 & 11.373 & 15.531 \\
+60{,}000 & Hybrid & 3.889 & 5.718 & 8.088 & 11.211 & 15.500 \\
+\bottomrule
+\end{tabularx}
+\end{table}

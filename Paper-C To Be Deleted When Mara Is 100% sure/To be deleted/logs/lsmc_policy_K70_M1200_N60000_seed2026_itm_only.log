@@ -1,0 +1,32 @@
+COMMAND: C:\Python312\python.exe D:\Mara PhD\Paper-C\To be deleted\engine\run_bgk_r03_benchmark_put.py
+
+STDOUT:
+LSMC benchmark for a Bermudan put
+Model: generalized Gatheral double mean-reverting (gDMR)
+Option type:          put
+Spot:                 100.00
+Strike:               70.00
+Maturity:             1.00
+Rate:                 0.0200
+Training paths:       60000
+Low-estimator paths:  60000
+Exercise dates:       12
+Euler steps:          1200
+Internal steps:       100
+Basis degree:         3
+Basis size:           16
+Seed:                 2026
+Low seed:             2103
+Scratch root:         D:\Mara PhD\Paper-C\To be deleted\scratch\lsmc_memmaps
+LSMC direct price:    3.442757
+LSMC direct error:    0.042177
+LSMC low price:       3.450986
+LSMC low error:       0.041953
+RESULT_JSON: {"K": 70.0, "S0": 100.0, "T": 1.0, "basis_degree": 3, "basis_size": 16, "delta1": 0.5, "delta2": 0.5, "euler_steps": 1200, "exercise_dates": 12, "internal_steps": 100.0, "kappa1": 5.5, "kappa2": 0.1, "low_paths": 60000, "low_seed": 2103, "lsmc_direct_error": 0.042177241475221165, "lsmc_direct_price": 3.4427567644512083, "lsmc_low_error": 0.041953041495312246, "lsmc_low_price": 3.450985635531559, "lsmc_policy": "itm_only", "method": "LSMC Benchmark", "option_type": "put", "paths": 60000, "r": 0.02, "rho12": -0.982, "rho13": -0.727, "rho23": 0.59, "scratch_root": "D:\\Mara PhD\\Paper-C\\To be deleted\\scratch\\lsmc_memmaps", "seed": 2026, "theta": 0.078, "v0": 0.114, "vp0": 0.11, "xi1": 2.689, "xi2": 0.502}
+
+
+STDERR:
+
+
+EXIT_CODE: 0
+RUNTIME_SECONDS: 9.984829

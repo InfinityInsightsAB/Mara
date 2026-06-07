@@ -1,0 +1,217 @@
+\documentclass[11pt]{article}
+
+\usepackage[a4paper,margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{float}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.55em}
+\renewcommand{\arraystretch}{1.12}
+
+\title{Numerical Results for the Bermudan Put Experiments}
+\author{}
+\date{13 March 2026}
+
+\begin{document}
+\maketitle
+
+This report presents the fixed Heston benchmark, the current default gDMR case, the equal-delta
+gDMR case, and the strike tests carried out under the equal-delta setup.
+
+\textbf{Fixed Heston benchmark.} This case is kept to compare the implementation against the
+published Heston Bermudan-put benchmark.
+
+\begin{table}[H]
+\centering
+\caption{Heston benchmark parameters.}
+\begin{tabular}{lr}
+\toprule
+Quantity & Value \\
+\midrule
+Model & Heston \\
+Option & Bermudan put \\
+$S_0$ & 10 \\
+$K$ & 10 \\
+$T$ & 1 \\
+$r$ & 0.02 \\
+$v_0$ & 0.15 \\
+$\kappa$ & 5 \\
+$\theta$ & 0.16 \\
+$\eta$ & 0.9 \\
+$\rho$ & 0.1 \\
+Exercise dates & 12 \\
+LSMC paths & 500,000 \\
+LSMC steps $M$ & 1,000 \\
+LSMC basis degree & 3 \\
+Hybrid paths $N$ & 10,000 \\
+Hybrid low paths $N_{\mathrm{low}}$ & 10,000 \\
+Hybrid asset grid points $N_S$ & 512 \\
+Hybrid basis degree & 3 \\
+Finite-difference reference & 1.4507 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Heston benchmark results.}
+\begin{tabular}{lrrrr}
+\toprule
+Estimator & Published value & Run value & $|$Run $-$ FD$|$ & Run $-$ published \\
+\midrule
+LSMC direct   & 1.4494 & 1.458896 & 0.008196 & +0.009496 \\
+LSMC low      & 1.4487 & 1.452544 & 0.001844 & +0.003844 \\
+Hybrid direct & 1.4530 & 1.452988 & 0.002288 & -0.000012 \\
+Hybrid low    & 1.4529 & 1.445493 & 0.005207 & -0.007407 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Default gDMR case ($\delta_1=\delta_2=0.50$).} This is the current tuned default setup.
+Relative errors in the next table are measured against the LSMC direct estimator.
+
+\begin{table}[H]
+\centering
+\caption{Default gDMR parameters.}
+\begin{tabular}{lr}
+\toprule
+Quantity & Value \\
+\midrule
+Model & gDMR \\
+Option & Bermudan put \\
+$S_0$ & 100 \\
+$K$ & 100 \\
+$T$ & 1 \\
+$r$ & 0.03 \\
+$v_0$ & 0.04 \\
+$v'_0$ & 0.04 \\
+$\kappa_1$ & 2.0 \\
+$\kappa_2$ & 1.0 \\
+$\theta$ & 0.04 \\
+$\xi_1$ & 0.35 \\
+$\xi_2$ & 0.20 \\
+$\rho_{12}$ & 0.20 \\
+$\rho_{13}$ & 0.10 \\
+$\rho_{23}$ & 0.10 \\
+$\delta_1$ & 0.50 \\
+$\delta_2$ & 0.50 \\
+Exercise dates $N_{\mathrm{ex}}$ & 100 \\
+Euler steps $M$ & 600 \\
+LSMC paths & 1,000,000 \\
+LSMC basis degree & 3 \\
+LSMC basis size & 16 \\
+Hybrid paths $N$ & 30,000 \\
+Hybrid low paths $N_{\mathrm{low}}$ & 30,000 \\
+Hybrid asset grid points $N_S$ & 181 \\
+Hybrid Hermite nodes $N_{\mathrm{hermite}}$ & 64 \\
+Hybrid volatility basis degree & 3 \\
+Hybrid volatility basis size & 10 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Default gDMR results.}
+\begin{tabular}{lrrr}
+\toprule
+Estimator & Price & Standard error & Relative error \\
+\midrule
+LSMC direct   & 6.384535 & 0.007943 & reference \\
+LSMC low      & 6.387249 & 0.007939 & 0.04\% vs LSMC direct \\
+Hybrid direct & 6.421758 & 0.000652 & 0.58\% vs LSMC direct \\
+Hybrid low    & 6.265070 & 0.045711 & 1.87\% vs LSMC direct \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Equal-delta gDMR case ($\delta_1=\delta_2=0.75$).} This run keeps the same tuned numerical
+setup as the default gDMR case and changes only the two elasticity parameters.
+
+\begin{table}[H]
+\centering
+\caption{Equal-delta gDMR parameters.}
+\begin{tabular}{lr}
+\toprule
+Quantity & Value \\
+\midrule
+Model & gDMR \\
+Option & Bermudan put \\
+$S_0$ & 100 \\
+$K$ & 100 \\
+$T$ & 1 \\
+$r$ & 0.03 \\
+$v_0$ & 0.04 \\
+$v'_0$ & 0.04 \\
+$\kappa_1$ & 2.0 \\
+$\kappa_2$ & 1.0 \\
+$\theta$ & 0.04 \\
+$\xi_1$ & 0.35 \\
+$\xi_2$ & 0.20 \\
+$\rho_{12}$ & 0.20 \\
+$\rho_{13}$ & 0.10 \\
+$\rho_{23}$ & 0.10 \\
+$\delta_1$ & 0.75 \\
+$\delta_2$ & 0.75 \\
+Exercise dates $N_{\mathrm{ex}}$ & 100 \\
+Euler steps $M$ & 600 \\
+LSMC paths & 1,000,000 \\
+Hybrid paths $N$ & 30,000 \\
+Hybrid low paths $N_{\mathrm{low}}$ & 30,000 \\
+Hybrid asset grid points $N_S$ & 181 \\
+Hybrid Hermite nodes $N_{\mathrm{hermite}}$ & 64 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Equal-delta gDMR results.}
+\begin{tabular}{lrrr}
+\toprule
+Estimator & Price & Standard error & Relative error \\
+\midrule
+LSMC direct   & 6.653560 & 0.007822 & reference \\
+LSMC low      & 6.655062 & 0.007819 & 0.02\% vs LSMC direct \\
+Hybrid direct & 6.696152 & 0.000375 & 0.64\% vs LSMC direct \\
+Hybrid low    & 6.545257 & 0.045080 & 1.63\% vs LSMC direct \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Strike tests under the equal-delta setup.} All model parameters and numerical settings are the
+same as in Table~4, except for the strike reported below.
+
+\begin{table}[H]
+\centering
+\caption{Strike-test parameters under the equal-delta setup.}
+\begin{tabular}{lrr}
+\toprule
+Case & $S_0$ & $K$ \\
+\midrule
+ITM put & 100 & 110 \\
+ATM put & 100 & 100 \\
+OTM put & 100 & 90 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[H]
+\centering
+\caption{Strike-test results under the equal-delta setup.}
+\resizebox{\textwidth}{!}{%
+\begin{tabular}{lrrrrrrr}
+\toprule
+Case & Strike & LSMC direct & LSMC low & Hybrid direct & Hybrid low & Hybrid direct rel. error & Hybrid low rel. vs LSMC direct \\
+\midrule
+ITM put & 110 & 12.735850 & 12.734082 & 12.767870 & 12.634384 & 0.25\% & 0.80\% \\
+ATM put & 100 & 6.653560 & 6.655062 & 6.696152 & 6.545257 & 0.64\% & 1.63\% \\
+OTM put & 90 & 2.743578 & 2.734472 & 2.791426 & 2.668242 & 1.74\% & 2.75\% \\
+\bottomrule
+\end{tabular}%
+}
+\end{table}
+
+\end{document}

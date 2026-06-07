@@ -1,0 +1,91 @@
+\section*{Positive-rate gDMR price tables}
+\begin{table}[htbp]\centering
+\caption{Benchmark prices. Prices are rounded to three decimals.}
+\begin{tabular}{lrrrrr}
+\toprule
+Strike & 70 & 80 & 90 & 100 & 110 \\
+\midrule
+LSMC benchmark & 2.523 & 4.299 & 6.942 & 10.682 & 15.744 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]\centering
+\caption{Fixed-path step-sweep prices with 20,000 paths. Prices are rounded to three decimals.}
+\begin{tabular}{lrrrr}
+\toprule
+Method/step & 24 & 48 & 72 & 96 \\
+\midrule
+LSMC K=70 & 2.741 & 2.612 & 2.579 & 2.536 \\
+Hybrid LSMC-PDE K=70 & 2.711 & 2.575 & 2.547 & 2.565 \\
+LSMC K=80 & 4.634 & 4.433 & 4.409 & 4.396 \\
+Hybrid LSMC-PDE K=80 & 4.528 & 4.345 & 4.307 & 4.339 \\
+LSMC K=90 & 7.341 & 7.129 & 7.068 & 7.080 \\
+Hybrid LSMC-PDE K=90 & 7.172 & 6.957 & 6.905 & 6.956 \\
+LSMC K=100 & 11.138 & 10.807 & 10.816 & 10.837 \\
+Hybrid LSMC-PDE K=100 & 10.898 & 10.673 & 10.607 & 10.679 \\
+LSMC K=110 & 16.241 & 15.920 & 15.894 & 15.798 \\
+Hybrid LSMC-PDE K=110 & 15.953 & 15.747 & 15.676 & 15.768 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]\centering
+\caption{Fixed-path step-sweep prices with 60,000 paths. Prices are rounded to three decimals.}
+\begin{tabular}{lrrrr}
+\toprule
+Method/step & 24 & 48 & 72 & 96 \\
+\midrule
+LSMC K=70 & 2.718 & 2.612 & 2.579 & 2.533 \\
+Hybrid LSMC-PDE K=70 & 2.721 & 2.585 & 2.557 & 2.543 \\
+LSMC K=80 & 4.531 & 4.434 & 4.362 & 4.318 \\
+Hybrid LSMC-PDE K=80 & 4.547 & 4.364 & 4.326 & 4.307 \\
+LSMC K=90 & 7.195 & 7.055 & 7.033 & 6.949 \\
+Hybrid LSMC-PDE K=90 & 7.207 & 6.987 & 6.940 & 6.918 \\
+LSMC K=100 & 10.996 & 10.800 & 10.794 & 10.712 \\
+Hybrid LSMC-PDE K=100 & 10.953 & 10.715 & 10.662 & 10.639 \\
+LSMC K=110 & 16.050 & 15.788 & 15.853 & 15.806 \\
+Hybrid LSMC-PDE K=110 & 16.026 & 15.803 & 15.749 & 15.725 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]\centering
+\caption{Fixed 48-step path-sweep prices. Prices are rounded to three decimals.}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Method/strike & 250 & 1,000 & 5,000 & 10,000 & 20,000 & 40,000 & 60,000 \\
+\midrule
+LSMC K=70 & 3.288 & 2.946 & 2.673 & 2.625 & 2.612 & 2.576 & 2.612 \\
+Hybrid LSMC-PDE K=70 & 3.089 & 2.702 & 2.608 & 2.554 & 2.575 & 2.570 & 2.585 \\
+LSMC K=80 & 5.425 & 4.795 & 4.545 & 4.452 & 4.433 & 4.369 & 4.434 \\
+Hybrid LSMC-PDE K=80 & 5.079 & 4.533 & 4.427 & 4.310 & 4.345 & 4.357 & 4.364 \\
+LSMC K=90 & 8.601 & 7.433 & 7.241 & 7.169 & 7.129 & 7.088 & 7.055 \\
+Hybrid LSMC-PDE K=90 & 7.946 & 7.187 & 7.090 & 6.903 & 6.957 & 6.992 & 6.987 \\
+LSMC K=100 & 13.454 & 11.404 & 11.072 & 10.918 & 10.807 & 10.881 & 10.800 \\
+Hybrid LSMC-PDE K=100 & 11.870 & 10.910 & 10.833 & 10.601 & 10.673 & 10.730 & 10.715 \\
+LSMC K=110 & 19.278 & 16.843 & 15.985 & 16.057 & 15.920 & 15.921 & 15.788 \\
+Hybrid LSMC-PDE K=110 & 17.120 & 15.962 & 15.889 & 15.660 & 15.747 & 15.819 & 15.803 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]\centering
+\caption{Fixed 60-step path-sweep prices. Prices are rounded to three decimals.}
+\begin{tabular}{lrrrrrrr}
+\toprule
+Method/strike & 250 & 1,000 & 5,000 & 10,000 & 20,000 & 40,000 & 60,000 \\
+\midrule
+LSMC K=70 & 3.452 & 2.884 & 2.738 & 2.665 & 2.635 & 2.619 & 2.587 \\
+Hybrid LSMC-PDE K=70 & 3.125 & 2.639 & 2.653 & 2.568 & 2.563 & 2.549 & 2.570 \\
+LSMC K=80 & 5.950 & 4.762 & 4.629 & 4.553 & 4.484 & 4.387 & 4.411 \\
+Hybrid LSMC-PDE K=80 & 5.034 & 4.396 & 4.470 & 4.321 & 4.318 & 4.321 & 4.342 \\
+LSMC K=90 & 8.936 & 7.227 & 7.270 & 7.222 & 7.120 & 7.045 & 7.084 \\
+Hybrid LSMC-PDE K=90 & 7.836 & 6.957 & 7.115 & 6.910 & 6.910 & 6.939 & 6.957 \\
+LSMC K=100 & 13.773 & 11.673 & 11.026 & 10.955 & 10.910 & 10.850 & 10.823 \\
+Hybrid LSMC-PDE K=100 & 11.761 & 10.596 & 10.831 & 10.604 & 10.610 & 10.666 & 10.677 \\
+LSMC K=110 & 18.962 & 17.240 & 15.920 & 15.991 & 15.918 & 15.952 & 15.860 \\
+Hybrid LSMC-PDE K=110 & 16.953 & 15.621 & 15.863 & 15.659 & 15.680 & 15.755 & 15.757 \\
+\bottomrule
+\end{tabular}
+\end{table}

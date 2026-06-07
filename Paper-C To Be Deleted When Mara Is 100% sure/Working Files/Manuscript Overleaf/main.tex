@@ -1,0 +1,838 @@
+\documentclass[10pt]{article}
+
+\usepackage{newtxtext,newtxmath}
+\usepackage[a4paper,margin=1in]{geometry}
+
+\let\Bbbk\relax
+\let\openbox\relax
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathrsfs}
+
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{threeparttable}
+\usepackage{subcaption}
+\usepackage{caption}
+\usepackage[numbers,square]{natbib}
+\bibliographystyle{plainnat}
+
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\providecommand*{\theHassumption}{\theHtheorem}
+
+\captionsetup[figure]{name=Fig.,labelfont=bf,labelsep=space}
+
+\newcommand{\keywords}[1]{\par\noindent\textbf{Keywords:} #1\par}
+\newcommand{\dd}{\mathrm d}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\F}{\mathcal F}
+\newcommand{\supp}{\operatorname{supp}}
+
+\title{Hybrid LSMC-PDE for a Generalized Gatheral Double Mean-Reverting Model}
+
+\author{%
+Mara Kalicanin Dimitrov$^{1}$ \and
+Ying Ni$^{2}$%
+}
+
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\small
+$^{1}$Department of Business and Mathematics, M\"{a}lardalen University, SE 721 23 V\"{a}ster{\aa}s, Sweden\\
+$^{2}$Department of Business and Mathematics, M\"{a}lardalen University, SE 721 23 V\"{a}ster{\aa}s, Sweden\\[4pt]
+\textbf{Email:} Mara Kalicanin Dimitrov, mara.kalicanin.dimitrov@mdu.se\\
+\textbf{Corresponding author:} Ying Ni, ying.ni@mdu.se\\
+\end{center}
+
+\begin{abstract}
+\textbf{To be changed}\\
+We study Bermudan-style optimal stopping problems under a generalized version of Gatheral's
+double mean-reverting stochastic volatility model. Our first contribution is a well-posedness analysis for the
+two-factor variance system: we identify parameter regimes (in particular $\delta_1,\delta_2\ge 1/2$
+under natural nonnegativity assumptions) ensuring existence of a nonnegative strong solution,
+which is essential for a stochastic-volatility interpretation.
+Our second contribution connects this model to the Mixed Least-Squares Monte Carlo-partial
+differential equation (LSMC-PDE) given in \citet{farahany2020mixing} for Bermudan
+options. We show that the generalized double
+mean-reverting model satisfies the structural hypotheses needed to (i) represent conditional
+continuation values via lower-dimensional (random-coefficient) parabolic PDEs and (ii) obtain
+almost-sure convergence of the regression coefficients under standard truncation/separability
+conditions.
+\end{abstract}
+
+\keywords{Bermudan options, Hybrid LSMC-PDE, Gatheral Double Mean-Reverting Model}
+
+
+\section{Introduction}
+
+The challenge of accurately pricing Bermudan options under stochastic volatility has been an important topic in financial mathematics. Bermudan options give the holder the right to exercise only at a finite set of pre-specified dates before maturity. This makes them practically relevant in structured products and also useful as a discrete approximation of American options. Under a risk-neutral measure, their value is obtained from a backward dynamic programming recursion. At each exercise date, the holder compares the immediate exercise payoff with the continuation value, which is the discounted conditional expectation of the future option value.
+
+For low-dimensional models, deterministic numerical methods such as finite-difference, tree-based, and partial differential equation (PDE) methods can be highly accurate. The Cox--Ross--Rubinstein binomial model provides a classical discrete-time approach \citep{cox1979option}, while the Black--Scholes and Merton frameworks form the foundation of continuous-time option pricing under diffusion models \citep{black1973pricing,merton1973theory}. For Markovian models, the Feynman--Kac representation connects conditional expectations to parabolic PDEs \citep{karatzas1991brownian}. However, when early exercise is present, the pricing problem becomes a free-boundary or variational inequality problem. This increases the numerical difficulty, especially when stochastic volatility factors are added to the state space.
+
+Monte Carlo simulation provides a flexible alternative, particularly for high-dimensional models and path-dependent contracts \citep{glasserman2004montecarlo}. For Bermudan and American options, the main difficulty is the approximation of continuation values. The least-squares Monte Carlo method of Longstaff and Schwartz \citep{longstaff2001valuing} and the regression-based method of Tsitsiklis and Van Roy \citep{tsitsiklis2001regression} address this problem by approximating conditional expectations through regression on simulated paths. These methods are simple and broadly applicable, but their performance may deteriorate in stochastic-volatility models, where the continuation surface depends on both the asset and volatility factors.
+
+This study considers Bermudan option pricing under a generalized version of Gatheral's double mean-reverting stochastic volatility model. In the original double mean-reverting structure, the instantaneous variance mean-reverts to a stochastic variance level, and this stochastic level mean-reverts to a long-run level. This construction is motivated by the need to capture richer volatility dynamics than those available in one-factor stochastic-volatility models. In this paper, the square-root diffusion coefficients are replaced by constant elasticity of variance (CEV)-type power functions with exponents $\delta_1$ and $\delta_2$. The resulting generalized double mean-reverting model includes the classical square-root specification as a special case and allows more flexible volatility-of-volatility behavior.
+
+This generalization introduces a mathematical issue near the boundary at zero. The CEV-type diffusion coefficients are not globally Lipschitz when the elasticity parameters are below one. Since the variance factors must remain nonnegative to have a valid stochastic-volatility interpretation, the first part of this paper establishes strong well-posedness and nonnegativity of the variance system. We show that when $\delta_1,\delta_2\in[1/2,1]$, the generalized double mean-reverting system admits a unique strong solution with nonnegative variance factors. This exponent range is natural because it is connected to the classical Yamada--Watanabe condition for pathwise uniqueness of one-dimensional SDEs with H\"older diffusion coefficients \citep{yamada1971uniqueness}.
+
+The second part of the paper develops a hybrid LSMC--PDE pricing method for the generalized model. The key structural feature is one-way coupling: the two variance factors evolve independently of the asset price. Therefore, volatility paths can be simulated first. Conditional on a simulated volatility path, the log-price equation can be reduced, after an orthogonalization of the Brownian drivers, to a one-dimensional diffusion with deterministic time-dependent coefficients. The conditional expectation required in each Bermudan step is then represented by a one-dimensional backward parabolic PDE. Solving this PDE along each volatility path produces a smooth pre-surface in the asset direction. A least-squares regression across the volatility states is then used to complete the continuation-value surface.
+
+The hybrid construction follows the mixed LSMC--PDE framework of \citet{farahany2020mixing}. Their method combines the variance-reduction advantages of conditional PDE pricing with the flexibility of regression Monte Carlo. The present paper verifies that the generalized double mean-reverting model satisfies the structural requirements of that framework. In particular, we prove the required one-way coupling and separability properties, derive the conditional PDE representation, and establish almost-sure convergence of the hybrid regression coefficients under the standard truncation assumptions.
+
+The numerical part of the paper compares the Hybrid LSMC--PDE method with the plain LSMC method for Bermudan put options under a calibrated generalized double mean-reverting specification. The experiments examine both fixed-path step sweeps and fixed-step path sweeps. The benchmark prices are obtained from a high-resolution LSMC computation. The results show that the Hybrid LSMC--PDE method usually produces direct prices closer to the benchmark and with smaller standard errors and narrower confidence intervals. The improvement is most visible at intermediate step levels and moderate path budgets, while the few observed reversals occur mainly in the deepest out-of-the-money case and at small sample sizes.
+
+The article is structured as follows. Section~2 reviews the related literature on Bermudan option pricing, stochastic-volatility models, mixed MC--PDE methods, and well-posedness of CEV-type variance processes. Section~3 introduces the generalized double mean-reverting model and the Bermudan stopping problem. Section~4 proves strong well-posedness and nonnegativity of the variance factors. Section~5 derives the conditional PDE representation used in the hybrid method. Section~6 verifies the almost-sure convergence of the hybrid regression coefficients. Section~7 describes the numerical Hybrid LSMC--PDE methodology. Section~8 presents the numerical experiments, and Section~9 concludes the paper.
+
+
+
+
+
+
+
+\section{Literature review}
+
+Bermudan and American option pricing can be formulated as optimal stopping problems under a risk-neutral measure. The value is obtained by comparing immediate exercise with the continuation value at each possible exercise date. In low-dimensional settings, PDE and finite-difference methods are often effective, since the early-exercise feature can be represented through free-boundary problems or variational inequalities. Classical contributions to American option pricing and variational inequality formulations include \citep{merton1977americanput,jaillet1990variational}. Tree-based methods also provide an important discrete-time approach, with the binomial model of Cox, Ross, and Rubinstein serving as a standard reference \citep{cox1979option}.
+
+Simulation-based methods are widely used when the model dimension is high or when the payoff structure is difficult to handle with deterministic grids. The least-squares Monte Carlo method introduced by Longstaff and Schwartz \citep{longstaff2001valuing} is one of the most commonly used approaches for pricing American and Bermudan options by simulation. The related regression-based dynamic programming method of Tsitsiklis and Van Roy \citep{tsitsiklis2001regression} provides another important formulation. A rigorous convergence analysis of least-squares regression methods for American option pricing was developed by Cl\'ement, Lamberton, and Protter \citep{clement2002analysis}. These methods approximate continuation values from simulated paths and are therefore flexible, but their accuracy depends strongly on the quality of the regression approximation.
+
+In stochastic-volatility models, the regression problem becomes more challenging because the state includes both the asset and volatility factors. The continuation surface may vary sharply with the volatility variables, and the exercise boundary can be difficult to estimate accurately by global regression. This motivates hybrid approaches that combine simulation and deterministic PDE methods. Mixed MC--PDE methods simulate the volatility factors and then solve conditional PDEs for the remaining asset-price uncertainty. Earlier developments of this idea include the mixed PDE/Monte Carlo approaches of Loeper and Pironneau \citep{loeper2009mixed} and Lipp, Loeper, and Pironneau \citep{lipp2013mixing}. Cozma and Reisinger \citep{cozma2017mixed} applied a related mixed MC--PDE variance-reduction method in a foreign-exchange setting with stochastic volatility and stochastic interest rates.
+
+For Bermudan options, Farahany, Jackson, and Jaimungal \citep{farahany2020mixing} developed a hybrid LSMC--PDE method under one-way coupled stochastic-volatility models. In their framework, volatility paths are simulated independently of the asset process. Conditional on each volatility path, a lower-dimensional PDE is solved in the asset variable. This produces a smooth pre-surface, and least-squares regression across the volatility states is then used to approximate the continuation value. They also prove almost-sure convergence of the regression coefficients under truncation and separability assumptions. Farahany's thesis \citep{farahany2019thesis} further develops the algorithmic background, including complexity-reduction techniques and applications to multifactor stochastic-volatility models.
+
+On the modeling side, stochastic volatility has become a standard tool for capturing features of implied-volatility surfaces that cannot be represented by the Black--Scholes model. The Heston model \citep{heston1993closedform}, in which the variance follows a Cox--Ingersoll--Ross square-root process \citep{cir1985termstructure}, is one of the most widely used stochastic-volatility models. However, empirical studies show that single-factor stochastic-volatility models may be insufficient to capture the shape and term structure of the equity index option smirk. Christoffersen, Heston, and Jacobs \citep{christoffersen2009smirk} show that multifactor stochastic-volatility models can improve the fit to index option data.
+
+Gatheral's volatility-surface framework motivates richer volatility-factor specifications \citep{gatheral2006volatility,gatheral2006volsurface}. In particular, the double mean-reverting model describes a variance process that mean-reverts to a stochastic level, while that stochastic level itself mean-reverts to a long-run variance. This type of structure is useful for representing both short-run and long-run volatility behavior. The generalized model considered in this paper replaces the square-root volatility-of-volatility terms by CEV-type powers. This connects the model to the classical CEV specification \citep{cox1975cev} and to the broader CKLS-type family of mean-reverting diffusion models used in interest-rate modeling \citep{chan1992empirical}.
+
+The use of CEV-type diffusion coefficients raises well-posedness questions near zero. Since the diffusion coefficient is only H\"older continuous, standard global Lipschitz conditions do not apply. The Yamada--Watanabe pathwise uniqueness criterion \citep{yamada1971uniqueness} is therefore central for identifying exponent ranges in which strong solutions remain well defined. For power-type diffusion coefficients, the threshold $\delta\ge 1/2$ is a natural condition for pathwise uniqueness. Recent work has also considered reflected versions of Gatheral-type double stochastic-volatility models to prevent undesirable boundary behavior \citep{mishura2025skorokhod}. The present paper complements this literature by proving strong well-posedness and nonnegativity for the generalized double mean-reverting model in the exponent regime $\delta_1,\delta_2\in[1/2,1]$, and by showing that this model fits into the hybrid LSMC--PDE convergence framework for Bermudan option pricing.
+
+
+
+\section{Model and Bermudan stopping problem}\label{sec:model}
+
+This section fixes the probabilistic setting, the generalized gDMR dynamics, and the discrete stopping problem used throughout the paper. We first specify the stochastic basis and the two-factor variance structure, emphasizing the one-way coupling that later enables conditional PDE pricing. We then formulate the Bermudan value through the finite exercise-time Snell recursion.
+
+\subsection{Stochastic basis and generalized gDMR dynamics}
+
+Let $(\Omega,\F,(\F_t)_{t\ge 0},\Q)$ be a filtered probability space satisfying the usual conditions and carrying
+a $3$-dimensional $(\F_t)$-Brownian motion $W=(W^{(1)},W^{(2)},W^{(3)})$ with constant correlation matrix
+$\rho=(\rho_{ij})_{1\le i,j\le 3}$, assumed symmetric positive semidefinite with $\rho_{ii}=1$.
+Fix parameters $r\ge 0$ and $\kappa_1,\kappa_2,\theta,\xi_1,\xi_2>0$ and initial conditions
+$(S_0,v_0,v_0')\in(0,\infty)\times[0,\infty)\times[0,\infty)$.
+
+We consider the generalized Gatheral double mean-reverting (gDMR) system under $\Q$:
+\begin{equation}\label{eq:gdmr}
+\begin{aligned}
+\dd S_t &= r\,S_t\,\dd t + S_t\sqrt{v_t}\,\dd W^{(1)}_t,\\
+\dd v_t &= \kappa_1\,(v'_t - v_t)\,\dd t + \xi_1 v_t^{\delta_1}\,\dd W^{(2)}_t,\\
+\dd v'_t &= \kappa_2\,(\theta - v'_t)\,\dd t + \xi_2 (v'_t)^{\delta_2}\,\dd W^{(3)}_t,
+\end{aligned}
+\end{equation}
+with elasticity parameters $\delta_1,\delta_2>0$.
+
+\begin{remark}[One-way coupling]\label{rem:one-way}
+The variance subsystem $(v,v')$ is autonomous (it does not depend on $S$). This one-way coupling is the structural
+feature exploited by mixed MC--PDE methods: volatility paths can be sampled independently of the asset, after which
+asset expectations are computed conditionally \citep{farahany2020mixing}.
+\end{remark}
+
+
+
+
+\section{Well-posedness}\label{sec:wellposed}
+
+The generalized variance dynamics contain CEV-type diffusion coefficients, so the behavior at the zero boundary must be settled before the model can be used as a pricing model. This section identifies the exponent regime in which the variance factors remain nonnegative and the coupled system admits a unique strong solution. It then records the corresponding Bermudan valuation problem in a setting compatible with the later conditional-PDE and regression arguments.
+
+\subsection{Exponent regime and strong well-posedness}
+
+\begin{assumption}[CEV exponents]\label{ass:delta-range}
+We impose $\delta_1,\delta_2\in[1/2,1]$.
+\end{assumption}
+
+\begin{theorem}[Strong existence/uniqueness and positivity]\label{thm:wellposed}
+Assume Assumption~\ref{ass:delta-range}. Then for any $T>0$ the system \eqref{eq:gdmr} admits a unique strong
+solution $(S_t,v_t,v'_t)_{t\in[0,T]}$ with continuous paths such that
+\[
+S_t>0,\qquad v_t\ge 0,\qquad v'_t\ge 0,\qquad \forall\,t\in[0,T]\quad \Q\text{-a.s.}
+\]
+\end{theorem}
+
+\begin{proof}
+\textbf{Well-posedness and nonnegativity of $v'$.}
+Define globally measurable coefficients on $\R$ by
+\[
+b_2(x):=\kappa_2(\theta-x),\qquad \sigma_2(x):=\xi_2(x^+)^{\delta_2},\qquad x^+:=\max(x,0).
+\]
+Then $b_2$ is globally Lipschitz with linear growth, and $\sigma_2$ is H\"older of order $\delta_2$.
+For $\delta_2\ge 1/2$, the Yamada--Watanabe modulus condition holds, implying pathwise uniqueness for the
+one-dimensional SDE
+\[
+\dd v'_t=b_2(v'_t)\dd t+\sigma_2(v'_t)\dd W^{(3)}_t,\qquad v'_0\ge 0;
+\]
+see \citet{yamada1971uniqueness} and \citet[Ch.~5]{karatzas1991brownian}. Since the coefficients are continuous
+with linear growth, weak existence holds, and hence a unique strong solution exists.
+
+
+
+\medskip
+\textbf{Well-posedness and nonnegativity of $v$ given $v'$.}
+Given the adapted continuous process $v'$, define
+\[
+b_1(t,x):=\kappa_1(v'_t-x),\qquad \sigma_1(x):=\xi_1(x^+)^{\delta_1}.
+\]
+For each $(t,\omega)$ the map $x\mapsto b_1(t,x)$ is globally Lipschitz with constant $\kappa_1$, and $\sigma_1$ is
+H\"older of order $\delta_1\ge 1/2$. The same Yamada--Watanabe argument (now with time-dependent but Lipschitz drift)
+yields a unique strong solution $v$ to $$\dd v_t=b_1(t,v_t)\dd t+\sigma_1(v_t)\dd W^{(2)}_t.$$
+
+
+\medskip
+\textbf{Explicit solution for $S$ and strict positivity.}
+With $v$ nonnegative and progressively measurable, the asset SDE is linear in $S$ and admits the unique strong solution
+\[
+S_t
+= S_0 \exp\!\left(
+\int_0^t \Bigl(r-\tfrac12 v_s\Bigr)\dd s + \int_0^t \sqrt{v_s}\,\dd W^{(1)}_s
+\right),
+\]
+which is strictly positive for all $t\in[0,T]$ whenever $S_0>0$.
+\end{proof}
+
+\begin{remark}[Why $\delta_i\ge 1/2$ is natural]\label{rem:delta-half}
+The lower bound $\delta_i\ge 1/2$ is a classical threshold for pathwise uniqueness in CEV-type diffusions:
+for $$\dd X_t=b(X_t)\dd t+\sigma (X_t^+)^\delta \dd W_t,$$ the Yamada--Watanabe modulus condition holds when $\delta\ge 1/2$,
+while for $\delta<1/2$ pathwise uniqueness can fail \citep{yamada1971uniqueness}. Since the hybrid MC--PDE convergence results
+of \citet{farahany2020mixing} are formulated for models admitting strong unique solutions, Assumption~\ref{ass:delta-range} is a
+minimal structural restriction that keeps the gDMR model within that framework.
+\end{remark}
+
+
+
+
+
+\subsection{Bermudan option valuation as a discrete-time stopping problem}
+
+Let $\pi=\{0=t_0<\dots<t_M=T\}$ be the exercise grid and let $(h_n)_{n=0}^M$ be measurable payoff
+functions with $h_n:(0,\infty)\to\R$. For simplicity, we assume that the payoff at time $t_n$
+depends only on $S_{t_n}$.
+The Bermudan value process $(V_n)_{n=0}^M$ satisfies the Snell recursion
+\begin{equation}\label{eq:snell}
+V_M=h_M(S_{t_M}),\qquad
+V_n=\max\Bigl\{h_n(S_{t_n}),\,e^{-r(t_{n+1}-t_n)}\,\E^\Q\!\bigl[V_{n+1}\mid\mathcal F_{t_n}\bigr]\Bigr\},
+\qquad n=M-1,\dots,0.
+\end{equation}
+
+Since $(S_t,v_t,v'_t)$ is Markov under $\Q$, the continuation value can be
+written as a deterministic function of the current state. Specifically, define
+\begin{equation}\label{eq:cont}
+C_n(s,v,v')
+:=e^{-r(t_{n+1}-t_n)}\,\E^\Q\!\left[
+V_{n+1}\bigl(S_{t_{n+1}},v_{t_{n+1}},v'_{t_{n+1}}\bigr)\,
+\middle|\,
+S_{t_n}=s,\,v_{t_n}=v,\,v'_{t_n}=v'
+\right].
+\end{equation}
+Then the one-step continuation value appearing in \eqref{eq:snell} is given by
+\[
+e^{-r(t_{n+1}-t_n)}\,\E^\Q\!\bigl[V_{n+1}\mid\mathcal F_{t_n}\bigr]
+= C_n\bigl(S_{t_n},v_{t_n},v'_{t_n}\bigr)\qquad\text{$\Q$-a.s.}
+\]
+
+\section{Conditional PDE representation}\label{sec:conditional_pde}
+Since the variance factors $(v,v')$ are \emph{one-way coupled} (their dynamics do not depend on $S$),
+the entire volatility path over an interval $[t_n,t_{n+1}]$ is measurable with respect to the Brownian drivers
+that generate $(v,v')$. After an orthogonalization of the \emph{asset} Brownian motion, the remaining randomness
+in the log-price evolution on $[t_n,t_{n+1}]$ is carried by a Brownian motion that is independent of those
+volatility drivers. Conditional expectations over one exercise step therefore reduce to a one-dimensional
+(time-inhomogeneous) diffusion problem, which is characterized by a backward parabolic PDE with
+\emph{random (pathwise) coefficients} \citet{farahany2020mixing}.
+
+
+
+\subsection{Orthogonalization on a Bermudan step}
+
+
+
+Fix an interval $[t_n,t_{n+1}]$ in a Bermudan exercise grid and define
+\[
+\mathcal G_n := \sigma\bigl( (W^{(2)}_s,W^{(3)}_s)\,:\,s\in[t_n,t_{n+1}]\bigr).
+\]
+Since the variance subsystem is one-way coupled and driven by $(W^{(2)},W^{(3)})$, the path
+$(v_s,v'_s)_{s\in[t_n,t_{n+1}]}$ is measurable with respect to $\mathcal F_{t_n}\vee\mathcal G_n$.
+
+Assume $|\rho_{23}|<1$ and define
+\[
+\Sigma_{23}:=
+\begin{bmatrix}
+1 & \rho_{23}\\
+\rho_{23} & 1
+\end{bmatrix},
+\qquad
+\beta:=\Sigma_{23}^{-1}
+\begin{bmatrix}
+\rho_{12}\\
+\rho_{13}
+\end{bmatrix}
+=
+\begin{bmatrix}
+\beta_2\\
+\beta_3
+\end{bmatrix}.
+\]
+Equivalently,
+\begin{equation}\label{eq:proj-coeffs}
+\beta_2=\frac{\rho_{12}-\rho_{13}\rho_{23}}{1-\rho_{23}^2},
+\qquad
+\beta_3=\frac{\rho_{13}-\rho_{12}\rho_{23}}{1-\rho_{23}^2}.
+\end{equation}
+The conditional variance of $W^{(1)}$ after projection onto $\mathrm{span}\{W^{(2)},W^{(3)}\}$
+is
+\begin{equation}\label{eq:sigperp}
+\sigma_\perp^2
+:=1-\begin{bmatrix}\rho_{12}&\rho_{13}\end{bmatrix}\Sigma_{23}^{-1}
+\begin{bmatrix}\rho_{12}\\ \rho_{13}\end{bmatrix}
+=\frac{1-\rho_{12}^2-\rho_{13}^2-\rho_{23}^2+2\rho_{12}\rho_{13}\rho_{23}}{1-\rho_{23}^2}\ge 0.
+\end{equation}
+
+
+Hence there exists a Brownian motion $B^\perp$, independent of $(W^{(2)},W^{(3)})$, such that
+on $[t_n,t_{n+1}]$,
+\begin{equation}\label{eq:orth}
+\dd W^{(1)}_t=\beta_2\,\dd W^{(2)}_t+\beta_3\,\dd W^{(3)}_t+\sigma_\perp\,\dd B^\perp_t.
+\end{equation}
+
+Let $X_t:=\log S_t$. Under $\Q$, we have
+\begin{equation}\label{eq:logS}
+\dd X_t=\Bigl(r-\tfrac12 v_t\Bigr)\dd t+\sqrt{v_t}\,\dd W^{(1)}_t.
+\end{equation}
+Substituting \eqref{eq:orth} into \eqref{eq:logS} yields, on $[t_n,t_{n+1}]$,
+\begin{equation}\label{eq:logS-orth}
+\dd X_t=\Bigl(r-\tfrac12 v_t\Bigr)\dd t
++\sqrt{v_t}\Bigl(\beta_2\,\dd W^{(2)}_t+\beta_3\,\dd W^{(3)}_t\Bigr)
++\sigma_\perp\sqrt{v_t}\,\dd B^\perp_t.
+\end{equation}
+
+Define the pathwise correlated shift and the orthogonal log component
+\begin{equation}\label{eq:Zshift}
+Z^{\mathrm{shift}}_t:=\int_{t_n}^t \sqrt{v_s}\,\bigl(\beta_2\,\dd W^{(2)}_s+\beta_3\,\dd W^{(3)}_s\bigr),
+\qquad
+Y_t:=X_t-Z^{\mathrm{shift}}_t.
+\end{equation}
+Then $X_t=Y_t+Z^{\mathrm{shift}}_t$ and, on $[t_n,t_{n+1}]$,
+\begin{equation}\label{eq:Ydyn}
+\dd Y_t=\Bigl(r-\tfrac12 v_t\Bigr)\dd t+\sigma_\perp\sqrt{v_t}\,\dd B^\perp_t.
+\end{equation}
+In the degenerate case $\sigma_\perp=0$, the stock Brownian driver lies in the span of the
+volatility Brownian drivers and, conditional on the volatility path, the propagation of $X$
+becomes deterministic.
+
+
+
+
+
+
+\subsection{Conditional expectation as a random-coefficient PDE}
+
+\begin{lemma}[]\label{lem:cond-PDE}
+Assume Assumption~\ref{ass:delta-range} and let $G:\R\times[0,\infty)^2\to\R$ be bounded and Borel measurable.
+Fix $n\in\{0,\dots,M-1\}$ and work on the interval $[t_n,t_{n+1}]$.
+Let
+\[
+\mathcal G_n := \sigma\bigl((W^{(2)}_s,W^{(3)}_s): s\in[t_n,t_{n+1}]\bigr),
+\]
+and define 
+\[
+Z_n := \int_{t_n}^{t_{n+1}} \sqrt{v_s}\,\bigl(\beta_2\,\dd W^{(2)}_s+\beta_3\,\dd W^{(3)}_s\bigr),
+\]
+where $\beta_2,\beta_3$ are given by \eqref{eq:proj-coeffs} and $\sigma_\perp$ by \eqref{eq:sigperp}.
+For $t\in[t_n,t_{n+1}]$ and $y\in\R$ set
+\[
+u(t,y)
+:=
+\E^\Q\!\left[
+G\!\bigl(Y_{t_{n+1}}+Z_n,\,v_{t_{n+1}},\,v'_{t_{n+1}}\bigr)\,\Big|\,\mathcal G_n,\ Y_t=y
+\right],
+\]
+where $Y$ is the orthogonal log-component in \eqref{eq:Ydyn} with $Y_{t_n}=\log S_{t_n}$.
+
+Then, conditional on $\mathcal G_n$, $u$ is the bounded solution of the random-coefficient backward PDE
+\[
+\begin{cases}
+\partial_t u(t,y)+\Bigl(r-\tfrac12 v_t\Bigr)\partial_y u(t,y)
++\tfrac12\sigma_\perp^2 v_t\,\partial_{yy}u(t,y)=0,
+& (t,y)\in[t_n,t_{n+1})\times\R,\\[2pt]
+u(t_{n+1},y)=G\!\bigl(y+Z_n,\,v_{t_{n+1}},\,v'_{t_{n+1}}\bigr),
+& y\in\R.
+\end{cases}
+\]
+\end{lemma}
+
+\begin{proof}
+By \eqref{eq:orth}--\eqref{eq:Ydyn}, on $[t_n,t_{n+1}]$ we have
+\[
+\dd Y_t=\Bigl(r-\tfrac12 v_t\Bigr)\dd t+\sigma_\perp\sqrt{v_t}\,\dd B^\perp_t,
+\]
+where $B^\perp$ is a Brownian motion independent of $(W^{(2)},W^{(3)})$.
+Since the variance subsystem $(v,v')$ is driven by $(W^{(2)},W^{(3)})$, the entire path
+$t\mapsto v_t$ on $[t_n,t_{n+1}]$ is $\mathcal G_n$-measurable. Hence, conditional on $\mathcal G_n$,
+$Y$ is a time-inhomogeneous one-dimensional diffusion with \emph{deterministic} coefficients, and the
+conditional Feynman-Kac formula yields that $u$ solves the stated backward parabolic PDE with terminal
+condition at $t_{n+1}$.
+\end{proof}
+
+
+\section{Almost-sure convergence of the hybrid regression coefficients}
+\label{sec:as_convergence}
+
+This section adapts the almost-sure convergence theorem of \citet{farahany2020mixing}
+to the generalized gDMR model~\eqref{eq:gdmr}. Our goal is to (i) restate the regression coefficients
+in a self-contained manner (in the present two-factor volatility setting), and (ii) verify, in detail,
+that the structural hypotheses required by the \citet{farahany2020mixing} framework are satisfied.
+
+Throughout, we work under the risk-neutral measure $\mathbb{Q}$ and the time grid
+$\pi=\{0=t_0<t_1<\dots<t_M=T\}$ used in the Bermudan recursion.
+
+\subsection{Regression set-up and truncation conditions}
+\label{subsec:regression_truncation}
+
+Let $d_B\in\mathbb{N}$ and let
+\[
+\phi = (\phi_1,\dots,\phi_{d_B}) : [0,\infty)^2 \to \mathbb{R}^{d_B}
+\]
+be a fixed vector of basis functions in the two-factor volatility state $(v,v')$.
+Let $\mathcal{D}_v\subset [0,\infty)^2$ be a compact rectangle such that $\supp(\phi)\subset \mathcal{D}_v$,
+and let $\mathcal{S}\subset (0,\infty)$ be a compact set containing the support of every exercise function
+$h_n$ (this is the standard spatial truncation used when solving the conditional PDEs).
+
+\paragraph{Idealized continuation functions.}
+Following \citet{farahany2020mixing}, define the \emph{idealized} continuation functions by backward
+induction:
+\[
+c_M(s,v,v') \equiv 0,\qquad
+c_n(s,v,v') := a_n(s)\cdot \phi(v,v'),\qquad n=0,\dots,M-1,
+\]
+where, for $n<M$, the coefficient vector $a_n(s)\in\mathbb{R}^{d_B}$ is obtained by least-squares regression
+of the next-step value.
+Define the associated ``value functions''
+\[
+f_n(s,v,v') := \max\{h_n(s),\,c_n(s,v,v')\},\qquad n=0,\dots,M-1,
+\qquad\text{and}\qquad
+f_M(s,v,v') := h_M(s).
+\]
+
+For fixed $(n,s)$, define the conditional least-squares objective
+\begin{align}
+H_{n,s}(a)
+:=
+\mathbb{E}_{\mathbb{Q}}
+\Bigl[
+\Bigl(
+\mathbb{E}_{\mathbb{Q}}\bigl[f_{n+1}(S_{t_{n+1}},v_{t_{n+1}},v'_{t_{n+1}})
+\mid S_{t_n}=s,\,v_{t_n},\,v'_{t_n}\bigr]
+- a\cdot \phi(v_{t_n},v'_{t_n})
+\Bigr)^2
+\ \Bigm|\ S_{t_n}=s
+\Bigr].
+\label{eq:Hns}
+\end{align}
+The (idealized) coefficient vector is any minimizer
+\[
+a_n(s)\in \arg\min_{a\in\mathbb{R}^{d_B}} H_{n,s}(a).
+\]
+Under the truncation conditions below, $H_{n,s}$ is finite and the normal equations yield the explicit
+representation:
+\begin{align}
+a_n(s) = A_n^{-1}\, b_n(s),
+\qquad
+A_n := \mathbb{E}_{\mathbb{Q}}\!\Bigl[\phi(v_{t_n},v'_{t_n})\,\phi(v_{t_n},v'_{t_n})^\top\Bigr],
+\qquad
+b_n(s) := \mathbb{E}_{\mathbb{Q}}\!\Bigl[\phi(v_{t_n},v'_{t_n})\, f_{n+1}(S_{t_{n+1}},v_{t_{n+1}},v'_{t_{n+1}})
+\ \bigm|\ S_{t_n}=s\Bigr].
+\label{eq:ideal_coeff_normal_eq}
+\end{align}
+
+\paragraph{Estimated continuation functions (hybrid LSMC--PDE).}
+Let $\mathbb{Q}'$ denote the inherited sampling measure used to construct i.i.d.\ copies of the
+volatility path segments. Under $\mathbb{Q}'$, let
+$\{(v^j_{t_k},v^{\prime j}_{t_k})_{k=0}^M\}_{j\ge 1}$ be i.i.d.\ copies of the volatility skeleton, and let
+$[v^j,v^{\prime j}]_{t_n}^{t_{n+1}}$ denote the corresponding path segment on $[t_n,t_{n+1}]$.
+
+Define the estimated continuation functions recursively by
+\[
+c_M^N \equiv 0,\qquad
+c_n^N(s,v,v') := a_n^N(s)\cdot \phi(v,v'),\qquad
+f_n^N(s,v,v') := \max\{h_n(s),\,c_n^N(s,v,v')\},\qquad f_M^N := h_M.
+\]
+At time step $n$, the hybrid algorithm computes the pre-regression conditional expectations (via the
+conditional PDE) along each sampled volatility segment:
+\[
+\bar C_{n}^{\,j,N}(s)
+:=
+\mathbb{E}_{\mathbb{Q}}\!\Bigl[
+f_{n+1}^N(S_{t_{n+1}}, v^j_{t_{n+1}}, v^{\prime j}_{t_{n+1}})
+\ \Bigm|\ S_{t_n}=s,\ [v^j,v^{\prime j}]_{t_n}^{t_{n+1}}
+\Bigr].
+\]
+The regression matrix and right-hand side are then
+\[
+A_n^N := \frac1N\sum_{j=1}^N \phi(v^j_{t_n},v^{\prime j}_{t_n})\,\phi(v^j_{t_n},v^{\prime j}_{t_n})^\top,
+\qquad
+b_n^N(s) := \frac1N\sum_{j=1}^N \phi(v^j_{t_n},v^{\prime j}_{t_n})\, \bar C_{n}^{\,j,N}(s),
+\]
+and the (truncated) hybrid regression coefficient is
+\begin{align}
+a_n^N(s) := \bigl[A_n^N\bigr]^{-1}_R\, b_n^N(s),
+\qquad
+\bigl[A_n^N\bigr]^{-1}_R := \bigl[A_n^N\bigr]^{-1}\,
+\mathbf{1}_{\{\|[A_n^N]^{-1}\|\le R\}},
+\label{eq:estimated_coeff}
+\end{align}
+for a fixed truncation constant $R>0$ chosen as in the standard truncation scheme.  Using $\mathbf{1}_{\{\|[A_n^N]^{-1}\|\le R\}}$ is ensuring uniform boundedness of
+the inverse.
+\medskip
+
+
+\begin{assumption}[Truncation conditions]
+\label{ass:truncation}
+\begin{enumerate}
+\item The basis functions $\{\phi_m\}_{m=1}^{d_B}$ are bounded and supported on the compact rectangle
+$\mathcal{D}_v\subset [0,\infty)^2$.
+\item For each $n$, the exercise function $h_n$ is bounded and has compact support contained in $\mathcal{S}\subset(0,\infty)$.
+\item The regression inverse is truncated as in \eqref{eq:estimated_coeff} for some $R>0$, so that
+$\sup_{n\le M-1,\,N\ge 1}\|[A_n^N]^{-1}_R\| <\infty$ holds $\mathbb{Q}'$-a.s.
+\end{enumerate}
+\end{assumption}
+
+\noindent\textbf{Remark}
+Item 2) holds automatically on any finite PDE grid because $h_n$ is evaluated only on the truncated domain
+$\mathcal{S}$ ($[s_{\min},s_{max}]$). For common payoffs without compact support (e.g.\ put), one may apply a standard cutoff:
+truncate the payoff beyond a large threshold and extend continuously to $0$ outside a slightly larger threshold. Likewise, common bases (polynomials,
+etc.) may be multiplied by a smooth cutoff so that $\supp(\phi)\subset\mathcal{D}_v$ while keeping $\mathcal{D}_v$.
+
+\subsection{Separability and finite-dimensional path statistics}
+\label{subsec:separability}
+
+The almost-sure convergence proof of \citet{farahany2020mixing} relies on separability of the asset dynamics and on the
+fact that the conditional expectations used in the hybrid algorithm depend on each volatility path segment only
+through a \emph{finite-dimensional} statistic.
+
+\begin{proposition}[Multiplicative return representation]
+\label{prop:multiplicative_return}
+Fix $0\le t<u\le T$. The solution of~\eqref{eq:gdmr} satisfies
+\[
+S_u = S_t\,R_{t,u},
+\qquad
+R_{t,u} := \exp\!\left(\int_t^u\Bigl(r-\tfrac12 v_s\Bigr)\,ds + \int_t^u \sqrt{v_s}\,dW^{(1)}_s\right).
+\]
+In particular, for fixed $(t,u)$, the factor $R_{t,u}$ does not depend on the value of $S_t$.
+\end{proposition}
+
+\begin{proof}
+Apply the explicit stochastic exponential representation for $S$ from Theorem~\ref{thm:wellposed} on $[t,u]$.
+\end{proof}
+
+\begin{assumption}[Separability conditions]
+\label{ass:separability}
+\begin{enumerate}
+\item $S_t>0$ for all $t\in[0,T]$ almost surely.
+\item For each exercise step $n$, if $S_{t_n}=s$ then $S_{t_{n+1}}=s\,R_n$, where $R_n$ does not depend on $s$.
+\item The exercise functions $h_n$ are continuous with compact support in $(0,\infty)$, and the basis functions
+$\phi$ are continuous with compact support in $[0,\infty)^2$.
+\end{enumerate}
+\end{assumption}
+
+\noindent\textbf{Comment.}
+Assumption~\ref{ass:separability}(1)--(2) is a model property: it holds for~\eqref{eq:gdmr} by Theorem~\ref{thm:wellposed}
+and Proposition~\ref{prop:multiplicative_return}. Assumption~\ref{ass:separability}
+
+
+
+\subsection{Main convergence theorem}
+\label{subsec:main_convergence}
+
+\begin{theorem}[Almost-sure coefficient convergence for the gDMR model]
+\label{thm:as_coeff_convergence}
+Assume Assumption~\ref{ass:delta-range}, and Assumptions~\ref{ass:truncation}
+and~\ref{ass:separability}. Fix $n\in\{0,\dots,M-1\}$ and $s\in\mathcal{S}$.
+Let $a_n(s)$ be the idealized coefficient vector defined by \eqref{eq:Hns}--\eqref{eq:ideal_coeff_normal_eq}, and let
+$a_n^N(s)$ be the hybrid LSMC--PDE estimator defined by \eqref{eq:estimated_coeff} from $N$ i.i.d.\ volatility samples
+under the inherited sampling measure $\mathbb{Q}'$.
+Then
+\[
+\lim_{N\to\infty} \bigl\|a_n^N(s)-a_n(s)\bigr\| = 0
+\qquad \mathbb{Q}'\text{-almost surely}.
+\]
+Consequently, the estimated continuation functions
+$c_n^N(s,v,v') := a_n^N(s)\cdot\phi(v,v')$ converge \emph{uniformly} on the truncation set $\mathcal{D}_v$:
+\[
+\lim_{N\to\infty}\ \sup_{(v,v')\in\mathcal{D}_v}
+\bigl|c_n^N(s,v,v')-c_n(s,v,v')\bigr| = 0,
+\qquad \mathbb{Q}'\text{-almost surely}.
+\]
+In particular, $f_n^N(s,v,v')=\max\{h_n(s),c_n^N(s,v,v')\}$ converges uniformly to $f_n(s,v,v')$ on $\mathcal{D}_v$.
+\end{theorem}
+
+\begin{proof}
+We verify the hypotheses of the almost-sure convergence theorem of \citet{farahany2020mixing}
+in the present two-factor volatility setting.
+
+\smallskip
+\noindent\emph{Pure stochastic volatility / one-way coupling.}
+By construction, the volatility subsystem $(v_t,v'_t)$ is autonomous and does not depend on $S$.
+Hence, volatility path segments can be sampled independently of the current asset level, and the inherited sampling space
+$\bigl(\Omega',\mathcal{F}',\mathbb{Q}'\bigr)$ of \citet{farahany2020mixing} applies.
+
+\smallskip
+\noindent\emph{Well-posedness.}
+Under Assumption~\ref{ass:delta-range}, Theorem~\ref{thm:wellposed} yields a unique strong solution of~\eqref{eq:gdmr} with
+$S_t>0$ and $v_t,v'_t\ge 0$ on $[0,T]$ almost surely. This provides the basic existence/uniqueness and positivity required by the framework.
+
+\smallskip
+\noindent\emph{Truncation scheme.}
+Assumption~\ref{ass:truncation} is exactly the truncation scheme used in \cite{farahany2020mixing}: bounded compactly supported
+payoff/basis functions make the objectives \eqref{eq:Hns} finite, and the truncated inverse $[A_n^N]^{-1}_R$ makes $a_n^N(s)$
+well-defined and uniformly bounded in $(n,N)$.
+
+\smallskip
+\noindent\emph{Separability.}
+Assumption~\ref{ass:separability}(1) holds by positivity of $S$ from Theorem~\ref{thm:wellposed}.
+Assumption~\ref{ass:separability}(2) holds by Proposition~\ref{prop:multiplicative_return} with $R_n=R_{t_n,t_{n+1}}$.
+Assumption~\ref{ass:separability}(3) is imposed by truncation and matches the compact-support setting required in \cite{farahany2020mixing}.
+
+\smallskip
+\noindent\emph{Apply Farahany et al.}
+Having verified one-way coupling, truncation, separability, and the finite-statistic property, we may invoke
+Theorem 1 of \citet{farahany2020mixing}(with volatility state $(v_{t_n},v'_{t_n})\in[0,\infty)^2$) to conclude that
+$\|a_n^N(s)-a_n(s)\|\to 0$ $\mathbb{Q}'$-almost surely.
+
+Uniform convergence of $c_n^N(s,\cdot,\cdot)$ on $\mathcal{D}_v$ follows immediately from boundedness of $\phi$ on $\mathcal{D}_v$:
+\[
+\sup_{(v,v')\in\mathcal{D}_v} |(a_n^N(s)-a_n(s))\cdot\phi(v,v')|
+\le \|a_n^N(s)-a_n(s)\|\ \sup_{(v,v')\in\mathcal{D}_v}\|\phi(v,v')\|.
+\]
+Finally, uniform convergence of $f_n^N$ follows from the $1$-Lipschitz property of $x\mapsto \max\{h_n(s),x\}$.
+\end{proof}
+
+
+
+
+\section{A hybrid LSMC-PDE methodology for the gDMR model}
+\label{sec:hybrid-method}
+
+This section summarizes a computational hybrid method for Bermudan pricing under the one-way coupled
+gDMR model \eqref{eq:gdmr}. The method follows the mixed LSMC-PDE philosophy of Farahany et al.~\citet{farahany2020mixing}:
+(i) simulate the autonomous volatility factors, (ii) compute the \emph{one-step} conditional expectations in the Snell recursion by
+solving a \emph{one-dimensional} random-coefficient PDE in the log-price variable along each sampled volatility path, producing a smooth
+\emph{pre-surface} over the asset grid, and (iii) regress these pre-surface values across volatility states to obtain a completed
+continuation-value surface over the volatility state space.
+
+\subsection{Discretization and regression ansatz}
+Let $\pi=\{0=t_0<\cdots<t_M=T\}$ be the Bermudan exercise grid and $(h_n)_{n=0}^M$ the (bounded, compactly supported) exercise payoff functions.
+We fix a spatial grid of asset values
+\[
+\mathcal S := \{s_1,\dots,s_{N_{\mathcal S}}\}\subset (0,\infty),\qquad y_i:=\log s_i,
+\]
+which is used by the conditional PDE solver in log-space. We also fix a truncation rectangle $D_v\subset[0,\infty)^2$ in the volatility
+state space and choose $d_B$ bounded basis functions
+\[
+\phi=(\phi_1,\dots,\phi_{d_B}) \quad\text{supported on }D_v.
+\]
+Following Farahany et al.~\citet{farahany2020mixing}, we approximate the continuation value at time $t_n$ in the separable form
+\begin{equation}
+c_n(s,v,v') \approx a_n(s)\cdot \phi(v,v'),\qquad a_n(s)\in\mathbb R^{d_B}.
+\label{eq:sep-ansatz}
+\end{equation}
+In practice we compute $a_n(s)$ only on the grid $s\in\mathcal S$, and use interpolation in $s$ when evaluating the approximation at
+off-grid asset values.
+
+We truncate the volatility state space by fixing a compact rectangle 
+$D_v=[0,\bar v]\times[0,\bar v']\subset[0,\infty)^2$, where $\bar v,\bar v'$ are chosen as high empirical quantiles of $\{(v_{t_n}^j,(v_{t_n}')^j)\}$ from the volatility simulation.
+
+
+\subsection{Pathwise conditional PDE step and pre-surfaces}
+Fix a time index $n\in\{0,\dots,M-1\}$ and assume we have already constructed an approximation $\widehat V_{n+1}$ of the value function at
+$t_{n+1}$ on $\mathcal S\times D_v$. For each Monte Carlo sample $j\in\{1,\dots,N\}$ we simulate a volatility path segment on $[t_n,t_{n+1}]$,
+\[
+\bigl(v_t^{\,j},(v_t')^{\,j}\bigr)_{t\in[t_n,t_{n+1}]},
+\]
+using a fine internal time discretization on the interval.
+Along with the volatility segment we compute the pathwise correlated shift
+\begin{equation}
+Z_n^{\,j}
+:=\int_{t_n}^{t_{n+1}} \sqrt{v_s^{\,j}}\bigl(\beta_2\,dW_s^{(2),j}+\beta_3\,dW_s^{(3),j}\bigr),
+\label{eq:Zn}
+\end{equation}
+where $\beta_2,\beta_3$ are given by \eqref{eq:proj-coeffs} and $\sigma_\perp$ by \eqref{eq:sigperp}.
+By Lemma~\ref{lem:cond-PDE} (Section~\ref{sec:conditional_pde}), conditional on the volatility drivers on $[t_n,t_{n+1}]$ the orthogonalized
+log-price component $Y$ evolves as a one-dimensional diffusion with deterministic coefficients,
+\[
+dY_t = \Bigl(r-\tfrac12 v_t^{\,j}\Bigr)\,dt + \sigma_\perp\sqrt{v_t^{\,j}}\,dB_t^\perp,\qquad t\in[t_n,t_{n+1}],
+\]
+and the conditional expectation required for the continuation value may be written as the solution of a backward parabolic PDE in $(t,y)$.
+Concretely, define the terminal function on log-space by
+\[
+g_{n+1}^{\,j}(y) := \widehat V_{n+1}\bigl(e^{y},\,v_{t_{n+1}}^{\,j},\,(v_{t_{n+1}}')^{\,j}\bigr),
+\]
+and let $u_n^{\,j}(t,y)$ denote the conditional expectation
+\[
+u_n^{\,j}(t,y)
+:= \mathbb E^{\mathbb Q}\!\left[g_{n+1}^{\,j}\bigl(Y_{t_{n+1}} + Z_n^{\,j}\bigr)\,\big|\,Y_t=y,\ (v^{\,j},(v')^{\,j})_{t_n}^{t_{n+1}}\right].
+\]
+Then $u_n^{\,j}$ satisfies, on $[t_n,t_{n+1})\times\mathbb R$,
+\begin{equation}
+\partial_t u + \Bigl(r-\tfrac12 v_t^{\,j}\Bigr)\partial_y u + \tfrac12 \sigma_\perp^2 v_t^{\,j}\,\partial_{yy}u = 0,
+\qquad
+u(t_{n+1},y) = g_{n+1}^{\,j}(y+Z_n^{\,j}).
+\label{eq:pathwise-pde}
+\end{equation}
+The \emph{pre-surface} is obtained by evaluating the PDE solution at $t=t_n$ on the spatial grid:
+\begin{equation}
+\widehat C_n^{\,j}(s_i)
+:= e^{-r\Delta t_n}\,u_n^{\,j}(t_n,y_i),
+\qquad i=1,\dots,N_{\mathcal S},
+\label{eq:presurface}
+\end{equation}
+where $\Delta t_n=t_{n+1}-t_n$. This provides, for each volatility sample $j$, a smooth function of $s\in\mathcal S$.
+
+Because \eqref{eq:pathwise-pde} has coefficients depending only on time (through $v_t^{\,j}$), it is translation-invariant in $y$ and admits
+a closed-form solution in Fourier space (cf.\ Farahany et al.~\cite{farahany2020mixing}). Let
+\[
+A_n^{\,j}:=\int_{t_n}^{t_{n+1}}\Bigl(r-\tfrac12 v_s^{\,j}\Bigr)\,ds,
+\qquad
+B_n^{\,j}:=\sigma_\perp^2\int_{t_n}^{t_{n+1}} v_s^{\,j}\,ds.
+\]
+Taking the Fourier transform in $y$ reduces the PDE to an ODE in time, yielding the characteristic exponent
+\[
+\Psi_n^{\,j}(\omega)
+:= i\omega Z_n^{\,j} + i\omega A_n^{\,j} - \tfrac12 \omega^2 B_n^{\,j}.
+\]
+On a uniform log-grid in $y$, FST computes the recursion
+\begin{equation}
+u_n^{\,j}(t_n,\cdot)\ \approx\ \mathrm{FFT}^{-1}\!\left(\mathrm{FFT}[g_{n+1}^{\,j}]\,\exp(\Psi_n^{\,j})\right),
+\label{eq:fst-recursion}
+\end{equation}
+where the exponential is applied pointwise in Fourier space. In the present one-dimensional setting this produces all values
+$u_n^{\,j}(t_n,y_i)$ simultaneously, after the pathwise scalars
+$(Z_n^{\,j},A_n^{\,j},B_n^{\,j})$ have been computed from the volatility discretization.
+
+\subsection{Regression across volatility states and backward recursion}
+Having computed the pre-surface realizations $\{\widehat C_n^{\,j}(s_i)\}_{j=1}^N$ at each fixed $s_i\in\mathcal S$, we regress across the
+volatility states at time $t_n$ to complete the continuation surface. Specifically, for each $s_i$ we compute
+\begin{equation}
+a_n^{N}(s_i)\in \arg\min_{a\in\mathbb R^{d_B}}
+\sum_{j=1}^N \Bigl|\widehat C_n^{\,j}(s_i) - a\cdot \phi\bigl(v_{t_n}^{\,j},(v_{t_n}')^{\,j}\bigr)\Bigr|^2.
+\label{eq:lsq}
+\end{equation}
+
+
+The resulting completed continuation-value surface on the grid is
+\[
+\widehat C_n^{N}(s_i,v,v') := a_n^{N}(s_i)\cdot \phi(v,v'),
+\]
+and the value approximation at time $t_n$ is given by the Bermudan recursion
+\[
+\widehat V_n^{N}(s_i,v,v') := \max\{h_n(s_i),\,\widehat C_n^{N}(s_i,v,v')\}.
+\]
+Starting from $\widehat V_M^{N}(s_i,v,v'):=h_M(s_i)$ and iterating backward for $n=M-1,\dots,1$ produces an approximation of the value and
+continuation surfaces on $\mathcal S\times D_v$. If we consider the Bermudan put option, then $h_n(s)=(K-s)^{+} \quad$ for all exercise dates $t_n$.
+
+\subsection{Time-zero estimators (direct and low)}
+At time $t_0=0$ the volatility state $(v_0,v_0')$ is fixed, so the time-zero continuation value may be estimated by averaging the first-step
+pre-surface values:
+\[
+\widehat C_0(s_i):=\frac1N\sum_{j=1}^N \widehat C_0^{\,j}(s_i),
+\qquad i=1,\dots,N_{\mathcal S},
+\]
+and defining the \emph{direct} estimator
+\[
+\widehat V_{d,0}(s_i) := \max\{h_0(s_i),\,\widehat C_0(s_i)\}.
+\]
+
+
+To obtain a (typically) low-biased estimator, we use the estimated continuation surfaces to define a suboptimal stopping rule on the exercise
+grid. For an off-grid state $(S_{t_n},v_{t_n},v_{t_n}')$, evaluate $\widehat C_n^{N}(S_{t_n},v_{t_n},v_{t_n}')$ by interpolating $a_n^{N}(\cdot)$
+in $s$ and forming the dot product with $\phi(v_{t_n},v_{t_n}')$. Define the stopping index
+\[
+\tau^{N} := \inf\Bigl\{n\in\{0,\dots,M\}: h_n(S_{t_n}) \ge \widehat C_n^{N}(S_{t_n},v_{t_n},v_{t_n}')\Bigr\},
+\]
+with the convention that $\tau^{N}=M$ if the set is empty. Simulating $N_{\mathrm{low}}$ independent sample paths of the full state process on
+the exercise grid and applying this policy yields the \emph{low} estimator
+\[
+\widehat V_{l,0} := \frac1{N_{\mathrm{low}}}\sum_{k=1}^{N_{\mathrm{low}}} e^{-r t_{\tau_k^{N}}}\,h_{\tau_k^{N}}\bigl(S_{t_{\tau_k^{N}}}^{(k)}\bigr).
+\]
+
+
+\subsection{Algorithmic summary}
+\label{subsec:algorithmic-summary}
+The numerical implementation used in Section~\ref{sec:numerical} follows the backward recursion above. The main computational steps are summarized below in the notation of this section. The time-zero direct estimator is the estimator reported in the numerical experiments.
+\begin{center}
+\begin{minipage}{0.96\textwidth}
+\small
+\noindent\textbf{Hybrid LSMC--PDE recursion.}
+\begin{enumerate}
+\item Simulate $N$ paths of the autonomous volatility subsystem $(v^j,(v')^j)$ on the Euler grid. For each exercise interval $[t_n,t_{n+1}]$, store the pathwise quantities $Z_n^{\,j}$, $A_n^{\,j}$, and $B_n^{\,j}$ appearing in \eqref{eq:Zn} and \eqref{eq:fst-recursion}.
+\item Initialize the terminal surface by setting $\widehat V_M^{N}(s_i,v,v')=h_M(s_i)$ on $\mathcal S\times D_v$.
+\item For $n=M-1,\dots,1$, repeat the following backward step:
+\begin{enumerate}
+\item for each volatility path $j$, compute the pre-surface $\widehat C_n^{\,j}(s_i)$ on the log-asset grid by the conditional PDE/Fourier step \eqref{eq:pathwise-pde}--\eqref{eq:fst-recursion}, with the zero-variance case interpreted as the corresponding deterministic shift on the log grid;
+\item for each asset grid point $s_i$, regress the pre-surface values across the volatility states according to \eqref{eq:lsq}, obtaining $a_n^N(s_i)$;
+\item form the completed continuation surface $\widehat C_n^{N}(s_i,v,v')=a_n^N(s_i)\cdot\phi(v,v')$ and update $\widehat V_n^{N}(s_i,v,v')=\max\{h_n(s_i),\widehat C_n^{N}(s_i,v,v')\}$.
+\end{enumerate}
+\item At time zero, compute the first-step pre-surfaces $\widehat C_0^{\,j}(s_i)$, average them over the simulated volatility paths, interpolate at the initial spot if necessary, and report
+\[
+\widehat V_{d,0}(S_0)
+=
+\max\left\{h_0(S_0),\frac1N\sum_{j=1}^N \widehat C_0^{\,j}(S_0)\right\}.
+\]
+\item For benchmark comparison, compute the plain LSMC direct estimator under the same contract and model specification, and report direct prices, standard errors, confidence intervals, and relative errors with respect to the high-resolution LSMC reference values.
+\end{enumerate}
+\end{minipage}
+\end{center}
+
+
+\input{sections/numerical_studies}
+
+\section{Conclusion}\label{sec:conclusion}
+
+
+
+\section*{Acknowledgments}
+The authors thank Anatoliy Malyarenko for helpful discussions.
+
+\section*{Declarations}
+
+The following statements provide the administrative declarations required for the manuscript.
+
+\subsection*{Funding}
+Not applicable.
+
+\subsection*{Conflicts of interest/Competing interests}
+The authors declare that they have no competing interests.
+
+\subsection*{Availability of data and materials}
+Not applicable.
+
+\subsection*{Code availability}
+/
+
+\subsection*{Authors' contributions}
+To be written.  All authors read and approved the final manuscript.
+
+\bibliography{references}
+
+\end{document}

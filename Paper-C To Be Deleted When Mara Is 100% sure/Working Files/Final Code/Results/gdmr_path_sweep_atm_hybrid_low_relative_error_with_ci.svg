@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1260" height="800" viewBox="0 0 1260 800">
+<rect width="100%" height="100%" fill="#f3efe7"/>
+<rect x="30" y="28" width="1200" height="744" rx="28" fill="#fffdf9" stroke="#ddd4c6"/>
+<text x="72" y="88" font-family="Segoe UI, Arial, sans-serif" font-size="31" font-weight="700" fill="#17202a">ATM put: Hybrid LSMC-PDE with FFT low relative error</text>
+<text x="72" y="118" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#475569">Reference taken from bgk_gdmr_comparison.md; only the Hybrid LSMC-PDE with FFT low curve is shown here.</text>
+<text x="72" y="146" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#64748b">BGK ATM setup with S0 = 100, K = 100, exercise dates = 100, Euler steps = 100.</text>
+<text x="72" y="174" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#64748b">Relative errors are measured against the fixed ATM put benchmark low reference. Pointwise 95% CI bars shown.</text>
+<line x1="115" y1="250" x2="115" y2="620" stroke="#334155" stroke-width="1.6"/>
+<line x1="115" y1="620" x2="1150" y2="620" stroke="#334155" stroke-width="1.6"/>
+<line x1="115" y1="620.00" x2="1150" y2="620.00" stroke="#ece5d8" stroke-width="1"/>
+<text x="103" y="625.00" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">0.00%</text>
+<line x1="115" y1="546.00" x2="1150" y2="546.00" stroke="#ece5d8" stroke-width="1"/>
+<text x="103" y="551.00" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">10.93%</text>
+<line x1="115" y1="472.00" x2="1150" y2="472.00" stroke="#ece5d8" stroke-width="1"/>
+<text x="103" y="477.00" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">21.86%</text>
+<line x1="115" y1="398.00" x2="1150" y2="398.00" stroke="#ece5d8" stroke-width="1"/>
+<text x="103" y="403.00" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">32.79%</text>
+<line x1="115" y1="324.00" x2="1150" y2="324.00" stroke="#ece5d8" stroke-width="1"/>
+<text x="103" y="329.00" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">43.72%</text>
+<line x1="115" y1="250.00" x2="1150" y2="250.00" stroke="#ece5d8" stroke-width="1"/>
+<text x="103" y="255.00" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">54.64%</text>
+<line x1="115.00" y1="250" x2="115.00" y2="620" stroke="#f3eee4" stroke-width="1"/>
+<text x="115.00" y="644" text-anchor="end" transform="rotate(-35 115.00 644)" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">50</text>
+<line x1="334.15" y1="250" x2="334.15" y2="620" stroke="#f3eee4" stroke-width="1"/>
+<text x="334.15" y="644" text-anchor="end" transform="rotate(-35 334.15 644)" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">250</text>
+<line x1="428.54" y1="250" x2="428.54" y2="620" stroke="#f3eee4" stroke-width="1"/>
+<text x="428.54" y="644" text-anchor="end" transform="rotate(-35 428.54 644)" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">500</text>
+<line x1="522.92" y1="250" x2="522.92" y2="620" stroke="#f3eee4" stroke-width="1"/>
+<text x="522.92" y="644" text-anchor="end" transform="rotate(-35 522.92 644)" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">1,000</text>
+<line x1="742.08" y1="250" x2="742.08" y2="620" stroke="#f3eee4" stroke-width="1"/>
+<text x="742.08" y="644" text-anchor="end" transform="rotate(-35 742.08 644)" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">5,000</text>
+<line x1="836.46" y1="250" x2="836.46" y2="620" stroke="#f3eee4" stroke-width="1"/>
+<text x="836.46" y="644" text-anchor="end" transform="rotate(-35 836.46 644)" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">10,000</text>
+<line x1="930.85" y1="250" x2="930.85" y2="620" stroke="#f3eee4" stroke-width="1"/>
+<text x="930.85" y="644" text-anchor="end" transform="rotate(-35 930.85 644)" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">20,000</text>
+<line x1="1055.62" y1="250" x2="1055.62" y2="620" stroke="#f3eee4" stroke-width="1"/>
+<text x="1055.62" y="644" text-anchor="end" transform="rotate(-35 1055.62 644)" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">50,000</text>
+<line x1="1119.61" y1="250" x2="1119.61" y2="620" stroke="#f3eee4" stroke-width="1"/>
+<text x="1119.61" y="644" text-anchor="end" transform="rotate(-35 1119.61 644)" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">80,000</text>
+<line x1="1150.00" y1="250" x2="1150.00" y2="620" stroke="#f3eee4" stroke-width="1"/>
+<text x="1150.00" y="644" text-anchor="end" transform="rotate(-35 1150.00 644)" font-family="Segoe UI, Arial, sans-serif" font-size="11" fill="#64748b">100,000</text>
+<text x="37" y="435.00" transform="rotate(-90 37 435.00)" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#475569">Relative error</text>
+<text x="632.50" y="672" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#475569">Number of paths (log scale)</text>
+<line x1="72" y1="210" x2="106" y2="210" stroke="#d97706" stroke-width="4"/>
+<circle cx="89" cy="210" r="5.5" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<text x="118" y="215" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#334155">Hybrid LSMC-PDE with FFT</text>
+<polyline fill="none" stroke="#d97706" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" points="115.00,498.64 334.15,543.64 428.54,606.25 522.92,577.17 742.08,602.48 836.46,614.66 930.85,608.93 1055.62,613.62 1119.61,617.86 1150.00,616.62"/>
+<line x1="115.00" y1="298.26" x2="115.00" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="109.00" y1="298.26" x2="121.00" y2="298.26" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="109.00" y1="620.00" x2="121.00" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<circle cx="115.00" cy="498.64" r="5.8" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<line x1="334.15" y1="426.09" x2="334.15" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="328.15" y1="426.09" x2="340.15" y2="426.09" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="328.15" y1="620.00" x2="340.15" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<circle cx="334.15" cy="543.64" r="5.8" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<line x1="428.54" y1="528.30" x2="428.54" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="422.54" y1="528.30" x2="434.54" y2="528.30" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="422.54" y1="620.00" x2="434.54" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<circle cx="428.54" cy="606.25" r="5.8" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<line x1="522.92" y1="521.07" x2="522.92" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="516.92" y1="521.07" x2="528.92" y2="521.07" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="516.92" y1="620.00" x2="528.92" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<circle cx="522.92" cy="577.17" r="5.8" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<line x1="742.08" y1="576.17" x2="742.08" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="736.08" y1="576.17" x2="748.08" y2="576.17" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="736.08" y1="620.00" x2="748.08" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<circle cx="742.08" cy="602.48" r="5.8" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<line x1="836.46" y1="595.23" x2="836.46" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="830.46" y1="595.23" x2="842.46" y2="595.23" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="830.46" y1="620.00" x2="842.46" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<circle cx="836.46" cy="614.66" r="5.8" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<line x1="930.85" y1="595.18" x2="930.85" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="924.85" y1="595.18" x2="936.85" y2="595.18" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="924.85" y1="620.00" x2="936.85" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<circle cx="930.85" cy="608.93" r="5.8" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<line x1="1055.62" y1="604.99" x2="1055.62" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="1049.62" y1="604.99" x2="1061.62" y2="604.99" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="1049.62" y1="620.00" x2="1061.62" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<circle cx="1055.62" cy="613.62" r="5.8" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<line x1="1119.61" y1="611.14" x2="1119.61" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="1113.61" y1="611.14" x2="1125.61" y2="611.14" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="1113.61" y1="620.00" x2="1125.61" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<circle cx="1119.61" cy="617.86" r="5.8" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+<line x1="1150.00" y1="610.67" x2="1150.00" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="1144.00" y1="610.67" x2="1156.00" y2="610.67" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<line x1="1144.00" y1="620.00" x2="1156.00" y2="620.00" stroke="#d97706" stroke-width="2.0" opacity="0.82"/>
+<circle cx="1150.00" cy="616.62" r="5.8" fill="#d97706" stroke="#fffdf9" stroke-width="2"/>
+</svg>

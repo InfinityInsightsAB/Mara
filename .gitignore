@@ -38,5 +38,6 @@ venv/
 *.vrb
 **/build/
 
-# Existing legacy repo/data folder
-Paper-C To Be Deleted When Mara Is 100% sure/
+# Track this retained archive folder despite the broad rules above.
+!Paper-C To Be Deleted When Mara Is 100% sure/
+!Paper-C To Be Deleted When Mara Is 100% sure/**

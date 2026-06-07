@@ -1,0 +1,394 @@
+from __future__ import annotations
+
+import csv
+import hashlib
+import json
+import math
+from pathlib import Path
+from typing import Any
+
+import matplotlib
+
+matplotlib.use("Agg")
+
+import matplotlib.pyplot as plt
+from matplotlib.lines import Line2D
+
+
+RUN_ROOT = Path(__file__).resolve().parents[1]
+CONFIG_PATH = RUN_ROOT / "config" / "rerun_config.json"
+RESULTS_DIR = RUN_ROOT / "results"
+REFERENCE_DIR = RESULTS_DIR / "reference_values"
+PATH_REFERENCE_DIR = REFERENCE_DIR / "path_sweep"
+PLOT_DATA_DIR = RESULTS_DIR / "plot_data"
+FIGURE_DIR = RUN_ROOT / "figures"
+TABLE_DIR = RUN_ROOT / "tables"
+METADATA_DIR = RESULTS_DIR / "metadata"
+CASE_ID = "bgk_r02_t1_delta05_nex12"
+BENCHMARK_CSV = REFERENCE_DIR / f"{CASE_ID}_benchmark_steps1200_paths1200000_table.csv"
+ASSET_MANIFEST = METADATA_DIR / f"{CASE_ID}_asset_manifest.csv"
+
+METHODS = [
+    ("benchmark", "LSMC", "#1f4e79", "o"),
+    ("hybrid", "Hybrid LSMC-PDE", "#c4601a", "s"),
+]
+MANIFEST_FIELDS = ["kind", "source_path", "destination_path", "sha256", "settings", "notes"]
+
+
+def load_config() -> dict[str, Any]:
+    return json.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+
+
+def read_rows(path: Path) -> list[dict[str, str]]:
+    with path.open("r", newline="", encoding="utf-8") as handle:
+        return list(csv.DictReader(handle))
+
+
+def write_rows(path: Path, fieldnames: list[str], rows: list[dict[str, Any]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", newline="", encoding="utf-8") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames)
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({field: row.get(field, "") for field in fieldnames})
+
+
+def file_hash(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def record(manifest: list[dict[str, str]], kind: str, source: str | Path, dest: Path, settings: str, notes: str) -> None:
+    manifest.append(
+        {
+            "kind": kind,
+            "source_path": str(source),
+            "destination_path": str(dest),
+            "sha256": file_hash(dest) if dest.exists() else "",
+            "settings": settings,
+            "notes": notes,
+        }
+    )
+
+
+def path_csv_path(slug: str, euler_steps: int) -> Path:
+    return PATH_REFERENCE_DIR / f"{CASE_ID}_path_sweep_{slug}_steps{euler_steps}_direct_ref1200_paths1200000_table.csv"
+
+
+def plot_csv_path(slug: str, euler_steps: int, method: str) -> Path:
+    return PLOT_DATA_DIR / f"{CASE_ID}_path_sweep_steps{euler_steps}_{slug}_{method}.csv"
+
+
+def finite(value: Any) -> float:
+    out = float(value)
+    if not math.isfinite(out):
+        raise ValueError(f"Non-finite value {value}")
+    return out
+
+
+def ci_bounds(value: float, se: float) -> tuple[float, float]:
+    return value - 1.96 * se, value + 1.96 * se
+
+
+def fmt_int(value: int | str) -> str:
+    return f"{int(value):,}"
+
+
+def fmt_pct(value: str) -> str:
+    return f"{100.0 * finite(value):.3f}\\%"
+
+
+def fmt_price(value: str | float) -> str:
+    return f"{finite(value):.3f}"
+
+
+def validate_sources(config: dict[str, Any]) -> None:
+    benchmark_rows = read_rows(BENCHMARK_CSV)
+    if len(benchmark_rows) != 5:
+        raise ValueError(f"benchmark row count should be 5, got {len(benchmark_rows)}")
+    expected_strikes = {int(item["K"]) for item in config["strikes"]}
+    if {int(float(row["K"])) for row in benchmark_rows} != expected_strikes:
+        raise ValueError("benchmark strikes are incomplete")
+    for path_budget in config["step_sweep"]["paths"]:
+        path = REFERENCE_DIR / f"{CASE_ID}_step_sweep_all_ref1200_direct_samepaths{int(path_budget)//1000}k_s24487296_table.csv"
+        rows = read_rows(path)
+        if len(rows) != 40:
+            raise ValueError(f"{path} should have 40 rows, got {len(rows)}")
+    for scenario in config["strikes"]:
+        for euler_steps in config["path_sweep"]["steps"]:
+            rows = read_rows(path_csv_path(scenario["slug"], int(euler_steps)))
+            if len(rows) != 18:
+                raise ValueError(f"path sweep for {scenario['slug']} M={euler_steps} should have 18 rows")
+
+
+def write_plot_data(config: dict[str, Any], manifest: list[dict[str, str]]) -> None:
+    reported = {int(value) for value in config["path_sweep"]["reported_paths"]}
+    fieldnames = ["paths", "rel_error_pct", "yerr_minus_pct", "yerr_plus_pct"]
+    for euler_steps in config["path_sweep"]["steps"]:
+        for scenario in config["strikes"]:
+            source = path_csv_path(scenario["slug"], int(euler_steps))
+            rows = read_rows(source)
+            for method, _, _, _ in METHODS:
+                output: list[dict[str, Any]] = []
+                for row in rows:
+                    if row["method"] != method or int(row["paths"]) not in reported:
+                        continue
+                    rel = 100.0 * finite(row["rel_error_direct"])
+                    rel_low = 100.0 * finite(row["rel_ci_lower_direct"])
+                    rel_high = 100.0 * finite(row["rel_ci_upper_direct"])
+                    output.append(
+                        {
+                            "paths": int(row["paths"]),
+                            "rel_error_pct": f"{rel:.6f}",
+                            "yerr_minus_pct": f"{rel - rel_low:.6f}",
+                            "yerr_plus_pct": f"{rel_high - rel:.6f}",
+                        }
+                    )
+                output.sort(key=lambda item: int(item["paths"]))
+                dest = plot_csv_path(scenario["slug"], int(euler_steps), method)
+                write_rows(dest, fieldnames, output)
+                record(
+                    manifest,
+                    "plot_data",
+                    source,
+                    dest,
+                    f"{euler_steps} steps; reported path grid",
+                    f"{method} plot data for K={scenario['K']}",
+                )
+
+
+def load_plot_rows(path: Path) -> list[dict[str, float]]:
+    return [
+        {
+            "paths": finite(row["paths"]),
+            "rel_error_pct": finite(row["rel_error_pct"]),
+            "yerr_minus_pct": finite(row["yerr_minus_pct"]),
+            "yerr_plus_pct": finite(row["yerr_plus_pct"]),
+        }
+        for row in read_rows(path)
+    ]
+
+
+def rcparams() -> None:
+    plt.rcParams.update(
+        {
+            "font.family": "STIXGeneral",
+            "mathtext.fontset": "stix",
+            "font.size": 11,
+            "axes.titlesize": 12,
+            "axes.labelsize": 11,
+            "axes.linewidth": 0.8,
+            "xtick.labelsize": 9,
+            "ytick.labelsize": 10,
+            "legend.fontsize": 10,
+            "figure.dpi": 300,
+            "savefig.dpi": 300,
+        }
+    )
+
+
+def render_path_figure(config: dict[str, Any], euler_steps: int, manifest: list[dict[str, str]]) -> None:
+    rcparams()
+    reported = config["path_sweep"]["reported_paths"]
+    ymax = 0.0
+    input_paths: list[str] = []
+    for scenario in config["strikes"]:
+        for method, _, _, _ in METHODS:
+            data_path = plot_csv_path(scenario["slug"], euler_steps, method)
+            input_paths.append(str(data_path))
+            for row in load_plot_rows(data_path):
+                ymax = max(ymax, row["rel_error_pct"] + row["yerr_plus_pct"])
+    ymax = max(1.0, 1.15 * ymax)
+
+    fig, axes = plt.subplots(3, 2, figsize=(10.8, 8.4), constrained_layout=True)
+    axes_flat = axes.flatten()
+    for axis, scenario in zip(axes_flat[:5], config["strikes"]):
+        for method, label, color, marker in METHODS:
+            rows = load_plot_rows(plot_csv_path(scenario["slug"], euler_steps, method))
+            x = [row["paths"] for row in rows]
+            y = [row["rel_error_pct"] for row in rows]
+            yerr = [[row["yerr_minus_pct"] for row in rows], [row["yerr_plus_pct"] for row in rows]]
+            axis.errorbar(
+                x,
+                y,
+                yerr=yerr,
+                fmt=f"{marker}-",
+                color=color,
+                linewidth=1.4,
+                markersize=4.8,
+                capsize=3.0,
+                elinewidth=1.0,
+                markeredgewidth=0.8,
+                label=label,
+            )
+        axis.set_title(f"$K={int(scenario['K'])}$")
+        axis.set_xscale("log")
+        axis.set_xlim(220, 70000)
+        axis.set_ylim(0, ymax)
+        axis.set_xticks(reported)
+        axis.set_xticklabels([fmt_int(value) for value in reported], rotation=35, ha="right")
+        axis.grid(True, which="major", color="#d8d8d8", linewidth=0.6)
+        axis.grid(True, which="minor", color="#eeeeee", linewidth=0.4)
+        axis.set_facecolor("white")
+    legend_axis = axes_flat[5]
+    legend_axis.axis("off")
+    handles = [
+        Line2D([0], [0], color=color, marker=marker, linewidth=1.4, markersize=5.0, label=label)
+        for _, label, color, marker in METHODS
+    ]
+    legend_axis.legend(handles=handles, loc="upper left", frameon=False)
+    legend_axis.text(0.02, 0.58, "Case: r=0.02, delta1=delta2=0.5", ha="left", va="top", fontsize=10)
+    legend_axis.text(0.02, 0.40, "Benchmark: LSMC, 1200 steps, 1.2M paths", ha="left", va="top", fontsize=10)
+    legend_axis.text(0.02, 0.22, "Error bars: propagated 95% confidence intervals", ha="left", va="top", fontsize=10)
+    fig.supxlabel("Number of Paths")
+    fig.supylabel("Relative Error (%)")
+
+    stem = f"{CASE_ID}_path_sweep_steps{euler_steps}_direct_relative_error"
+    for ext in ("pdf", "png", "eps"):
+        dest = FIGURE_DIR / f"{stem}.{ext}"
+        fig.savefig(dest, format=ext if ext == "eps" else None, bbox_inches="tight")
+        record(manifest, "figure", ";".join(sorted(input_paths)), dest, f"{euler_steps}-step path sweep", f"{ext} figure")
+    plt.close(fig)
+
+
+def write_representative_table(config: dict[str, Any], manifest: list[dict[str, str]]) -> None:
+    euler_steps = 48
+    selected_path = 20_000
+    rows_by_strike: dict[str, dict[str, dict[str, str]]] = {}
+    source_paths: list[str] = []
+    for scenario in config["strikes"]:
+        source_path = path_csv_path(scenario["slug"], euler_steps)
+        source_paths.append(str(source_path))
+        source_rows = read_rows(source_path)
+        selected = {
+            row["method"]: row
+            for row in source_rows
+            if int(row["paths"]) == selected_path and row["method"] in ("benchmark", "hybrid")
+        }
+        rows_by_strike[str(scenario["K"])] = selected
+    lines = [
+        r"\begin{table}[H]",
+        r"\centering",
+        r"\caption{Representative direct metrics at $20{,}000$ paths under the sandbox fixed 48-step path sweep.}",
+        r"\label{tab:sandbox-bgk-r02-t1-delta05-nex12-path48-path20k}",
+        r"\begin{tabular}{lrrrr}",
+        r"\toprule",
+        r"Strike & LSMC price & LSMC rel. err. & Hybrid price & Hybrid rel. err. \\",
+        r"\midrule",
+    ]
+    for scenario in config["strikes"]:
+        strike = str(scenario["K"])
+        benchmark = rows_by_strike[strike]["benchmark"]
+        hybrid = rows_by_strike[strike]["hybrid"]
+        lines.append(
+            rf"${strike}$ & {finite(benchmark['price_direct']):.6f} & {fmt_pct(benchmark['rel_error_direct'])} & "
+            rf"{finite(hybrid['price_direct']):.6f} & {fmt_pct(hybrid['rel_error_direct'])} \\"
+        )
+    lines.extend([r"\bottomrule", r"\end{tabular}", r"\end{table}", ""])
+    dest = TABLE_DIR / f"{CASE_ID}_path_sweep_steps48_path20k_table.tex"
+    dest.write_text("\n".join(lines), encoding="utf-8")
+    record(manifest, "table", ";".join(source_paths), dest, "48 steps; 20k paths", "representative direct metrics")
+
+
+def write_appendix_tables(config: dict[str, Any], manifest: list[dict[str, str]]) -> None:
+    benchmark_rows = read_rows(BENCHMARK_CSV)
+    source_paths: list[str] = [str(BENCHMARK_CSV)]
+    lines = [
+        r"\section*{Sandbox Robustness Price Tables}",
+        r"\begin{table}[H]\centering",
+        r"\caption{Sandbox robustness benchmark prices. Prices are rounded to three decimals.}",
+        r"\begin{tabular}{lrrrrr}",
+        r"\toprule",
+        r"Strike & 70 & 80 & 90 & 100 & 110 \\",
+        r"\midrule",
+        "LSMC benchmark & "
+        + " & ".join(fmt_price(row["benchmark_direct_price"]) for row in sorted(benchmark_rows, key=lambda item: finite(item["K"])))
+        + r" \\",
+        r"\bottomrule",
+        r"\end{tabular}",
+        r"\end{table}",
+        "",
+    ]
+    for path_budget in config["step_sweep"]["paths"]:
+        step_path = REFERENCE_DIR / f"{CASE_ID}_step_sweep_all_ref1200_direct_samepaths{int(path_budget)//1000}k_s24487296_table.csv"
+        source_paths.append(str(step_path))
+        rows = read_rows(step_path)
+        lines.extend(
+            [
+                r"\begin{table}[H]\centering",
+                rf"\caption{{Sandbox robustness fixed-path step-sweep prices with {fmt_int(path_budget)} paths. Prices are rounded to three decimals.}}",
+                r"\begin{tabular}{lrrrr}",
+                r"\toprule",
+                r"Method/step & 24 & 48 & 72 & 96 \\",
+                r"\midrule",
+            ]
+        )
+        for scenario in config["strikes"]:
+            for method, label, _, _ in METHODS:
+                selected = [
+                    row
+                    for row in rows
+                    if int(float(row["K"])) == int(scenario["K"]) and row["method"] == method
+                ]
+                selected.sort(key=lambda row: int(row["euler_steps"]))
+                lines.append(
+                    f"{label} K={scenario['K']} & "
+                    + " & ".join(fmt_price(row["price_direct"]) for row in selected)
+                    + r" \\"
+                )
+        lines.extend([r"\bottomrule", r"\end{tabular}", r"\end{table}", ""])
+    for euler_steps in config["path_sweep"]["steps"]:
+        lines.extend(
+            [
+                r"\begin{table}[H]\centering",
+                rf"\caption{{Sandbox robustness fixed {euler_steps}-step path-sweep prices. Prices are rounded to three decimals.}}",
+                r"\begin{tabular}{lrrrrrrr}",
+                r"\toprule",
+                "Method/strike & " + " & ".join(fmt_int(path) for path in config["path_sweep"]["reported_paths"]) + r" \\",
+                r"\midrule",
+            ]
+        )
+        for scenario in config["strikes"]:
+            path_source = path_csv_path(scenario["slug"], int(euler_steps))
+            source_paths.append(str(path_source))
+            rows = read_rows(path_source)
+            for method, label, _, _ in METHODS:
+                selected = [
+                    row
+                    for row in rows
+                    if row["method"] == method and int(row["paths"]) in config["path_sweep"]["reported_paths"]
+                ]
+                selected.sort(key=lambda row: int(row["paths"]))
+                lines.append(
+                    f"{label} K={scenario['K']} & "
+                    + " & ".join(fmt_price(row["price_direct"]) for row in selected)
+                    + r" \\"
+                )
+        lines.extend([r"\bottomrule", r"\end{tabular}", r"\end{table}", ""])
+    dest = TABLE_DIR / f"{CASE_ID}_appendix_price_tables.tex"
+    dest.write_text("\n".join(lines), encoding="utf-8")
+    record(manifest, "table", ";".join(source_paths), dest, "appendix-style prices", "sandbox price tables")
+
+
+def main() -> None:
+    config = load_config()
+    PLOT_DATA_DIR.mkdir(parents=True, exist_ok=True)
+    FIGURE_DIR.mkdir(parents=True, exist_ok=True)
+    TABLE_DIR.mkdir(parents=True, exist_ok=True)
+    METADATA_DIR.mkdir(parents=True, exist_ok=True)
+    validate_sources(config)
+    manifest: list[dict[str, str]] = []
+    write_plot_data(config, manifest)
+    for euler_steps in config["path_sweep"]["steps"]:
+        render_path_figure(config, int(euler_steps), manifest)
+    write_representative_table(config, manifest)
+    write_appendix_tables(config, manifest)
+    write_rows(ASSET_MANIFEST, MANIFEST_FIELDS, manifest)
+    print(f"[assets] wrote {ASSET_MANIFEST}")
+
+
+if __name__ == "__main__":
+    main()

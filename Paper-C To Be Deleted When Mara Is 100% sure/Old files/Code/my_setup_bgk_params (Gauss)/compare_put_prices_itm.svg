@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1220" height="780" viewBox="0 0 1220 780">
+<rect width="100%" height="100%" fill="#eff3f8"/>
+<rect x="34" y="28" width="1152" height="724" rx="28" fill="#ffffff" stroke="#d8dee9"/>
+<text x="70" y="88" font-family="Segoe UI, Arial, sans-serif" font-size="31" font-weight="700" fill="#0f172a">gDMR Bermudan Put Comparison</text>
+<text x="70" y="118" font-family="Segoe UI, Arial, sans-serif" font-size="15" fill="#475569">BGK parameter block applied to the my_setup_delta_075 Gauss-Hermite gDMR workflow</text>
+<text x="70" y="142" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#64748b">Spot: 100.00   Strike: 110.00   Maturity: 1.00   Exercise dates: 100   Euler steps: 600</text>
+<text x="70" y="164" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#64748b">LSMC paths: 1,000,000   Hybrid paths: 20,000   Hybrid low paths: 20,000</text>
+<text x="70" y="186" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#64748b">Asset grid: 181 points   Range factors: 0.35 to 3.00   Hermite nodes: 64</text>
+<rect x="780" y="80" width="334" height="134" rx="18" fill="#f8fafc" stroke="#d8dee9"/>
+<text x="804" y="110" font-family="Segoe UI, Arial, sans-serif" font-size="14" font-weight="700" fill="#334155">Reference summary</text>
+<text x="804" y="136" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#475569">Reference = LSMC direct = 16.597246</text>
+<text x="804" y="160" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#475569">Hybrid direct relative error = 0.97%</text>
+<text x="804" y="184" font-family="Segoe UI, Arial, sans-serif" font-size="13" fill="#475569">Hybrid low relative error = 0.72%</text>
+<rect x="1010" y="146" width="78" height="28" rx="14" fill="#166534" opacity="0.92"/>
+<text x="1049" y="165" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" font-weight="700" fill="#ffffff">PASS 1.00%</text>
+<line x1="120" y1="205" x2="120" y2="590" stroke="#334155" stroke-width="1.5"/>
+<line x1="120" y1="590" x2="1080" y2="590" stroke="#334155" stroke-width="1.5"/>
+<line x1="120" y1="590.00" x2="1080" y2="590.00" stroke="#e2e8f0" stroke-width="1"/>
+<text x="106" y="595.00" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">16.1937</text>
+<line x1="120" y1="513.00" x2="1080" y2="513.00" stroke="#e2e8f0" stroke-width="1"/>
+<text x="106" y="518.00" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">16.4116</text>
+<line x1="120" y1="436.00" x2="1080" y2="436.00" stroke="#e2e8f0" stroke-width="1"/>
+<text x="106" y="441.00" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">16.6295</text>
+<line x1="120" y1="359.00" x2="1080" y2="359.00" stroke="#e2e8f0" stroke-width="1"/>
+<text x="106" y="364.00" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">16.8474</text>
+<line x1="120" y1="282.00" x2="1080" y2="282.00" stroke="#e2e8f0" stroke-width="1"/>
+<text x="106" y="287.00" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">17.0652</text>
+<line x1="120" y1="205.00" x2="1080" y2="205.00" stroke="#e2e8f0" stroke-width="1"/>
+<text x="106" y="210.00" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">17.2831</text>
+<line x1="120" y1="447.39" x2="1080" y2="447.39" stroke="#16a34a" stroke-width="2" stroke-dasharray="8 6" opacity="0.95"/>
+<text x="1072" y="437.39" text-anchor="end" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#166534">LSMC direct reference</text>
+<line x1="190" y1="441.18" x2="190" y2="453.61" stroke="#1d4ed8" stroke-width="3"/>
+<line x1="178" y1="441.18" x2="202" y2="441.18" stroke="#1d4ed8" stroke-width="3"/>
+<line x1="178" y1="453.61" x2="202" y2="453.61" stroke="#1d4ed8" stroke-width="3"/>
+<circle cx="190" cy="447.39" r="11" fill="#1d4ed8" stroke="#ffffff" stroke-width="4"/>
+<text x="190" y="429.39" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#0f172a">16.597246</text>
+<text x="190" y="481.39" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">SE 0.017589</text>
+<text x="190" y="626" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#334155">LSMC direct</text>
+<line x1="405" y1="435.96" x2="405" y2="448.38" stroke="#4f46e5" stroke-width="3"/>
+<line x1="393" y1="435.96" x2="417" y2="435.96" stroke="#4f46e5" stroke-width="3"/>
+<line x1="393" y1="448.38" x2="417" y2="448.38" stroke="#4f46e5" stroke-width="3"/>
+<circle cx="405" cy="442.17" r="11" fill="#4f46e5" stroke="#ffffff" stroke-width="4"/>
+<text x="405" y="424.17" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#0f172a">16.612028</text>
+<text x="405" y="476.17" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">SE 0.017574</text>
+<text x="405" y="626" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#334155">LSMC low</text>
+<line x1="670" y1="385.06" x2="670" y2="395.87" stroke="#d97706" stroke-width="3"/>
+<line x1="658" y1="385.06" x2="682" y2="385.06" stroke="#d97706" stroke-width="3"/>
+<line x1="658" y1="395.87" x2="682" y2="395.87" stroke="#d97706" stroke-width="3"/>
+<circle cx="670" cy="390.47" r="11" fill="#d97706" stroke="#ffffff" stroke-width="4"/>
+<text x="670" y="372.47" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#0f172a">16.758325</text>
+<text x="670" y="424.47" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">SE 0.015292</text>
+<text x="670" y="626" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#334155">Hybrid direct</text>
+<line x1="885" y1="358.06" x2="885" y2="451.96" stroke="#6b7280" stroke-width="3"/>
+<line x1="873" y1="358.06" x2="897" y2="358.06" stroke="#6b7280" stroke-width="3"/>
+<line x1="873" y1="451.96" x2="897" y2="451.96" stroke="#6b7280" stroke-width="3"/>
+<circle cx="885" cy="405.01" r="11" fill="#6b7280" stroke="#ffffff" stroke-width="4"/>
+<text x="885" y="387.01" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="15" font-weight="700" fill="#0f172a">16.717166</text>
+<text x="885" y="439.01" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="12" fill="#64748b">SE 0.132848</text>
+<text x="885" y="626" text-anchor="middle" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#334155">Hybrid low</text>
+<text x="70" y="650" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#334155">Hybrid direct vs LSMC direct: 0.97%   Hybrid low vs LSMC direct: 0.72%</text>
+<text x="70" y="674" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#334155">Hybrid low vs LSMC low: 0.63%   LSMC low vs LSMC direct: 0.09%</text>
+<text x="70" y="698" font-family="Segoe UI, Arial, sans-serif" font-size="14" fill="#475569">Error bars show one standard error for each estimator. The dashed line is the LSMC direct reference used for relative errors.</text>
+</svg>

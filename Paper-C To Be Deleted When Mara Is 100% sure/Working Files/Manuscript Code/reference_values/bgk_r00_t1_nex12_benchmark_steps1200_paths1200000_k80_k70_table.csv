@@ -1,0 +1,3 @@
+scenario,S0,K,T,euler_steps,lsmc_paths,lsmc_low_paths,runtime_seconds,benchmark_direct_price,benchmark_direct_error,benchmark_direct_ci_lower,benchmark_direct_ci_upper,benchmark_low_price,benchmark_low_error,benchmark_low_ci_lower,benchmark_low_ci_upper,benchmark_direct_low_gap
+K=80 put,100.0,80.0,1.0,1200,1200000,1200000,312.9918132000603,4.596899,0.009874,4.577545959999999,4.61625204,4.585755,0.00986,4.5664294,4.6050806,-0.002424242951607121
+K=70 put,100.0,70.0,1.0,1200,1200000,1200000,285.4737706000451,2.699339,0.007474,2.68468996,2.7139880400000003,2.692367,0.007465,2.6777356,2.7069984,-0.002582854543279003

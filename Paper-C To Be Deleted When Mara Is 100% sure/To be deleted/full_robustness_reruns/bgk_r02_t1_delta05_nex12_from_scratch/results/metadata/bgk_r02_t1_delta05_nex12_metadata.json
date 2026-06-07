@@ -1,0 +1,93 @@
+{
+  "case_id": "bgk_r02_t1_delta05_nex12",
+  "run_root": "D:\\Mara PhD\\Paper-C\\To be deleted\\full_robustness_reruns\\bgk_r02_t1_delta05_nex12_from_scratch",
+  "sandbox_only": true,
+  "model_env": {
+    "GDMR_S0": "100.0",
+    "GDMR_V0": "0.114",
+    "GDMR_VP0": "0.110",
+    "GDMR_R": "0.02",
+    "GDMR_KAPPA1": "5.5",
+    "GDMR_KAPPA2": "0.1",
+    "GDMR_THETA": "0.078",
+    "GDMR_XI1": "2.689",
+    "GDMR_XI2": "0.502",
+    "GDMR_DELTA1": "0.5",
+    "GDMR_DELTA2": "0.5",
+    "GDMR_RHO12": "-0.982",
+    "GDMR_RHO13": "-0.727",
+    "GDMR_RHO23": "0.59",
+    "GDMR_MATURITY": "1.0",
+    "GDMR_EXERCISE_DATES": "12"
+  },
+  "seeds": {
+    "direct": "2026",
+    "low": "2103"
+  },
+  "hybrid_env": {
+    "GDMR_HYBRID_ASSET_POINTS": "301",
+    "GDMR_HYBRID_ASSET_LOW_FACTOR": "0.30",
+    "GDMR_HYBRID_ASSET_HIGH_FACTOR": "3.50",
+    "GDMR_HYBRID_VOL_QUANTILE": "0.999",
+    "GDMR_HYBRID_FST_PAD_FACTOR": "4",
+    "GDMR_HYBRID_FST_BATCH_SIZE": "256"
+  },
+  "benchmark": {
+    "euler_steps": 1200,
+    "paths": 1200000,
+    "low_paths": 1200000
+  },
+  "step_sweep": {
+    "paths": [
+      20000,
+      60000
+    ],
+    "steps": [
+      24,
+      48,
+      72,
+      96
+    ],
+    "methods": [
+      "benchmark",
+      "hybrid"
+    ]
+  },
+  "path_sweep": {
+    "steps": [
+      48,
+      60
+    ],
+    "paths": [
+      250,
+      500,
+      1000,
+      2000,
+      5000,
+      10000,
+      20000,
+      40000,
+      60000
+    ],
+    "reported_paths": [
+      250,
+      1000,
+      5000,
+      10000,
+      20000,
+      40000,
+      60000
+    ],
+    "methods": [
+      "benchmark",
+      "hybrid"
+    ]
+  },
+  "engines": {
+    "lsmc": "D:\\Mara PhD\\Paper-C\\To be deleted\\full_robustness_reruns\\bgk_r02_t1_delta05_nex12_from_scratch\\code\\lsmc_from_scratch.py",
+    "hybrid": "D:\\Mara PhD\\Paper-C\\To be deleted\\full_robustness_reruns\\bgk_r02_t1_delta05_nex12_from_scratch\\code\\hybrid_from_scratch.py",
+    "lsmc_sha256": "39434d62f1278fc907cedee0b8776cc816b2c81f40e6c1efd8c2883dd85885fe",
+    "hybrid_sha256": "fe96b8c2d7b873d1cbfe97d8e8e64156078dd0ebb22581a4bb5fd77cf0ca7970"
+  },
+  "created_by": "from-scratch sandbox rerun"
+}

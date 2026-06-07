@@ -1,0 +1,31 @@
+Hybrid LSMC–PDE for a Generalized Gatheral
+Double Mean-Reverting Model
+Mara Kalicanin Dimitrov 1 and Ying Ni 1*
+1*M¨ alardalen University, 721 23, V¨ aster˚ as, Sweden.
+*Corresponding author(s). E-mail(s): ying.ni@mdu.se.
+Contributing authors: mara.kalicanin.dimitrov@mdu.se.
+Abstract
+We study Bermudan put pricing under a generalized Gatheral double mean-
+reverting stochastic-volatility model. The model extends the square-root specifi-
+cation by allowing CEV-type volatility-of-volatility coefficients, while preserving
+the double mean-reverting structure of the variance factors. This added flexibil-
+ity creates a boundary issue at zero, so we first prove strong well-posedness and
+nonnegativity of the two-factor variance system for elasticity exponents δ1, δ2 ∈
+[1/2, 1]. We then use the one-way coupling of the model to build a Hybrid
+LSMC–PDE pricing method. Conditional on simulated volatility paths, each
+Bermudan continuation step reduces to a one-dimensional backward parabolic
+PDE in log-price space; in the implementation this conditional problem is eval-
+uated through its Fourier representation, and least-squares regression across
+volatility states completes the continuation-value approximation. Under the
+truncation, compact-support, and separability assumptions used in the hybrid
+framework, the fitted regression coefficients and continuation approximations
+converge almost surely. Numerical experiments for Bermudan puts compare the
+direct hybrid estimator with plain LSMC using prices, standard errors, confidence
+intervals, and benchmark-relative errors against high-resolution LSMC reference
+values. In the reported experiments, the hybrid estimator is generally closer to
+the benchmark and has smaller standard errors, especially at moderate path bud-
+gets and intermediate exercise grids. A positive-rate square-root-exponent case
+shows the same qualitative pattern, although the absolute errors are larger.
+Keywords: Bermudan options, Hybrid LSMC–PDE, Gatheral Double
+Mean-Reverting Model
+1

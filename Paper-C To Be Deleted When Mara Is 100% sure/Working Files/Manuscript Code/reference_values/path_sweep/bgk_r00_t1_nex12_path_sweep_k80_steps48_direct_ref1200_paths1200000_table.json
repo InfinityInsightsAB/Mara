@@ -1,0 +1,44 @@
+{
+  "scenario_slug": "k80",
+  "scenario_label": "K=80 put",
+  "display_label": "K=80",
+  "strike": 80.0,
+  "euler_steps": 48,
+  "path_counts": [
+    250,
+    500,
+    1000,
+    2000,
+    5000,
+    10000,
+    20000,
+    40000,
+    60000
+  ],
+  "reuse_mode": "mixed_saved_and_computed",
+  "source_paths": [
+    "C:\\MDU PhD\\Paper C\\Experiments 26.03\\bgk_r00_t1_nex12_step_sweep_all_ref1200_direct_samepaths20k_s24487296_table.csv",
+    "C:\\MDU PhD\\Paper C\\Experiments 26.03\\bgk_r00_t1_nex12_step_sweep_all_ref1200_direct_samepaths60k_s24487296_table.csv"
+  ],
+  "reused_paths": [
+    20000,
+    60000
+  ],
+  "computed_paths": [
+    250,
+    500,
+    1000,
+    2000,
+    5000,
+    10000,
+    40000
+  ],
+  "output_csv": "C:\\MDU PhD\\Paper C\\Working Files\\Manuscript Code\\reference_values\\path_sweep\\bgk_r00_t1_nex12_path_sweep_k80_steps48_direct_ref1200_paths1200000_table.csv",
+  "benchmark_reference_price": 4.596899,
+  "benchmark_source_paths": [
+    "C:\\MDU PhD\\Paper C\\Experiments 26.03\\bgk_r00_t1_nex12_benchmark_steps1200_paths1200000_table.csv",
+    "C:\\MDU PhD\\Paper C\\Experiments 26.03\\bgk_r00_t1_nex12_benchmark_steps1200_paths1200000_k80_k70_table.csv"
+  ],
+  "benchmark_script": "C:\\MDU PhD\\Paper C\\Experiments 26.03\\LSMC Benchmark\\run_gdmr_benchmark_put.py",
+  "hybrid_script": "C:\\MDU PhD\\Paper C\\Experiments 26.03\\Hybrid LSMC-PDE with FFT\\run_gdmr_hybrid_put.py"
+}

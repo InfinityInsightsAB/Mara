@@ -1,0 +1,20 @@
+\begin{table}[htbp]
+\centering
+\caption{Representative direct metrics at $72$ steps under the matched 20,000-path comparison.}
+\label{tab:step-sweep-20k-step72}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{@{}ccc>{\centering\arraybackslash}Xcc>{\centering\arraybackslash}X@{}}
+\toprule
+& \multicolumn{3}{c}{LSMC} & \multicolumn{3}{c}{Hybrid LSMC--PDE} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+$K$ & Dir. err. & SE & Confidence interval & Dir. err. & SE & Confidence interval \\
+\midrule
+70 & 1.476\% & 0.057802 & [2.625881, 2.852465] & 0.560\% & 0.012206 & [2.690521, 2.738368] \\
+80 & 1.645\% & 0.076738 & [4.522131, 4.822943] & 0.012\% & 0.018645 & [4.560886, 4.633975] \\
+90 & 1.788\% & 0.098666 & [7.342003, 7.728773] & 0.418\% & 0.026674 & [7.319752, 7.424315] \\
+100 & 0.948\% & 0.117430 & [11.234369, 11.694695] & 0.475\% & 0.035909 & [11.232454, 11.373219] \\
+110 & 0.773\% & 0.134824 & [16.510179, 17.038689] & 0.163\% & 0.045393 & [16.529605, 16.707546] \\
+\botrule
+\end{tabularx}
+\end{table}

@@ -1,0 +1,62 @@
+{
+  "case_id": "bgk_r02_t1_delta05_nex12",
+  "model_env": {
+    "GDMR_S0": "100.0",
+    "GDMR_V0": "0.114",
+    "GDMR_VP0": "0.110",
+    "GDMR_R": "0.02",
+    "GDMR_KAPPA1": "5.5",
+    "GDMR_KAPPA2": "0.1",
+    "GDMR_THETA": "0.078",
+    "GDMR_XI1": "2.689",
+    "GDMR_XI2": "0.502",
+    "GDMR_DELTA1": "0.5",
+    "GDMR_DELTA2": "0.5",
+    "GDMR_RHO12": "-0.982",
+    "GDMR_RHO13": "-0.727",
+    "GDMR_RHO23": "0.59",
+    "GDMR_MATURITY": "1.0",
+    "GDMR_EXERCISE_DATES": "12"
+  },
+  "seeds": {
+    "direct": "2026",
+    "low": "2103"
+  },
+  "hybrid_env": {
+    "GDMR_HYBRID_ASSET_POINTS": "301",
+    "GDMR_HYBRID_ASSET_LOW_FACTOR": "0.30",
+    "GDMR_HYBRID_ASSET_HIGH_FACTOR": "3.50",
+    "GDMR_HYBRID_VOL_QUANTILE": "0.999",
+    "GDMR_HYBRID_FST_PAD_FACTOR": "4",
+    "GDMR_HYBRID_FST_BATCH_SIZE": "256"
+  },
+  "strikes": [
+    {"scenario": "K=70 put", "K": 70, "slug": "k70"},
+    {"scenario": "K=80 put", "K": 80, "slug": "k80"},
+    {"scenario": "OTM put", "K": 90, "slug": "k90"},
+    {"scenario": "ATM", "K": 100, "slug": "k100"},
+    {"scenario": "ITM put", "K": 110, "slug": "k110"}
+  ],
+  "benchmark": {
+    "euler_steps": 1200,
+    "paths": 1200000,
+    "low_paths": 1200000
+  },
+  "step_sweep": {
+    "paths": [20000, 60000],
+    "steps": [24, 48, 72, 96],
+    "methods": ["benchmark", "hybrid"]
+  },
+  "path_sweep": {
+    "steps": [48, 60],
+    "paths": [250, 500, 1000, 2000, 5000, 10000, 20000, 40000, 60000],
+    "reported_paths": [250, 1000, 5000, 10000, 20000, 40000, 60000],
+    "methods": ["benchmark", "hybrid"]
+  },
+  "smoke": {
+    "strike": 100,
+    "euler_steps": 24,
+    "lsmc_paths": 250,
+    "hybrid_paths": 100
+  }
+}

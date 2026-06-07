@@ -1,0 +1,3 @@
+case_id,scenario,K,method,r,delta1,delta2,exercise_dates,euler_steps,paths,direct_price,direct_se,runtime_seconds
+bgk_r02_t1_delta05_nex12,ATM,100,benchmark,0.02,0.5,0.5,12,24,250,14.471340057558,1.474633780455,0.172237
+bgk_r02_t1_delta05_nex12,ATM,100,hybrid,0.02,0.5,0.5,12,24,100,13.494749196577,0.831250726865,0.471680

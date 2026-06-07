@@ -1,0 +1,20 @@
+\begin{table}[H]
+\centering
+\caption{Representative direct metrics at $20{,}000$ paths under the fixed 48-step path sweep.}
+\label{tab:path-sweep-48-path20k}
+\small
+\setlength{\tabcolsep}{3pt}
+\begin{tabularx}{\textwidth}{@{}ccc>{\centering\arraybackslash}Xcc>{\centering\arraybackslash}X@{}}
+\toprule
+& \multicolumn{3}{c}{LSMC} & \multicolumn{3}{c}{Hybrid LSMC--PDE} \\
+\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+$K$ & Dir. err. & SE & Confidence interval & Dir. err. & SE & Confidence interval \\
+\midrule
+70 & 3.890\% & 0.059206 & [2.688290, 2.920378] & 1.589\% & 0.012069 & [2.718589, 2.765901] \\
+80 & 3.193\% & 0.077914 & [4.590982, 4.896404] & 0.832\% & 0.018497 & [4.598892, 4.671399] \\
+90 & 2.173\% & 0.098998 & [7.369862, 7.757934] & 0.248\% & 0.026580 & [7.369274, 7.473469] \\
+100 & 1.336\% & 0.119290 & [11.274695, 11.742311] & 0.052\% & 0.035911 & [11.292378, 11.433149] \\
+110 & 1.221\% & 0.135565 & [16.583297, 17.114711] & 0.228\% & 0.045516 & [16.594577, 16.773000] \\
+\bottomrule
+\end{tabularx}
+\end{table}
